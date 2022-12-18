@@ -60,7 +60,6 @@ describe("Signup", () => {
     fireEvent.change(usernameInput, { target: { value: "﷽﷽﷽﷽﷽﷽12" } });
     userEvent.click(signupButton);
 
-
     const usernameError = screen.getByText(
       /username must start with a letter and have at least 3 to 15 characters/i
     );

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import SignupForm from '../forms/SignupForm.js';
 
 const Signup = () => {
@@ -12,9 +13,9 @@ const Signup = () => {
       { error && 
         <p>{error}</p>
       }
-      <p>Have an account? <a href="#">Log in</a></p>
+      <p>Have an account? <Link to="/auth">Log in</Link></p>
   </div>
   )
-}
+};
 
 export default Signup;
