@@ -1,8 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Input from "../inputs/Input";
+import { validateMail, validatePsw } from "../../utils/validation";
 
-const LoginForm = ({validateMail, validatePsw, displayError}) => {
+const LoginForm = ({displayError}) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     displayError('');
@@ -12,8 +13,15 @@ const LoginForm = ({validateMail, validatePsw, displayError}) => {
     const isMailValid = validateMail(mail);
     const isPswValid = validatePsw(psw);
 
-    if(isMailValid !== true) displayError(isMailValid);
-    if(isPswValid !== true) displayError(isPswValid);
+    switch(true) {
+      case isMailValid !== true:
+        displayError(isMailValid);
+        return;
+      case isPswValid !== true:
+        displayError(isPswValid);
+        return;
+      default: return;
+    };
   };
 
   return (
@@ -28,8 +36,6 @@ const LoginForm = ({validateMail, validatePsw, displayError}) => {
 }
 
 LoginForm.propTypes = {
-  validateMail: PropTypes.func.isRequired,
-  validatePsw: PropTypes.func.isRequired,
   displayError: PropTypes.func.isRequired,
 };
 

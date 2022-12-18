@@ -1,9 +1,7 @@
-import Authentication from "./components/Authentication/Authentication";
+import Authentication from "./components/authentication/Authentication";
 
 function App() {
-  return (
-    <Authentication />
-  );
+  return <Authentication />;
 }
 
 export default App;
