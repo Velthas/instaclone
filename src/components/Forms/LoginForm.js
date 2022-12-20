@@ -2,8 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import Input from "../inputs/Input";
 import { validateMail, validatePsw } from "../../utils/validation";
+import { loginUser } from "../../firebase/authentication";
+import { redirect } from "react-router-dom";
 
-const LoginForm = ({displayError}) => {
+const LoginForm = ({displayError, setUser}) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     displayError('');
@@ -20,7 +22,10 @@ const LoginForm = ({displayError}) => {
       case isPswValid !== true:
         displayError(isPswValid);
         return;
-      default: return;
+      default:
+        loginUser(mail, psw);
+        setUser(true);
+        redirect('/');
     };
   };
 
@@ -37,6 +42,7 @@ const LoginForm = ({displayError}) => {
 
 LoginForm.propTypes = {
   displayError: PropTypes.func.isRequired,
+  setUser: PropTypes.func.isRequired,
 };
 
 export default LoginForm;

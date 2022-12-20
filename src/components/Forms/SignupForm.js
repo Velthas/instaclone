@@ -2,14 +2,16 @@ import React from "react";
 import PropTypes from "prop-types";
 import Input from "../inputs/Input";
 import { validateMail, validatePsw, validateUsername, validateName } from "../../utils/validation";
+import { createUser } from "../../firebase/authentication";
+import { createUserBucket } from "../../firebase/firestore";
 
 const SignupForm = ({displayError}) => {
   const handleSubmit = (e) => {
     e.preventDefault();
-    displayError('');
+    displayError(null);
 
     const allInputs = Array.from(document.querySelectorAll('#signup input')).map(input => input.value);
-    const [mail, psw, usname, fullname] = allInputs
+    const [mail, psw, usname, fullname] = allInputs;
     const isMailValid = validateMail(mail);
     const isPswValid = validatePsw(psw);
     const isUsernameValid = validateUsername(usname);
@@ -28,7 +30,9 @@ const SignupForm = ({displayError}) => {
       case isNameValid !== true:
         displayError(isNameValid);
         return;
-      default: return;
+      default: 
+        createUser(mail, psw, usname);
+        createUserBucket(fullname, usname);
     };
   };
 
