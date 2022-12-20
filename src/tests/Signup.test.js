@@ -3,10 +3,14 @@ import Signup from "../components/authentication/Signup";
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
 
 describe("Signup", () => {
   it("displays content correctly", () => {
-    render(<Signup />);
+    render(
+      <MemoryRouter>
+        <Signup />
+      </MemoryRouter> );
 
     const mailInput = screen.getByPlaceholderText(/email/i);
     const passwordInput = screen.getByPlaceholderText(/password/i);
@@ -23,8 +27,9 @@ describe("Signup", () => {
 
   it("displays error message when full name is in wrong format", () => {
     render(
-      <Signup />
-    );
+      <MemoryRouter>
+        <Signup />
+      </MemoryRouter> );
 
     const mailInput = screen.getByPlaceholderText(/email/i);
     const passwordInput = screen.getByPlaceholderText(/password/i);
@@ -45,8 +50,9 @@ describe("Signup", () => {
 
   it("displays error message when username is in wrong format", () => {
     render(
-      <Signup />
-    );
+      <MemoryRouter>
+        <Signup />
+      </MemoryRouter> );
 
     const mailInput = screen.getByPlaceholderText(/email/i);
     const passwordInput = screen.getByPlaceholderText(/password/i);

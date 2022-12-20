@@ -6,6 +6,8 @@ const createUserBucket = (name, username) => {
     name: name,
     username: username,
     description: `Hello, my name is ${name}`,
+    pfp: `users/df/pfp`, // reference to cloud storage default profile picture
+    pbg: `users/df/pbg`, // same as above, but for background, will be updated when new pic is chosen.
     follows: ['damian'],
     followed: [],
   }

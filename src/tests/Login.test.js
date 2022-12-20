@@ -3,10 +3,14 @@ import Login from "../components/authentication/Login.js";
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
 
 describe("Login", () => {
   it("renders content correctly", () => {
-    render(<Login />);
+    render(
+    <MemoryRouter>
+      <Login setUser={jest.fn} />
+    </MemoryRouter> );
 
     const mailInput = screen.getByPlaceholderText(/email/i);
     const passwordInput = screen.getByPlaceholderText(/password/i);
@@ -20,7 +24,10 @@ describe("Login", () => {
   });
 
   it("text inputs register user inputs", () => {
-    render(<Login />);
+    render(
+      <MemoryRouter>
+        <Login setUser={jest.fn}/>
+      </MemoryRouter> );
 
     const mailInput = screen.getByPlaceholderText(/email/i);
     const passwordInput = screen.getByPlaceholderText(/password/i);
@@ -34,7 +41,10 @@ describe("Login", () => {
   });
 
   it("displays message if user email does not match format", () => {
-    render(<Login />);
+    render(
+      <MemoryRouter>
+        <Login setUser={jest.fn}/>
+      </MemoryRouter> );
 
     const mailInput = screen.getByPlaceholderText(/email/i);
     fireEvent.change(mailInput, { target: { value: "iamnotanemail" } });
@@ -46,7 +56,10 @@ describe("Login", () => {
   });
 
   it("displays error message if user password does not match format", () => {
-    render(<Login />);
+    render(
+      <MemoryRouter>
+        <Login setUser={jest.fn}/>
+      </MemoryRouter> );
 
     const mailInput = screen.getByPlaceholderText(/email/i);
     const pswInput = screen.getByPlaceholderText(/password/i);

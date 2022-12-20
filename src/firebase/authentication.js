@@ -1,11 +1,12 @@
 import { auth } from "./firebase-config";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
+import defaultpfp from '../assets/images/default.svg';
 
 const createUser = async (mail, password, username) => {
   signOut(auth); //TODO Remember to take this out after testing is done
   const response = await createUserWithEmailAndPassword(auth, mail, password);
   const user = response.user;
-  await updateProfile(user, {displayName: username})
+  await updateProfile(user, {displayName: username, photoUrl: defaultpfp});
 };
 
 const loginUser = async (email, password) => {
