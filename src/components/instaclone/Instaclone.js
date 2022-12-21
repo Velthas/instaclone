@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import Userbar from "./sections/Nav";
 import Main from "./sections/Main";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Instaclone = ({user}) => {
+  const navigate = useNavigate();
   useEffect(() => {
-    if (user === null) redirect('/auth');
+    if(!user) navigate('/auth');
   }, [user]);
 
   return (

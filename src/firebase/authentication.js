@@ -1,5 +1,5 @@
 import { auth } from "./firebase-config";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
 import defaultpfp from '../assets/images/default.svg';
 
 const createUser = async (mail, password, username) => {
@@ -13,9 +13,16 @@ const loginUser = async (email, password) => {
   await signInWithEmailAndPassword(auth, email, password);
 };
 
+const authenticationListener = (setUser) => { // handles redirects when not authenticated/otherwise
+  const unsub = onAuthStateChanged(auth, (user) => {setUser(user)});
+  return unsub;
+}
+
 const getUsernameAndPhoto = async () => {
   const user = auth.currentUser
   return {username: user.displayName, photo: user.photoURL}
 };
 
-export { createUser, loginUser };
+const signOutCurrentUser = () => signOut(auth)
+
+export { createUser, loginUser, authenticationListener, signOutCurrentUser };
