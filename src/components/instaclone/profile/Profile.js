@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { getUserInfo } from "../../../firebase/firestore";
+import { getUserInfo, getPosts } from "../../../firebase/firestore";
 
 const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [info, setInfo] = useState(null);
+  const [posts, setPosts] = useState([]);
   let {username} = useParams();
   useEffect(() => {
     const loadUserInfo = async () => {
       const userInfo = await getUserInfo(username);
-      console.log(userInfo);
+      const postInfo = await getPosts(username);
       setInfo(userInfo);
+      setPosts(postInfo);
       setLoading(false);
     }
     loadUserInfo();
@@ -31,34 +33,31 @@ const Profile = () => {
           <div>
             <div>
               <div>
-                <h1>{loading ? '' :info.name}</h1>
+                <h1>{loading ? '' : info.name}</h1>
                 <h2>{loading ? '' : '@' + username}</h2>
               </div>
               <div>
-                <p></p>
+                <p>{loading ? '' : posts.length}</p>
                 <p>Posts</p>
               </div>
               <div>
                 <div>
-                  <p></p>
+                  <p>{loading ? '' : info.follows.length}</p>
                   <p>Following</p>
                 </div>
                 <div>
-                  <p></p>
+                  <p>{loading ? '' :info.followed.length}</p>
                   <p>Followers</p>
                 </div>
               </div>
               <div>
                 <h3>Bio</h3>
-                <p></p>
+                <p>{loading ? '' : info.description}</p>
               </div>
-            </div>
-            <div>
-              Posts
             </div>
           </div>
           <div>
-
+            Posts
           </div>
         </PostAndInfo>
     </div>
@@ -74,7 +73,8 @@ const ProfileCover = styled.div`
 const ImgAndButtons = styled.div`
   display: flex;
   margin: 0px 10%;
-  align-items: center;
+  height: 100px;
+  align-items: flex-start;
   justify-content: space-between;
 `;
 
@@ -95,9 +95,9 @@ const Buttons = styled.div`
 
 const PostAndInfo = styled.div`
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    margin: 0px 10%;
+    margin: 10px 10%;
 `;
 
 const UserInfo = styled.div`

@@ -4,6 +4,7 @@ import Instaclone from "./components/instaclone/Instaclone";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './styles/shared.css';
 import { authenticationListener } from "./firebase/authentication";
+import { getPosts } from "./firebase/firestore";
 
 function App() {
   const [user, setUser] = useState(null);
