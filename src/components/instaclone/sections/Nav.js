@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import home from '../../../assets/icons/home.svg';
 import person from '../../../assets/icons/person.svg';
@@ -12,7 +13,7 @@ import fillperson from '../../../assets/icons/fillperson.svg';
 import instalogo from '../../../assets/logo/insta-logo.png';
 
 
-const Nav = () => {
+const Nav = ({user}) => {
 
   const [active, setActive] = useState('')
   const handleClick = (icon) => setActive(icon)
@@ -36,10 +37,12 @@ const Nav = () => {
           />
         </li>
         <li>
+        <Link to={user !== null ? '/profile/' + user.displayName : '/'}>  
           <Icon alt='profile'
             src={active === 'person' ? fillperson : person}
             onClick={() => handleClick('person')}
           />
+        </Link>
         </li>
         <li>
           <Icon 

@@ -5,7 +5,7 @@ import { validateMail, validatePsw } from "../../utils/validation";
 import { loginUser } from "../../firebase/authentication";
 import { redirect } from "react-router-dom";
 
-const LoginForm = ({displayError, setUser}) => {
+const LoginForm = ({displayError}) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     displayError('');
@@ -24,7 +24,6 @@ const LoginForm = ({displayError, setUser}) => {
         return;
       default:
         loginUser(mail, psw);
-        setUser(true);
         redirect('/');
     };
   };
@@ -42,7 +41,6 @@ const LoginForm = ({displayError, setUser}) => {
 
 LoginForm.propTypes = {
   displayError: PropTypes.func.isRequired,
-  setUser: PropTypes.func.isRequired,
 };
 
 export default LoginForm;

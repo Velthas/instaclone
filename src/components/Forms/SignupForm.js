@@ -5,7 +5,7 @@ import { validateMail, validatePsw, validateUsername, validateName } from "../..
 import { createUser } from "../../firebase/authentication";
 import { createUserBucket } from "../../firebase/firestore";
 
-const SignupForm = ({displayError}) => {
+const SignupForm = ({displayError, setUser}) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     displayError(null);
@@ -31,7 +31,7 @@ const SignupForm = ({displayError}) => {
         displayError(isNameValid);
         return;
       default: 
-        createUser(mail, psw, usname);
+        createUser(mail, psw, usname, setUser);
         createUserBucket(fullname, usname);
     };
   };
@@ -51,6 +51,7 @@ const SignupForm = ({displayError}) => {
 
 SignupForm.propTypes = {
   displayError: PropTypes.func.isRequired,
+  setUser: PropTypes.func.isRequired,
 };
 
 export default SignupForm;

@@ -1,27 +1,23 @@
 import { auth } from "./firebase-config";
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
-import defaultpfp from '../assets/images/default.svg';
 
-const createUser = async (mail, password, username) => {
-  signOut(auth); //TODO Remember to take this out after testing is done
+const createUser = async (mail, password, username, setUser) => {
   const response = await createUserWithEmailAndPassword(auth, mail, password);
   const user = response.user;
-  await updateProfile(user, {displayName: username, photoUrl: defaultpfp});
+  await updateProfile(user, {displayName: username});
+  setUser({...auth.currentUser}); // bypasses problem: when the user is signed up
+  // they are logged in by default, and their info stored before displayName change takes place
+  // this means their profile cannot be displayed on first login. 
 };
 
 const loginUser = async (email, password) => {
   await signInWithEmailAndPassword(auth, email, password);
 };
 
-const authenticationListener = (setUser) => { // handles redirects when not authenticated/otherwise
+const authenticationListener = (setUser) => {
   const unsub = onAuthStateChanged(auth, (user) => {setUser(user)});
   return unsub;
 }
-
-const getUsernameAndPhoto = async () => {
-  const user = auth.currentUser
-  return {username: user.displayName, photo: user.photoURL}
-};
 
 const signOutCurrentUser = () => signOut(auth)
 

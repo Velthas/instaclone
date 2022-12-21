@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import Userbar from "./sections/Nav";
 import Main from "./sections/Main";
 import { useNavigate } from "react-router-dom";
+import Nav from "./sections/Nav";
 
 const Instaclone = ({user}) => {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ const Instaclone = ({user}) => {
 
   return (
     <>
-      <Userbar />
+      <Nav user={user} />
       <Main />
     </>
   );

@@ -11,8 +11,8 @@ const Authentication = ({user, setUser}) => {
   }, [user]);
   return (
       <Routes>
-        <Route path="/" element={<Login setUser={setUser} />} />
-        <Route path="signup" element={<Signup />} />
+        <Route path="/" element={<Login />} />
+        <Route path="signup" element={<Signup setUser={setUser} />} />
       </Routes>
   )
 };

@@ -19,4 +19,8 @@ describe("Userbar", () => {
     expect(Add).toBeInTheDocument();
     expect(Heart).toBeInTheDocument();
   });
+
+  it("displays dropdown when user icon is clicked", () => {
+    //TODO
+  });
 });
