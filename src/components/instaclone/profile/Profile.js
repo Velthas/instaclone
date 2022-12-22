@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { getCurrentUserUsername } from "../../../firebase/authentication";
 import { getUserInfo, getPosts } from "../../../firebase/firestore";
+import Buttons from "./Buttons";
 
 const Profile = () => {
   const [loading, setLoading] = useState(true);
@@ -24,10 +26,10 @@ const Profile = () => {
         <ProfileCover role='img' bgurl={loading ? '' : info.pbg} />
         <ImgAndButtons>
           <ProfilePic alt="profile picture" src={loading ? '' : info.pfp} />
-          <Buttons>
-            <button>Follow</button>
-            <button>Chat</button>
-          </Buttons>
+          {!loading && <Buttons 
+            isFollowed={info.follows.indexOf(username) >= 0}
+            isOwnProfile={username === getCurrentUserUsername()} 
+          />}
         </ImgAndButtons>
         <PostAndInfo>
           <div>
@@ -83,14 +85,6 @@ const ProfilePic = styled.img`
   width: 200px;
   border-radius: 100%;
   transform: translateY(-50%);
-`;
-
-const Buttons = styled.div`
-    height: 200px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transform: translateY(-50%);
 `;
 
 const PostAndInfo = styled.div`

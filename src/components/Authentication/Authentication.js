@@ -17,4 +17,9 @@ const Authentication = ({user, setUser}) => {
   )
 };
 
+Authentication.propTypes = {
+  setUser: PropTypes.func.isRequired,
+  user: PropTypes.object,
+};
+
 export default Authentication;

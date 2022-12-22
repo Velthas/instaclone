@@ -19,6 +19,8 @@ const authenticationListener = (setUser) => {
   return unsub;
 }
 
-const signOutCurrentUser = () => signOut(auth)
+const signOutCurrentUser = () => signOut(auth);
 
-export { createUser, loginUser, authenticationListener, signOutCurrentUser };
+const getCurrentUserUsername = () => auth.currentUser.displayName;
+
+export { createUser, loginUser, authenticationListener, signOutCurrentUser, getCurrentUserUsername };

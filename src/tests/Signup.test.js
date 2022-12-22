@@ -9,7 +9,7 @@ describe("Signup", () => {
   it("displays content correctly", () => {
     render(
       <MemoryRouter>
-        <Signup />
+        <Signup setUser={jest.fn()}/>
       </MemoryRouter> );
 
     const mailInput = screen.getByPlaceholderText(/email/i);
@@ -28,7 +28,7 @@ describe("Signup", () => {
   it("displays error message when full name is in wrong format", () => {
     render(
       <MemoryRouter>
-        <Signup />
+        <Signup setUser={jest.fn()} />
       </MemoryRouter> );
 
     const mailInput = screen.getByPlaceholderText(/email/i);
@@ -51,7 +51,7 @@ describe("Signup", () => {
   it("displays error message when username is in wrong format", () => {
     render(
       <MemoryRouter>
-        <Signup />
+        <Signup setUser={jest.fn()}/>
       </MemoryRouter> );
 
     const mailInput = screen.getByPlaceholderText(/email/i);

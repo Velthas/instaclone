@@ -1,0 +1,35 @@
+import React from "react";
+import Buttons from "../components/instaclone/profile/Buttons";
+import { render, screen} from "@testing-library/react";
+import "@testing-library/jest-dom";
+
+describe('Buttons', () => {
+  it('Renders correct buttons when user viewing own profile', () => {
+    render(<Buttons isFollowed={false} isOwnProfile={true}/>);
+
+    const editProfileButton = screen.getByRole('button', {name: /edit profile/i});
+    const addPostButton = screen.getByRole('button', {name: '+'});
+
+    expect(editProfileButton).toBeInTheDocument();
+    expect(addPostButton).toBeInTheDocument();
+  });
+
+  it('Renders correct buttons when user viewing other profiles', () => {
+    render(<Buttons isFollowed={false} isOwnProfile={false}/>);
+
+    const followButton = screen.getByRole('button', {name: /follow/i});
+    const chatButton = screen.getByRole('button', {name: /chat/i});
+
+    expect(followButton).toBeInTheDocument();
+    expect(chatButton).toBeInTheDocument();
+  });
+
+  it('Renders Unfollow button when the user is followed', () => {
+    render(<Buttons isFollowed={true} isOwnProfile={false}/>);
+
+    const unfollowButton = screen.getByRole('button', {name: /unfollow/i});
+
+    expect(unfollowButton).toBeInTheDocument();
+  });
+});
+
