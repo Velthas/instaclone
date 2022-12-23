@@ -1,68 +1,53 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React from "react";
 import styled from "styled-components";
+import { useParams } from "react-router-dom";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
-import { getUserInfo, getPosts } from "../../../firebase/firestore";
 import Buttons from "./Buttons";
 
-const Profile = () => {
-  const [loading, setLoading] = useState(true);
-  const [info, setInfo] = useState(null);
-  const [posts, setPosts] = useState([]);
+const Profile = ({loading, info, posts}) => {
   let {username} = useParams();
-  useEffect(() => {
-    const loadUserInfo = async () => {
-      const userInfo = await getUserInfo(username);
-      const postInfo = await getPosts(username);
-      setInfo(userInfo);
-      setPosts(postInfo);
-      setLoading(false);
-    }
-    loadUserInfo();
-  }, []);
-
   return (
     <div>
-        <ProfileCover role='img' bgurl={loading ? '' : info.pbg} />
-        <ImgAndButtons>
-          <ProfilePic alt="profile picture" src={loading ? '' : info.pfp} />
-          {!loading && <Buttons 
-            isFollowed={info.follows.indexOf(username) >= 0}
-            isOwnProfile={username === getCurrentUserUsername()} 
-          />}
-        </ImgAndButtons>
-        <PostAndInfo>
-          <div>
+          <ProfileCover role='img' bgurl={loading ? '' : info.pbg} />
+          <ImgAndButtons>
+            <ProfilePic alt="profile picture" src={loading ? '' : info.pfp} />
+            {!loading && <Buttons 
+              isFollowed={info.follows.indexOf(username) >= 0}
+              isOwnProfile={username === getCurrentUserUsername()} 
+            />}
+          </ImgAndButtons>
+          <PostAndInfo>
             <div>
               <div>
-                <h1>{loading ? '' : info.name}</h1>
-                <h2>{loading ? '' : '@' + username}</h2>
-              </div>
-              <div>
-                <p>{loading ? '' : posts.length}</p>
-                <p>Posts</p>
-              </div>
-              <div>
                 <div>
-                  <p>{loading ? '' : info.follows.length}</p>
-                  <p>Following</p>
+                  <h1>{loading ? '' : info.name}</h1>
+                  <h2>{loading ? '' : '@' + username}</h2>
                 </div>
                 <div>
-                  <p>{loading ? '' :info.followed.length}</p>
-                  <p>Followers</p>
+                  <p>{loading ? '' : posts.length}</p>
+                  <p>Posts</p>
                 </div>
-              </div>
-              <div>
-                <h3>Bio</h3>
-                <p>{loading ? '' : info.description}</p>
+                <div>
+                  <div>
+                    <p>{loading ? '' : info.follows.length}</p>
+                    <p>Following</p>
+                  </div>
+                  <div>
+                    <p>{loading ? '' :info.followed.length}</p>
+                    <p>Followers</p>
+                  </div>
+                </div>
+                <div>
+                  <h3>Bio</h3>
+                  <p>{loading ? '' : info.description}</p>
+                </div>
               </div>
             </div>
-          </div>
-          <div>
-            Posts
-          </div>
-        </PostAndInfo>
-    </div>
+            <div>
+              Posts
+            </div>
+          </PostAndInfo>
+      </div>
   )
 }
 
@@ -88,17 +73,10 @@ const ProfilePic = styled.img`
 `;
 
 const PostAndInfo = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 10px 10%;
-`;
-
-const UserInfo = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0px 10%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 10%;
 `;
 
 export default Profile;

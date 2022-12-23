@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const Buttons = ({isOwnProfile, isFollowed}) => {
   return(
@@ -8,7 +9,7 @@ const Buttons = ({isOwnProfile, isFollowed}) => {
       { isOwnProfile &&
         <>
         <ShortButton>+</ShortButton>
-        <LongButton>Edit Profile</LongButton>
+        <Link to="settings"><LongButton>Edit Profile</LongButton></Link>
         </> 
       }
       { !isOwnProfile &&
