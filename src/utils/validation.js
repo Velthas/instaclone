@@ -22,4 +22,15 @@ const validateUsername = (username) => {
   return true;
 };
 
-export {validateMail, validateName, validatePsw, validateUsername}
+const validateDescription = (description) => {
+  const regex = /^(.|\s)*[a-zA-Z]+(.|\s)*$/ // allows alphabets, numbers, special chars.
+  if(!regex.test(description) || description.length > 100) return 'Description can only contain 100 characters between alphabets, numbers and special characters if needed';
+  return true;
+}
+
+const isFileImage = (file) => {
+  if(file && file.type.includes('image')) return true;
+  else return 'There seems to be a problem with your file. Ensure it is an image.'
+};
+
+export {validateMail, validateName, validatePsw, validateUsername, validateDescription, isFileImage}

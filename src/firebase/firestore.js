@@ -1,5 +1,5 @@
 import { db } from "./firebase-config";
-import { setDoc, getDoc, getDocs, doc, collection } from "firebase/firestore"
+import { setDoc, getDoc, updateDoc, getDocs, doc, collection } from "firebase/firestore";
 
 const createUserBucket = (name, username) => {
   const defaultPfp = 'https://firebasestorage.googleapis.com/v0/b/velstaclone.appspot.com/o/users%2Fdf%2Fpfp.jpg?alt=media&token=4a70d3ec-47bf-4971-a99b-c3d50cedd702';
@@ -31,4 +31,9 @@ const getPosts = async (username) => {
   else return posts.map(doc => doc.data());
 }
 
-export { createUserBucket, getUserInfo, getPosts}
+const updateDocument = async (username, payload) => {
+  const docRef = doc(db, 'Users', username);
+  await updateDoc(docRef, payload);
+}
+
+export { createUserBucket, getUserInfo, getPosts, updateDocument}
