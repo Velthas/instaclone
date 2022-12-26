@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import PostForm from '../posts/PostForm';
 import styled from 'styled-components';
 import home from '../../../assets/icons/home.svg';
 import person from '../../../assets/icons/person.svg';
@@ -14,11 +15,16 @@ import instalogo from '../../../assets/logo/insta-logo.png';
 
 
 const Nav = ({user}) => {
-
   const [active, setActive] = useState('')
+  const [postForm, setPostForm] = useState(false);
   const handleClick = (icon) => setActive(icon)
+  const closeForm = () => {
+    setPostForm(false);
+    setActive('');
+  }
   
   return (
+    <>
     <Navbar>
       <Logo alt='instalogo' src={instalogo}/>
       <Icons>
@@ -33,7 +39,10 @@ const Nav = ({user}) => {
           <Icon 
             alt='add'
             src={active === 'add' ? filladd : add}
-            onClick={() => handleClick('add')}
+            onClick={() => {
+
+            handleClick('add')
+            setPostForm(true) }}
           />
         </li>
         <li>
@@ -53,6 +62,8 @@ const Nav = ({user}) => {
         </li>
       </Icons>
     </Navbar>
+    {postForm && <PostForm closeForm={closeForm} />}
+    </>
   )
 };
 

@@ -11,10 +11,12 @@ const Profile = ({loading, info, posts}) => {
           <ProfileCover role='img' bgurl={loading ? '' : info.pbg} />
           <ImgAndButtons>
             <ProfilePic alt="profile picture" src={loading ? '' : info.pfp} />
-            {!loading && <Buttons 
-              isFollowed={info.follows.indexOf(username) >= 0}
-              isOwnProfile={username === getCurrentUserUsername()} 
-            />}
+            {!loading && 
+              <Buttons 
+                isFollowed={info.follows.indexOf(username) >= 0}
+                isOwnProfile={username === getCurrentUserUsername()} 
+              />
+            }
           </ImgAndButtons>
           <PostAndInfo>
             <div>

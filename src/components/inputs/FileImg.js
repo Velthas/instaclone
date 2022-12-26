@@ -13,7 +13,7 @@ const FileImg = ({id, url, alt, imgStyle}) => {
   return(
     <label htmlFor={id}>
       <Img imgStyle={imgStyle} src={photo} alt={alt} />
-      <Input type="file" id={id} accept="image/*" onChange={(e) => handleChange(e)} />
+      <Input data-testid='file' title='upload' type="file" id={id} accept="image/*" onChange={(e) => handleChange(e)} />
     </label>
   )
 };
@@ -29,10 +29,10 @@ const Input = styled.input`
 `
 
 const Img = styled.img`
-  ${({imgStyle}) => imgStyle}
   object-fit: cover;
   width: 100%;
   height: 100%;
+  ${({imgStyle}) => imgStyle};
 `
 
 export default FileImg;
