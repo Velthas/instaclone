@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
 import Buttons from "./Buttons";
+import PostPreview from "../posts/PostPreview";
+import uniqid from 'uniqid'
 
 const Profile = ({loading, info, posts}) => {
   let {username} = useParams();
@@ -19,7 +21,7 @@ const Profile = ({loading, info, posts}) => {
             }
           </ImgAndButtons>
           <PostAndInfo>
-            <div>
+            <InfoContainer>
               <div>
                 <div>
                   <h1>{loading ? '' : info.name}</h1>
@@ -44,10 +46,12 @@ const Profile = ({loading, info, posts}) => {
                   <p>{loading ? '' : info.description}</p>
                 </div>
               </div>
-            </div>
-            <div>
-              Posts
-            </div>
+            </InfoContainer>
+            <PostList>
+              {posts.map(post => {
+                return <PostPreview key={uniqid()} post={post}/>
+              })}
+            </PostList>
           </PostAndInfo>
       </div>
   )
@@ -76,9 +80,21 @@ const ProfilePic = styled.img`
 
 const PostAndInfo = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
   margin: 10px 10%;
+`;
+
+const InfoContainer = styled.div`
+  max-width: 300px;
+  overflow-wrap: break-word;
+`;
+
+const PostList = styled.div`
+  width: 100%;
+  display: grid;
+  gap: 25px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 `;
 
 export default Profile;

@@ -35,7 +35,11 @@ const PostForm = ({closeForm}) => {
       default:
         const username = getCurrentUserUsername();
         const docRef = await getPostDocReference(username); // Get a ref early for the ID.
-        if(photo.files.length !== 0) uploadPhoto(`users/${username}/${docRef.id}`, photo.files[0])
+        if(photo.files.length !== 0) payload.photo = await uploadPhoto(`users/${username}/${docRef.id}`, photo.files[0]);
+        else{
+          setError('Cannot upload a post without an image!');
+          return;
+        }
         payload.description = descr.value;
         payload.username = username;
         payload.timestamp = Timestamp.fromDate(new Date());

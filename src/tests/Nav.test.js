@@ -2,10 +2,11 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Nav from "../components/instaclone/sections/Nav";
+import { MemoryRouter } from "react-router-dom";
 
 describe("Userbar", () => {
   it("displays logo and icons", () => {
-    render(<Nav />);
+    render(<MemoryRouter><Nav user={{displayName: 'hi'}}/></MemoryRouter>);
 
     const Logo = screen.getByAltText("instalogo");
     const Home = screen.getByAltText("home");
