@@ -16,7 +16,7 @@ import MinimalComment from "./comments/MinimalComment";
 
 const HomePost = ({post}) => {
   const [liked, setLiked] = useLiked(post);
-  const [comments, insertComment] = useComments(post, '#add-comment');
+  const [comments, insertComment] = useComments(post, `#${post.id}`);
   const currentUser = getCurrentUserUsername();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
@@ -70,7 +70,7 @@ const HomePost = ({post}) => {
         <div>
           <Input
             type='text'
-            id='add-comment'
+            id={post.id}
             placeholder='Add your comment here...'
             styling={CommentInput}
           />
