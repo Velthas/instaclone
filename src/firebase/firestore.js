@@ -1,9 +1,10 @@
 import { db } from "./firebase-config";
-import { setDoc, getDoc, updateDoc, getDocs, doc, collection} from "firebase/firestore";
+import { setDoc, getDoc, updateDoc, getDocs, doc, collection, arrayUnion, arrayRemove} from "firebase/firestore";
 
 const createUserBucket = (name, username) => {
   const defaultPfp = 'https://firebasestorage.googleapis.com/v0/b/velstaclone.appspot.com/o/users%2Fdf%2Fpfp.jpg?alt=media&token=4a70d3ec-47bf-4971-a99b-c3d50cedd702';
   const defaultBgp = 'https://firebasestorage.googleapis.com/v0/b/velstaclone.appspot.com/o/users%2Fdf%2Fpbg.jpg?alt=media&token=075d5ee9-bc57-4b63-b3dc-19eb4a47590b';
+
   const userData = {
     name: name,
     username: username,
@@ -45,4 +46,31 @@ const createPost = async (ref, payload) => {
   await setDoc(ref, payload)
 }
 
-export { createUserBucket, getUserInfo, getPosts, updateDocument, getPostDocReference, createPost}
+const getPostInfo = async (username, postId) => {
+  const docRef = doc(db, 'Users', username, 'Posts', postId);
+  const document = await getDoc(docRef);
+  return document.data();
+}
+
+const updateLikes = async (path, username, liked) => {
+  const docRef = doc(db, path);
+  if(liked) updateDoc(docRef, {likedby: arrayUnion(username)});
+  else updateDoc(docRef, {likedby: arrayRemove(username)});
+};
+
+const addComment = async (path, comment) => {
+  const docRef = doc(db, path);
+  updateDoc(docRef, {comments: arrayUnion(comment)})
+}
+
+export { 
+  createUserBucket,
+  getUserInfo,
+  getPosts,
+  updateDocument,
+  getPostDocReference,
+  createPost,
+  getPostInfo,
+  updateLikes,
+  addComment,
+}

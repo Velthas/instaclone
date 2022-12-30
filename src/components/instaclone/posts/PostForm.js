@@ -21,7 +21,7 @@ const PostForm = ({closeForm}) => {
     const photo = document.querySelector('#post-photo');
     const descr = document.querySelector('#post-description');
     const isDescrValid = validateDescription(descr.value);
-    const isPictureValid = photo.files.length === 0 
+    const isPictureValid = photo.files.length === 0 //TODO CORRECT THIS
       ? true
       : (photo.files[0] && isFileImage(photo.files[0]));
 
@@ -40,6 +40,7 @@ const PostForm = ({closeForm}) => {
           setError('Cannot upload a post without an image!');
           return;
         }
+        payload.id = docRef.id;
         payload.description = descr.value;
         payload.username = username;
         payload.timestamp = Timestamp.fromDate(new Date());

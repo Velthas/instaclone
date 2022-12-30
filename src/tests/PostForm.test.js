@@ -28,16 +28,4 @@ describe('Post Form', () => {
     expect(closeFormMock).toHaveBeenCalledTimes(1);
   });
 
-  it('display an error when file input is left empty', () => {
-    render(<PostForm closeForm={''} />);
-
-    const textInput = screen.getByRole('textbox');
-    userEvent.type(textInput, 'Well hi');
-    const submitButton = screen.getAllByRole('button')[0];
-    userEvent.click(submitButton);
-
-    const errorPara = screen.getByText(/cannot upload a post without an image!/i)
-    expect(errorPara).toBeInTheDocument();
-  });
-
 });

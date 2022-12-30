@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
 import Buttons from "./Buttons";
 import PostPreview from "../posts/PostPreview";
+import HomePost from "../posts/HomePost";
 import uniqid from 'uniqid'
 
 const Profile = ({loading, info, posts}) => {
@@ -49,7 +50,7 @@ const Profile = ({loading, info, posts}) => {
             </InfoContainer>
             <PostList>
               {posts.map(post => {
-                return <PostPreview key={uniqid()} post={post}/>
+                return <HomePost key={uniqid()} post={post}/>
               })}
             </PostList>
           </PostAndInfo>
