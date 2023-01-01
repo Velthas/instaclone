@@ -1,9 +1,10 @@
-import { screen, render} from "@testing-library/react";
+import { screen, render } from "@testing-library/react";
 import * as firestoreModule from "../firebase/firestore";
 import * as authenticationModule from "../firebase/authentication";
 import "@testing-library/jest-dom";
 import HomePost from "../components/instaclone/posts/HomePost";
 import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
 
 describe("Home Post", () => {
   it("displays a post correctly", async () => {
@@ -18,11 +19,12 @@ describe("Home Post", () => {
       photo: "",
       likedby: ["test"],
       comments: [{ author: "test", content: "hi!", timestamp: new Date() }],
+      id: 'hi'
     };
     firestoreModule.getUserInfo = jest.fn().mockReturnValue(fakeUser);
     firestoreModule.updateLikes = jest.fn();
     authenticationModule.getCurrentUserUsername = jest.fn().mockReturnValue('test')
-    render(<HomePost post={fakePost} />);
+    render(<MemoryRouter><HomePost post={fakePost} /></MemoryRouter>);
 
     const fullName = await screen.findByText(/claptrap the deathtrap/i);
     const username = await screen.findByText(/@test/i);
@@ -31,7 +33,7 @@ describe("Home Post", () => {
     const likesIcon = screen.getByAltText(/heart/i);
     const commentIcon = screen.getByAltText(/speech bubble/i);
     const goToIcon = screen.getByAltText(/go-to/i);
-    const shareIcon = screen.getByAltText(/share/i);
+    const shareIcon = screen.getByAltText('share');
     const likesAmount = await screen.findByText('1 likes');
     const comment =  await screen.findByText("hi!");
     const commentInput = screen.getByRole("textbox");
@@ -61,11 +63,12 @@ describe("Home Post", () => {
       { author: "test", content: "hi!", timestamp: new Date() },
       { author: "test", content: "hello!", timestamp: new Date() },
       { author: "test", content: "heeeeeeello!", timestamp: new Date() }],
+      id: 'hi'
     };
     firestoreModule.getUserInfo = jest.fn().mockReturnValue(fakeUser);
     firestoreModule.updateLikes = jest.fn();
     authenticationModule.getCurrentUserUsername = jest.fn().mockReturnValue('test')
-    render(<HomePost post={fakePost} />);
+    render(<MemoryRouter><HomePost post={fakePost} /></MemoryRouter>);
 
     const viewAllComments = await screen.findByText('View All Comments');
 
@@ -87,11 +90,12 @@ describe("Home Post", () => {
       { author: "test", content: "hi!", timestamp: new Date() },
       { author: "test", content: "hello!", timestamp: new Date() },
       { author: "test", content: "heeeeeeello!", timestamp: new Date() }],
+      id: 'hi'
     };
     firestoreModule.getUserInfo = jest.fn().mockReturnValue(fakeUser);
     firestoreModule.updateLikes = jest.fn();
     authenticationModule.getCurrentUserUsername = jest.fn().mockReturnValue('test')
-    render(<HomePost post={fakePost} />);
+    render(<MemoryRouter><HomePost post={fakePost} /></MemoryRouter>);
 
     const viewAllComments = await screen.findByText('View All Comments');
     const firstComment = await screen.findByText('hi!');
@@ -117,11 +121,12 @@ describe("Home Post", () => {
       { author: "test", content: "hi!", timestamp: new Date() },
       { author: "test", content: "hello!", timestamp: new Date() },
       { author: "test", content: "heeeeeeello!", timestamp: new Date() }],
+      id: 'hi'
     };
     firestoreModule.getUserInfo = jest.fn().mockReturnValue(fakeUser);
     firestoreModule.updateLikes = jest.fn();
     authenticationModule.getCurrentUserUsername = jest.fn().mockReturnValue('test')
-    render(<HomePost post={fakePost} />);
+    render(<MemoryRouter><HomePost post={fakePost} /></MemoryRouter>);
 
     const textInput = screen.getByRole('textbox');
     userEvent.type(textInput, 'hello there!');
@@ -132,6 +137,29 @@ describe("Home Post", () => {
   });
 
   it("Doesn't append an empty comment", async () => {
+    const fakePost = {
+      username: "test",
+      photo: "",
+      likedby: ["test"],
+      comments: [
+        { author: "test", content: "hi!", timestamp: new Date() },
+        { author: "test", content: "hello!", timestamp: new Date() },
+      ],
+      id: 'hi'
+    };
+    firestoreModule.updateLikes = jest.fn();
+    authenticationModule.getCurrentUserUsername = jest.fn().mockReturnValue('test')
+    render(<MemoryRouter><HomePost post={fakePost} /></MemoryRouter>);
+
+    const sendIcon = screen.getByAltText(/send-comment/i);
+    userEvent.click(sendIcon);
+    const viewAllComments = screen.queryByText('View All Comments');
+
+    // If the comment is appended it will be the third, thus this shouldn't be displayed
+    expect(viewAllComments).toBe(null);
+  });
+
+  it('Opens up settings menu when three dots are clicked', () => {
     const fakeUser = {
       username: "test",
       name: "ClapTrap the DeathTrap",
@@ -142,21 +170,22 @@ describe("Home Post", () => {
       username: "test",
       photo: "",
       likedby: ["test"],
-      comments: [
-        { author: "test", content: "hi!", timestamp: new Date() },
-        { author: "test", content: "hello!", timestamp: new Date() },
-      ],
+      comments: [],
+      id: 'hi'
     };
     firestoreModule.getUserInfo = jest.fn().mockReturnValue(fakeUser);
-    firestoreModule.updateLikes = jest.fn();
     authenticationModule.getCurrentUserUsername = jest.fn().mockReturnValue('test')
-    render(<HomePost post={fakePost} />);
+    render(<MemoryRouter><HomePost post={fakePost} /></MemoryRouter>);
 
-    const sendIcon = screen.getByAltText(/send-comment/i);
-    userEvent.click(sendIcon);
-    const viewAllComments = screen.queryByText('View All Comments');
+    const dotIcon = screen.getByAltText('settings');
+    userEvent.click(dotIcon);
 
-    // If the comment is appended it will be the third, thus this should be displayed
-    expect(viewAllComments).toBe(null);
+    const shareIcon = screen.getByAltText('url');
+    const urlIcon = screen.getByAltText('post share');
+    const deleteIcon = screen.getByAltText('delete');
+
+    expect(shareIcon).toBeInTheDocument();
+    expect(urlIcon).toBeInTheDocument();
+    expect(deleteIcon).toBeInTheDocument();
   });
 });

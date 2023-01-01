@@ -1,23 +1,26 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
 import { getUserInfo } from "../../../firebase/firestore";
 import { useLiked, useComments } from "../../../utils/hooks";
 import { flexRowCenter, flexColumnCenter, flexRowBetween } from "../../../styles/style";
-import dots from '../../../assets/icons/dots.svg';
-import heart from '../../../assets/icons/heart.svg';
-import fillheart from '../../../assets/icons/fillheart.svg';
-import comment from '../../../assets/icons/chat.png';
-import sendcomment from '../../../assets/icons/instashare.svg';
-import share from '../../../assets/icons/share.svg';
-import share2 from '../../../assets/icons/share2.svg'
+import { openNativeShare } from "../../../utils/sharing";
+import dots from "../../../assets/icons/dots.svg";
+import heart from "../../../assets/icons/heart.svg";
+import fillheart from "../../../assets/icons/fillheart.svg";
+import comment from "../../../assets/icons/chat.png";
+import sendcomment from "../../../assets/icons/instashare.svg";
+import share from "../../../assets/icons/share.svg";
+import share2 from "../../../assets/icons/share2.svg";
 import Input from "../../inputs/Input";
 import MinimalComment from "./comments/MinimalComment";
+import PostSettings from "./PostSettings";
 
-const HomePost = ({post}) => {
-  const [liked, setLiked] = useLiked(post);
-  const [comments, insertComment] = useComments(post, `#${post.id}`);
+const HomePost = ({ post }) => {
   const currentUser = getCurrentUserUsername();
+  const [settings, setSettings] = useState(false);
+  const [liked, setLiked] = useLiked(post); // We put an a at the beginning to ensure id starts with letter
+  const [comments, insertComment] = useComments(post, `#a${post.id}`); // If not, it will throw an err.
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   useEffect(() => {
@@ -26,66 +29,96 @@ const HomePost = ({post}) => {
       const info = await getUserInfo(username);
       setUser(info);
       setLoading(false);
-    }
+    };
     getPosterInfo();
   }, []);
 
   return (
     <Container>
+      <PostSettings
+        settings={settings}
+        setSettings={setSettings}
+        post={post}
+      />
       <Postheader>
         <PosterInfo>
           <PosterIcon>
-            <Picture src={loading ? '' : user.pfp} alt="poster profile picture"/>
+            <Picture
+              src={loading ? "" : user.pfp}
+              alt="poster profile picture"
+            />
           </PosterIcon>
           <div>
-            <PosterName>{loading ? '' : user.name}</PosterName>
-            <PosterUsername>{loading ? '' : '@' + user.username}</PosterUsername>
+            <PosterName>{loading ? "" : user.name}</PosterName>
+            <PosterUsername>
+              {loading ? "" : "@" + user.username}
+            </PosterUsername>
           </div>
         </PosterInfo>
-        <SmallerIcon src={dots} alt='extra functions'/>
+        <SmallerIcon
+          src={dots}
+          onClick={() => setSettings(true)}
+          alt="settings"
+        />
       </Postheader>
       <PhotoContainer>
-        <Picture src={loading ? '' : post.photo} alt="post picture"/>
+        <Picture src={loading ? "" : post.photo} alt="post picture" />
       </PhotoContainer>
       <Postheader>
         <IconContainer>
-          <Heart liked={liked} src={liked ? fillheart : heart} onClick={() => setLiked(!liked)} alt= 'heart' />
-          <Icon src={comment} alt='speech bubble' />
-          <Icon src={share} alt='go-to' />
+          <Heart
+            liked={liked}
+            src={liked ? fillheart : heart}
+            onClick={() => setLiked(!liked)}
+            alt="heart"
+          />
+          <Icon src={comment} alt="speech bubble" />
+          <Icon src={share} alt="go-to" />
         </IconContainer>
-        <Icon src={share2} alt='share' />
+        <Icon src={share2} alt="share" onClick={() => openNativeShare(post.username, post.id)} />
       </Postheader>
       <CommentSection>
         <p>
-          {
-            ( liked 
-            ? post.likedby.filter(user => user !== currentUser).length + 1
-            : post.likedby.filter(user => user !== currentUser).length) + ' likes'
-          }
+          {(liked
+            ? post.likedby.filter((user) => user !== currentUser).length + 1
+            : post.likedby.filter((user) => user !== currentUser).length) +
+            " likes"}
         </p>
-        { !loading && comments.length > 2 && <p>View All Comments</p> }
-        { !loading && comments.slice(0, 2).map(comment => <MinimalComment key={comment.id} comment={comment}/>) }
+        {!loading && comments.length > 2 && (
+          <ViewMoreCommentsPara>View All Comments</ViewMoreCommentsPara>
+        )}
+        {!loading &&
+          comments
+            .slice(0, 2)
+            .map((comment) => (
+              <MinimalComment key={comment.id} comment={comment} />
+            ))}
       </CommentSection>
       <AddComment>
         <div>
           <Input
-            type='text'
-            id={post.id}
-            placeholder='Add your comment here...'
+            type="text"
+            id={'a' + post.id}
+            placeholder="Add your comment here..."
             styling={CommentInput}
           />
         </div>
-        <SmallerIcon src={sendcomment} onClick={insertComment} alt="send-comment" />
+        <SmallerIcon
+          src={sendcomment}
+          onClick={insertComment}
+          alt="send-comment"
+        />
       </AddComment>
     </Container>
-  )
-}
+  );
+};
 
 const Container = styled.div`
   ${flexColumnCenter}
   width: 550px;
   border-radius: 16px;
-  box-shadow: 1px 1px 1px black;
+  box-shadow: 3px 3px 10px #adaaaa;
+  position: relative;
 `;
 
 const PosterInfo = styled.div`
@@ -97,13 +130,13 @@ const PosterName = styled.p`
   font-size: 1.1rem;
   color: black;
   font-weight: bold;
-`
+`;
 
 const PosterUsername = styled.p`
   font-size: 0.9rem;
   color: gray;
   font-weight: bold;
-`
+`;
 
 const PosterIcon = styled.div`
   height: 38px;
@@ -128,7 +161,11 @@ const SmallerIcon = styled.img`
 
 const Heart = styled(Icon)`
   transition: 0.3s;
-  ${({liked}) => {return liked ? 'filter: invert(50%) sepia(87%) saturate(5070%) hue-rotate(332deg) brightness(99%) contrast(85%);' : '' }};
+  ${({ liked }) => {
+    return liked
+      ? "filter: invert(50%) sepia(87%) saturate(5070%) hue-rotate(332deg) brightness(99%) contrast(85%);"
+      : "";
+  }};
 `;
 
 const Postheader = styled.div`
@@ -138,9 +175,17 @@ const Postheader = styled.div`
   margin: 0 10%;
 `;
 
+const ViewMoreCommentsPara = styled.p`
+  font-size: 0.9rem;
+  color: gray;
+`;
+
 const CommentSection = styled.div`
   width: 90%;
   min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 `;
 
 const PhotoContainer = styled.div`
@@ -148,10 +193,10 @@ const PhotoContainer = styled.div`
   height: 500px;
 `;
 
-const IconContainer = styled.div `
+const IconContainer = styled.div`
   ${flexRowCenter}
   gap: 10px;
-`
+`;
 const AddComment = styled.div`
   ${flexRowBetween}
   width: 90%;
@@ -163,6 +208,6 @@ const AddComment = styled.div`
 const CommentInput = `
   width: 470px;
   border: none;
-`
+`;
 
 export default HomePost;
