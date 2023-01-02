@@ -55,6 +55,11 @@ const getPostDocReference = async (username) => {
   return docRef;
 };
 
+const getCommentDocReference = async (post) => {
+  const docRef = doc(collection(db, "Users", post.username, "Posts", post.id, "Comments"));
+  return docRef;
+}
+
 const createPost = async (ref, payload) => {
   await setDoc(ref, payload);
 };
@@ -65,15 +70,23 @@ const getPostInfo = async (username, postId) => {
   return document.data();
 };
 
+const getComments = async (username, postId) => {
+  const colRef = collection(db, 'Users', username, 'Posts', postId, 'Comments')
+  const comments = await getDocs(colRef);
+  console.log(comments);
+  if (comments.empty) return [];
+  else return comments.docs.map(comment => comment.data());
+}
+
 const updateLikes = async (path, username, liked) => {
   const docRef = doc(db, path);
   if (liked) updateDoc(docRef, { likedby: arrayUnion(username) });
   else updateDoc(docRef, { likedby: arrayRemove(username) });
 };
 
-const addComment = async (path, comment) => {
-  const docRef = doc(db, path);
-  updateDoc(docRef, { comments: arrayUnion(comment) });
+const addComment = async (ref, comment) => {
+  console.log(ref)
+  setDoc(ref, comment);
 };
 
 const deletePost = async (post) => {
@@ -86,7 +99,9 @@ export {
   getUserInfo,
   updateDocument,
   getPostDocReference,
+  getCommentDocReference,
   getPosts,
+  getComments,
   createPost,
   getPostInfo,
   deletePost,

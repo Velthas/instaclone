@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
 import { getUserInfo } from "../../../firebase/firestore";
@@ -21,14 +22,12 @@ const HomePost = ({ post }) => {
   const [settings, setSettings] = useState(false);
   const [liked, setLiked] = useLiked(post); // We put an a at the beginning to ensure id starts with letter
   const [comments, insertComment] = useComments(post, `#a${post.id}`); // If not, it will throw an err.
-  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   useEffect(() => {
     const getPosterInfo = async () => {
       const username = post.username;
       const info = await getUserInfo(username);
       setUser(info);
-      setLoading(false);
     };
     getPosterInfo();
   }, []);
@@ -44,14 +43,14 @@ const HomePost = ({ post }) => {
         <PosterInfo>
           <PosterIcon>
             <Picture
-              src={loading ? "" : user.pfp}
+              src={!user ? "" : user.pfp}
               alt="poster profile picture"
             />
           </PosterIcon>
           <div>
-            <PosterName>{loading ? "" : user.name}</PosterName>
+            <PosterName>{!user ? "" : user.name}</PosterName>
             <PosterUsername>
-              {loading ? "" : "@" + user.username}
+              {!user ? "" : "@" + user.username}
             </PosterUsername>
           </div>
         </PosterInfo>
@@ -61,9 +60,11 @@ const HomePost = ({ post }) => {
           alt="settings"
         />
       </Postheader>
-      <PhotoContainer>
-        <Picture src={loading ? "" : post.photo} alt="post picture" />
-      </PhotoContainer>
+      <Link to={`/posts/${post.username}/${post.id}`}>
+        <PhotoContainer>
+            <Picture src={!user ? "" : post.photo} alt="post picture" />
+        </PhotoContainer>
+      </Link>
       <Postheader>
         <IconContainer>
           <Heart
@@ -84,10 +85,10 @@ const HomePost = ({ post }) => {
             : post.likedby.filter((user) => user !== currentUser).length) +
             " likes"}
         </p>
-        {!loading && comments.length > 2 && (
+        {comments && comments.length > 2 && (
           <ViewMoreCommentsPara>View All Comments</ViewMoreCommentsPara>
         )}
-        {!loading &&
+        {comments &&
           comments
             .slice(0, 2)
             .map((comment) => (
