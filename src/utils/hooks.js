@@ -10,26 +10,25 @@ import {
 import { Timestamp } from "firebase/firestore";
 import { getCurrentUserUsername } from "../firebase/authentication";
 
-// Used in post components to provide user instant feedback about
+// Used in post components to provide user feedback about
 // liking posts, as well as updating things on the backend.
+// can be used independently when fed complete post info
 const useLiked = (post) => {
   const currentUser = getCurrentUserUsername();
-  const [liked, setLiked] = useState(
-    post.likedby.indexOf(getCurrentUserUsername()) !== -1
-  );
+  const [liked, setLiked] = useState(post.likedby.indexOf(currentUser) !== -1);
   useEffect(() => {
     updateLikes(`Users/${post.username}/Posts/${post.id}`, currentUser, liked); // Backend update
   }, [liked]);
   return [liked, setLiked];
 };
 
+// Works the same as the one above, but for comments on posts.
+// Comment likes are only shown when the full post is opened.
 const useCommentsLiked = (comment, post) => {
   const currentUser = getCurrentUserUsername();
-  const [liked, setLiked] = useState(
-    comment.likedby.indexOf(getCurrentUserUsername()) !== -1
-  );
+  const [liked, setLiked] = useState(comment.likedby.indexOf(currentUser) !== -1);
   useEffect(() => {
-    updateLikes(`Users/${post.username}/Posts/${post.id}`, currentUser, liked); // Backend update
+    updateLikes(`Users/${post.username}/Posts/${post.id}/Comments/${comment.id}`, currentUser, liked);
   }, [liked]);
   return [liked, setLiked];
 };
@@ -46,15 +45,16 @@ const useComments = (post, inputSelector) => {
     const getPostComments = async (username, postid) => {
       const commentdocs = await getComments(username, postid);
       setComments(commentdocs);
-    }
+    };
     getPostComments(post.username, post.id);
   }, []);
+
   const insertComment = async () => {
-    const content = document.querySelector(inputSelector).value;
+    const input = document.querySelector(inputSelector)
+    const content = input.value;
     if (content.length === 0) return;
     if (content.length > 25) content.slice(1, 25);
     const commentRef = await getCommentDocReference(post);
-    console.log(commentRef);
     const timestamp = Timestamp.fromDate(new Date());
     const author = getCurrentUserUsername();
     const id = commentRef.id;
@@ -62,29 +62,40 @@ const useComments = (post, inputSelector) => {
     const comment = { content, author, timestamp, id, likedby };
     addComment(commentRef, comment);
     setComments([comment].concat(comments));
+    input.value = ''; // Reset the text field
   };
+
   return [comments, insertComment];
 };
 
-// Fetches all data about a post and its poster and sets both in state.
-// Used in post components where we need info about both the post and poster.
+// Fetches info about post, poster and determines if post has been liked.
+// Used in full post components where post data is not already provided.
 const usePost = (username, postId) => {
+  const currentUser = getCurrentUserUsername();
   const [post, setPost] = useState(null);
   const [user, setUser] = useState(null);
+  const [liked, setLiked] = useState(false);
   useEffect(() => {
     const getPost = async () => {
       const postData = await getPostInfo(username, postId);
       const userData = await getUserInfo(username);
       setPost(postData);
       setUser(userData);
+      setLiked(postData.likedby.indexOf(currentUser) !== -1);
     };
     getPost();
   }, []);
-  return [post, user];
+
+  const changeLiked = (liked) => {
+    updateLikes(`Users/${post.username}/Posts/${post.id}`, currentUser, !liked);
+    setLiked(!liked);
+  };
+
+  return [post, user, liked, changeLiked];
 };
 
 // Using this hook to fetch user information and update it when needed using updateUser.
-// Could be also used to fetch user data for a profile
+// Using it in comments when profile picture has to be displayed.
 const useUser = (username) => {
   const [user, setUser] = useState(null);
   useEffect(() => {
@@ -101,4 +112,4 @@ const useUser = (username) => {
   return [user, updateUser];
 };
 
-export { useLiked, useComments, usePost, useUser };
+export { useLiked, useCommentsLiked, useComments, usePost, useUser };

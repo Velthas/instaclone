@@ -3,26 +3,23 @@ import styled from "styled-components";
 
 const MinimalComment = ({comment}) => {
   return (
-    <Container>
+    <div>
       <Username>{comment.author}</Username>
       <Comment>{comment.content}</Comment>
-    </Container>
+    </div>
   )
 };
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 5px;
-`
 
 const Username = styled.p`
   font-size: 1rem;
   font-weight: bold;
+  display: inline-block;
+  padding-right: 5px;
 `
 const Comment = styled.p`
   font-size: 0.9rem;
   color: black;
+  display: inline;
 `
 
 export default MinimalComment;

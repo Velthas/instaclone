@@ -73,7 +73,6 @@ const getPostInfo = async (username, postId) => {
 const getComments = async (username, postId) => {
   const colRef = collection(db, 'Users', username, 'Posts', postId, 'Comments')
   const comments = await getDocs(colRef);
-  console.log(comments);
   if (comments.empty) return [];
   else return comments.docs.map(comment => comment.data());
 }
@@ -85,7 +84,6 @@ const updateLikes = async (path, username, liked) => {
 };
 
 const addComment = async (ref, comment) => {
-  console.log(ref)
   setDoc(ref, comment);
 };
 

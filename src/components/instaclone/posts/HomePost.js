@@ -20,8 +20,8 @@ import PostSettings from "./PostSettings";
 const HomePost = ({ post }) => {
   const currentUser = getCurrentUserUsername();
   const [settings, setSettings] = useState(false);
-  const [liked, setLiked] = useLiked(post); // We put an a at the beginning to ensure id starts with letter
-  const [comments, insertComment] = useComments(post, `#a${post.id}`); // If not, it will throw an err.
+  const [liked, setLiked] = useLiked(post);
+  const [comments, insertComment] = useComments(post, `#a${post.id}`); // Ensure it starts with a letter
   const [user, setUser] = useState(null);
   useEffect(() => {
     const getPosterInfo = async () => {
