@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { getCurrentUserUsername } from "../firebase/authentication";
+import { format } from "date-fns";
 
 const formatDate = (timestamp) => {
   let periods = {
@@ -16,21 +17,26 @@ const formatDate = (timestamp) => {
 
   switch (true) {
     case diff > periods.year:
-      return Math.floor(diff / periods.year) + "y";
+      return Math.floor(diff / periods.year) + " y";
     case diff > periods.month:
-      return Math.floor(diff / periods.month) + "m";
+      return Math.floor(diff / periods.month) + " m";
     case diff > periods.week:
-      return Math.floor(diff / periods.week) + "w";
+      return Math.floor(diff / periods.week) + " w";
     case diff > periods.day:
-      return Math.floor(diff / periods.day) + "d";
+      return Math.floor(diff / periods.day) + " d";
     case diff > periods.hour:
-      return Math.floor(diff / periods.hour) + "h";
+      return Math.floor(diff / periods.hour) + " h";
     case diff > periods.minute:
-      return Math.floor(diff / periods.minute) + "m";
+      return Math.floor(diff / periods.minute) + " m";
     default:
       return "Now";
   }
 };
+
+const formatDateLong = (timestamp) => {
+  const date = new Date(timestamp.seconds * 1000) // To be used for detailed posts.
+  return format(date, "MMMM d', 'yyyy"); // Returns date in this format (January 6, 2022)
+}
 
 const formatPostLikes = (likedby) => {
   switch (true) {
@@ -50,14 +56,23 @@ const formatPostLikes = (likedby) => {
 // If we don't, a single user liking a post would count as two (array.length + 1 due to liked).
 // This also enables us to refresh the front end without fetching from the backend
 const likeSimpleFormat = (likedby, liked) => {
-  console.log('getting called');
   const currentUser = getCurrentUserUsername(); 
   const amount = liked
     ? likedby.filter((user) => user !== currentUser).length + 1
     : likedby.filter((user) => user !== currentUser).length;
-  if(amount === 1) return `1 like`;
-  if(amount > 1) return `${likedby.length} likes`;
+  if(amount === 1) return `Likes: 1`;
+  if(amount > 1) return `Likes: ${likedby.length}`;
   return '';
 };
 
-export { formatDate, formatPostLikes, likeSimpleFormat};
+const likeDiscursiveFormat = (likedby, liked) => {
+  const currentUser = getCurrentUserUsername(); 
+  const amount = liked
+    ? likedby.filter((user) => user !== currentUser).length + 1
+    : likedby.filter((user) => user !== currentUser).length;
+  if(amount === 1) return `Liked by 1 person`;
+  if(amount > 1) return `Liked by ${likedby.length} people`;
+  return '';
+}
+
+export { formatDate, formatDateLong, formatPostLikes, likeSimpleFormat, likeDiscursiveFormat};

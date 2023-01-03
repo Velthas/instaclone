@@ -22,10 +22,10 @@ const ExtendedComment = ({ comment, post }) => {
             <Undercomment>
               {formatDate(comment.timestamp)}
             </Undercomment>
-            <Undercomment>
+            <Underimportant>
               {likeSimpleFormat(comment.likedby, liked)}
-            </Undercomment>
-            <Undercomment>Reply</Undercomment>
+            </Underimportant>
+            <Underimportant>Reply</Underimportant>
           </Extra>
         </Wrapper>
       </Main>
@@ -41,25 +41,10 @@ const ExtendedComment = ({ comment, post }) => {
 
 const Comment = styled.div`
   width: 100%;
+  padding: 0 5%;
   ${flexRowBetween};
   align-items: flex-start;
   margin: 15px 0;
-`;
-
-const UserPic = styled.div`
-  background-image: url(${({ url }) => url});
-  background-position: center;
-  background-size: cover;
-  height: 34px;
-  width: 34px;
-  border-radius: 100%;
-  flex-shrink: 0;
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
 `;
 
 const Main = styled.div`
@@ -69,26 +54,20 @@ const Main = styled.div`
   width: 100%;
 `;
 
-const Extra = styled.div`
-  ${flexRowCenter};
-  justify-content: flex-start;
-  gap: 5px;
+const UserPic = styled.div`
+  background-image: url(${({ url }) => url});
+  background-position: center;
+  background-size: cover;
+  height: 32px;
+  width: 32px;
+  border-radius: 100%;
+  flex-shrink: 0;
 `;
 
-const Undercomment = styled.div`
-  font-size: 0.7rem;
-  color: gray;
-`;
-
-const LikeIcon = styled.img`
-  width: 12px;
-  height: 12px;
-  align-self: center;
-  ${({ liked }) => {
-    return liked
-      ? "filter: invert(50%) sepia(87%) saturate(5070%) hue-rotate(332deg) brightness(99%) contrast(85%)"
-      : "";
-  }};
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 `;
 
 const Username = styled.div`
@@ -100,6 +79,33 @@ const Username = styled.div`
 const Message = styled.div`
   font-size: 0.9rem;
   display: inline;
+`;
+
+const Extra = styled.div`
+  ${flexRowCenter};
+  justify-content: flex-start;
+  gap: 5px;
+`;
+
+const Undercomment = styled.div`
+  margin-top: 5px;
+  font-size: 0.7rem;
+  color: gray;
+`;
+
+const Underimportant = styled(Undercomment)`
+  font-weight: bold;
+`
+
+const LikeIcon = styled.img`
+  width: 12px;
+  height: 12px;
+  align-self: center;
+  ${({ liked }) => {
+    return liked
+      ? "filter: invert(50%) sepia(87%) saturate(5070%) hue-rotate(332deg) brightness(99%) contrast(85%)"
+      : "";
+  }};
 `;
 
 export default ExtendedComment;
