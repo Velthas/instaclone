@@ -31,6 +31,10 @@ const Button = styled.button`
   border: none;
   border-radius: 3px;
   background-color: transparent;
+  cursor: pointer;
+    &:hover{
+    color: #00376b;
+  }
 `;
 
 const Icon = styled.img`

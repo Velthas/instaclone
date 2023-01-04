@@ -6,6 +6,7 @@ import {
   getComments,
   getUserInfo,
   getCommentDocReference,
+  updateFollow,
 } from "../firebase/firestore";
 import { Timestamp } from "firebase/firestore";
 import { getCurrentUserUsername } from "../firebase/authentication";
@@ -102,14 +103,21 @@ const useUser = (username) => {
     getUser();
   }, []);
 
-  const updateUser = () => getUser(); // Fetches the data again if needed.
-
   const getUser = async () => {
     const userData = await getUserInfo(username);
     setUser(userData);
   };
 
-  return [user, updateUser];
+  return [user, getUser];
 };
 
-export { useLiked, useCommentsLiked, useComments, usePost, useUser };
+const useFollow = (user) => {
+  const currentUser = getCurrentUserUsername();
+  const [followed, setFollowed] = useState(user ? user.followed.indexOf(currentUser) !== -1 : false);
+  useEffect(() => {
+    if(user)updateFollow(user.username, followed);
+  }, [followed]);
+  return [followed, setFollowed]
+};
+
+export { useLiked, useCommentsLiked, useComments, usePost, useUser, useFollow };

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
-import { usePost, useComments } from "../../../utils/hooks";
+import { usePost, useComments, useFollow } from "../../../utils/hooks";
 import { flexColumnCenter, flexRowCenter} from "../../../styles/style";
 import PostSettings from "./PostSettings";
 import Header from "./fullpost/Header";
@@ -12,10 +12,11 @@ import Add from "./fullpost/Add";
 
 const FullPost = () => {
   const { postid, username } = useParams();
-  const [settings, setSettings] = useState(false);
   const postInfo = { id: postid, username };
+  const [settings, setSettings] = useState(false);
   const [post, user, liked, changeLiked] = usePost(username, postid);
   const [comments, insertComment] = useComments(postInfo, `#a${postInfo.id}`);
+  const [followed, setFollowed] = useFollow(user ? user : null);
 
   return (
     <Container>
@@ -29,7 +30,7 @@ const FullPost = () => {
         )}
         <Photo url={post ? post.photo : ""} />
         <Info>
-          <Header user={user} setSettings={setSettings} />
+          <Header user={user} setSettings={setSettings} followed={followed} setFollowed={setFollowed} />
           <Comments comments={comments} postInfo={postInfo} />
           <Icons liked={liked} changeLiked={changeLiked} />
           <Stats post={post} liked={liked} />

@@ -7,7 +7,7 @@ import heart from "../../../../assets/icons/heart.svg";
 import fillheart from "../../../../assets/icons/fillheart.svg";
 
 const ExtendedComment = ({ comment, post }) => {
-  const [user, updateUser] = useUser(comment.author);
+  const [user, getUser] = useUser(comment.author);
   const [liked, setLiked] = useCommentsLiked(comment, post);
   return (
     <Comment>

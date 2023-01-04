@@ -10,6 +10,7 @@ import {
   arrayRemove,
   deleteDoc,
 } from "firebase/firestore";
+import { getCurrentUserUsername } from "./authentication";
 
 const createUserBucket = (name, username) => {
   const defaultPfp =
@@ -74,7 +75,7 @@ const getComments = async (username, postId) => {
   const colRef = collection(db, 'Users', username, 'Posts', postId, 'Comments')
   const comments = await getDocs(colRef);
   if (comments.empty) return [];
-  else return comments.docs.map(comment => comment.data());
+  else return comments.docs.map(comment => comment.data()).sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
 }
 
 const updateLikes = async (path, username, liked) => {
@@ -92,6 +93,19 @@ const deletePost = async (post) => {
   await deleteDoc(docRef);
 };
 
+const updateFollow = async (followee, followed) => {
+  const follower = getCurrentUserUsername();
+  const followerRef = doc(db, 'Users', follower);
+  const followeeRef = doc(db, 'Users', followee);
+  if (followed) {
+    updateDoc(followerRef, { follows: arrayUnion(followee) });
+    updateDoc(followeeRef, { followed: arrayUnion(follower) });
+  } else { // Both follower and followee profiles have to be updated 
+    updateDoc(followerRef, { follows: arrayRemove(followee) });
+    updateDoc(followeeRef, { followed: arrayRemove(follower) });
+  }
+}
+
 export {
   createUserBucket,
   getUserInfo,
@@ -104,5 +118,6 @@ export {
   getPostInfo,
   deletePost,
   updateLikes,
+  updateFollow,
   addComment,
 };

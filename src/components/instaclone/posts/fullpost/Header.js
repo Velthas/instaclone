@@ -3,14 +3,16 @@ import styled from "styled-components";
 import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
 import dots from "../../../../assets/icons/dots.svg";
 
-const Header = ({ user, setSettings }) => {
+const Header = ({ user, setSettings, followed, setFollowed }) => {
   return (
     <Container>
       <User>
         <UserPhoto url={user ? user.pfp : ""} />
         <Bold>{user ? user.username : ""}</Bold>
         <span>•</span>
-        <Button>Follow</Button>
+        <Button onClick={() => setFollowed(!followed)}>
+          {followed ? 'Unfollow' : 'Follow'}
+        </Button>
       </User>
       <Dots src={dots} onClick={() => setSettings(true)} />
     </Container>
@@ -56,6 +58,10 @@ const Button = styled.button`
   border: none;
   border-radius: 3px;
   background-color: transparent;
+  cursor: pointer;
+  &:hover{
+    color: #00376b;
+  }
 `;
 
 export default Header;

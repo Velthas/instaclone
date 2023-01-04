@@ -23,6 +23,7 @@ const Container = styled.div`
 const Likes = styled.p`
   font-weight: bold;
   color: #262626;
+  font-size: 0.9rem;
 `;
 
 const Date = styled.p`
