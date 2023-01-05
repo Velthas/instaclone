@@ -1,92 +1,137 @@
-
 import { useState } from 'react';
+import { useUser } from '../../../utils/hooks';
 import { Link } from 'react-router-dom';
 import PostForm from '../posts/PostForm';
 import styled from 'styled-components';
-import home from '../../../assets/icons/home.svg';
-import person from '../../../assets/icons/person.svg';
-import add from '../../../assets/icons/add.svg';
-import heart from '../../../assets/icons/heart.svg';
-import fillheart from '../../../assets/icons/fillheart.svg';
-import filladd from '../../../assets/icons/filladd.svg';
-import fillhome from '../../../assets/icons/fillhome.svg';
-import fillperson from '../../../assets/icons/fillperson.svg';
-import instalogo from '../../../assets/logo/insta-logo.png';
+import * as BsIcons from "react-icons/bs";
+import { IconContext } from 'react-icons';
+import { flexRowCenter } from '../../../styles/style';
+import Sidebar from '../sidebar/Sidebar';
 
 
 const Nav = ({user}) => {
-  const [active, setActive] = useState('')
+  const [sidebar, setSidebar] = useState(false);
+  const [userdata, getUserData] = useUser(user ? user.displayName : null); 
   const [postForm, setPostForm] = useState(false);
-  const handleClick = (icon) => setActive(icon)
+  const [active, setActive] = useState('home');
+
+  const isActive = (icon) => icon === active;
+
+  const handleClick = (icon) => {
+    if(sidebar) setSidebar(false)
+    setActive(icon)
+  };
+  
+  const openSidebar = (icon) => {
+    if(icon === active && sidebar === true) setSidebar(false); // Close sidebar on same icon click
+    else {
+    handleClick(icon);
+    setSidebar(true);
+    }
+  };
+
   const closeForm = () => {
     setPostForm(false);
     setActive('');
-  }
+  };
   
   return (
-    <>
-    <Navbar>
-      <Logo alt='instalogo' src={instalogo}/>
-      <Icons>
-        <li>
-          <Icon 
-            alt='heart' 
-            src={active === 'heart' ? fillheart : heart}
-            onClick={() => handleClick('heart')}
-          />
-        </li>
-        <li>
-          <Icon 
-            alt='add'
-            src={active === 'add' ? filladd : add}
-            onClick={() => {
-
-            handleClick('add')
-            setPostForm(true) }}
-          />
-        </li>
-        <li>
-        <Link to={user !== null ? '/profile/' + user.displayName : '/'}>  
-          <Icon alt='profile'
-            src={active === 'person' ? fillperson : person}
-            onClick={() => handleClick('person')}
-          />
-        </Link>
-        </li>
-        <li>
-          <Icon 
-            alt='home'
-            src={active === 'home' ? fillhome : home}
-            onClick={() => handleClick('home')}
-          />
-        </li>
-      </Icons>
-    </Navbar>
-    {postForm && <PostForm closeForm={closeForm} />}
-    </>
+    <IconContext.Provider value={{ style: {cursor: 'pointer'}, size: 24 }}>
+      <Navbar>
+        <Sidebar active={sidebar} content={active} />
+        <LogoContainer>
+          <BsIcons.BsInstagram alt='instalogo'/>
+        </LogoContainer>
+        <Icons>
+          <StyledLink to={'/'}>
+            <ListItem>
+              { active === 'home' 
+                ? <BsIcons.BsHouseDoorFill />
+                : <BsIcons.BsHouseDoor onClick={() => handleClick('home')} alt="home" /> }
+            </ListItem>
+          </StyledLink>
+          <ListItem>
+            <BsIcons.BsSearch alt='search' onClick={() => openSidebar('search')} />
+          </ListItem>
+          <ListItem>
+            { active === 'add' 
+                ? <BsIcons.BsPlusCircleFill alt="add"/>
+                : <BsIcons.BsPlusCircle alt="add" onClick={() => {
+                    handleClick('add')
+                    setPostForm(true) }} 
+                  /> 
+            }
+          </ListItem>
+          <ListItem onClick={() => openSidebar('heart')}>
+            { active === 'heart' 
+            ? <BsIcons.BsHeartFill alt='heart'/>
+            : <BsIcons.BsHeart alt='heart' />}
+          </ListItem>
+          <StyledLink to={user !== null ? '/profile/' + user.displayName : '/'}> 
+            <ListItem onClick={() => handleClick('') }> 
+                <User url={userdata ? userdata.pfp : ''} />
+            </ListItem>
+          </StyledLink>
+        </Icons>
+        <BsIcons.BsList alt="burger" />
+      </Navbar>
+      {postForm && <PostForm closeForm={closeForm} />}
+    </IconContext.Provider>
   )
 };
 
 const Navbar = styled.nav`
+  position: fixed;
+  z-index: 3;
+  top: 0;
+  left: 0;
+
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
-  height: 10vh;
-  margin: 0 20px;
+
+  width: 80px;
+  height: 100vh;
+  padding: 12px 8px;
+
+  background-color: white;
+  border-right: 1px solid #dfdfdf;
 `;
 
-const Logo = styled.img`
-  height: 70%;
+const LogoContainer = styled.div`
+  ${flexRowCenter}
+  height: 20%;
+  width: 100%;
+`;
+
+const User = styled.div`
+  background-image: url(${({url}) => url});
+  background-position: center;
+  background-size: cover;
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+  border: 1px solid #dfdfdf
 `;
 
 const Icons = styled.ul`
   list-style: none;
   display: flex;
-  gap: 15px;
+  flex-direction: column;
+  gap: 25px;
+  height: 70%;
 `
 
-const Icon = styled.img`
-  height: 30px;
+const ListItem = styled.li`
+  transition: 0.15s ease-out;
+  &:hover{
+    transform: scale(1.1);
+  }
+`
+
+const StyledLink = styled(Link)`
+  color: black;
 `
 
 export default Nav;

@@ -7,6 +7,7 @@ import {
   getUserInfo,
   getCommentDocReference,
   updateFollow,
+  searchForProfiles,
 } from "../firebase/firestore";
 import { Timestamp } from "firebase/firestore";
 import { getCurrentUserUsername } from "../firebase/authentication";
@@ -100,7 +101,7 @@ const usePost = (username, postId) => {
 const useUser = (username) => {
   const [user, setUser] = useState(null);
   useEffect(() => {
-    getUser();
+    if(username) getUser();
   }, []);
 
   const getUser = async () => {
@@ -120,4 +121,19 @@ const useFollow = (user) => {
   return [followed, setFollowed]
 };
 
-export { useLiked, useCommentsLiked, useComments, usePost, useUser, useFollow };
+const useSearch = () => {
+  const [query, setQuery] = useState(false);
+  const [profiles, setProfiles] = useState([])
+  useEffect(() => {
+    const searchProfiles = async () => {
+      if(query) { 
+        const result = await searchForProfiles(query);
+        setProfiles(result);
+      }
+    } 
+    searchProfiles();
+  }, [query])
+  return [profiles, setQuery];
+}
+
+export { useLiked, useCommentsLiked, useComments, usePost, useUser, useFollow, useSearch };

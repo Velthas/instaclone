@@ -9,6 +9,8 @@ import {
   arrayUnion,
   arrayRemove,
   deleteDoc,
+  query,
+  where,
 } from "firebase/firestore";
 import { getCurrentUserUsername } from "./authentication";
 
@@ -106,6 +108,14 @@ const updateFollow = async (followee, followed) => {
   }
 }
 
+const searchForProfiles = async (userQuery) => {
+  const usersRef = collection(db, 'Users');
+  const q = query(usersRef, where("username", '>=', userQuery), where('username', '<=', userQuery + '\uf8ff'));
+  const results = await getDocs(q);
+  if(results.empty) return []
+  return results.docs.map(doc => doc.data())
+}
+
 export {
   createUserBucket,
   getUserInfo,
@@ -120,4 +130,5 @@ export {
   updateLikes,
   updateFollow,
   addComment,
+  searchForProfiles,
 };
