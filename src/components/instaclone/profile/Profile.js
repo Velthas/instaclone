@@ -5,11 +5,13 @@ import PostPreview from "../posts/PostPreview";
 import uniqid from 'uniqid'
 import { flexRowCenter } from "../../../styles/style";
 import ProfileHeader from "./ProfileHeader";
+import ProfileSections from "./ProfileSections";
 
 const Profile = ({user, posts}) => {
   return (
     <Container>
         <ProfileHeader user={user} posts={posts} />
+        <ProfileSections />
         <PostList>
           {posts.map(post => {
             return <PostPreview key={uniqid()} post={post}/>
@@ -33,6 +35,7 @@ const PostList = styled.div`
   display: grid;
   gap: 28px;
   grid-template-columns: 1fr 1fr 1fr;
+  margin: 0 5%;
 `;
 
 export default Profile;

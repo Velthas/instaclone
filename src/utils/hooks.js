@@ -156,7 +156,7 @@ const useProfile = (username) => {
       setPosts(postInfo);
     }
     loadAllInfo();
-  }, []);
+  }, [username]);
 
   const reloadInfo = async () => {
     const userInfo = await getUserInfo(username);

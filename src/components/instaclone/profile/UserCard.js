@@ -1,9 +1,16 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-const UserCard = ({user}) => {
+const UserCard = ({user, setSidebar}) => {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate('./profile/' + user.username)
+    setSidebar(false);
+  }
+
   return (
-    <Container>
+    <Container onClick={handleClick}>
       <Picture url={user.pfp}/>
       <div>
         <Username>{user.username}</Username>

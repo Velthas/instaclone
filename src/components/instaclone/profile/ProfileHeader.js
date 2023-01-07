@@ -4,9 +4,15 @@ import { flexRowCenter } from "../../../styles/style";
 import { BsPersonPlus, BsThreeDots } from "react-icons/bs";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
 import { useNavigate } from "react-router-dom";
+import { useFollow } from "../../../utils/hooks";
 
 const ProfileHeader = ({ user, posts }) => {
   const currentUser = getCurrentUserUsername();
+  const [followed, updateFollowed] = useFollow(user ? user : null);
+  let followers;
+  if(user) followers = followed 
+    ? user.followed.filter(usr => usr !== currentUser).length + 1
+    : user.followed.filter(usr => usr !== currentUser).length
   const navigate = useNavigate();
   return (
     <Header>
@@ -22,7 +28,9 @@ const ProfileHeader = ({ user, posts }) => {
             <ButtonContainer>
               {user && currentUser !== user.username ?
               <>
-                <Button blue>Follow</Button>
+                <Button blue onClick={() => updateFollowed(!followed)}>
+                  {followed ? 'Unfollow' : 'Follow'}
+                </Button>
                 <Button>Message</Button>
                 <IconButton>
                   <BsPersonPlus size={15} />
@@ -36,18 +44,20 @@ const ProfileHeader = ({ user, posts }) => {
           </FirstRow>
           <StatsUl>
             <li>
-              <span>{posts.length}</span> posts
+              <StatEntry>{posts.length}</StatEntry> posts
             </li>
             <li>
-              <span>{user ? user.followed.length : ""}</span> followers
+              <StatEntry>
+                {user ? followers : ""}
+              </StatEntry> followers
             </li>
             <li>
-              <span>{user ? user.follows.length : ""}</span> followed
+              <StatEntry>{user ? user.follows.length : ""}</StatEntry> followed
             </li>
           </StatsUl>
           <div>
             <FullName>{user ? user.name : ""}</FullName>
-            <Description>{user ? user.username : ""}</Description>
+            <Description>{user ? user.description : ""}</Description>
           </div>
         </div>
       </InfoContainer>
@@ -93,7 +103,12 @@ const Username = styled.h2`
   font-weight: 400;
 `;
 
+const StatEntry = styled.span`
+  font-weight: bold;
+`;
+
 const Button = styled.button`
+  cursor: pointer;
   padding: 8px 16px;
   margin-left: 5px;
   border: none;
@@ -103,7 +118,7 @@ const Button = styled.button`
   color: ${props => props.blue ? '#fff' : '#000'};
   background-color: ${ props => props.blue ? '#0095f6' : '#efefef' };
   &:hover {
-    background-color: ${props => props.blue ? '#1877f2' : '#dbdbdb' }<
+    background-color: ${props => props.blue ? '#1877f2' : '#dbdbdb' };
   }
 `
 
@@ -132,6 +147,7 @@ const FullName = styled.span`
 
 const Description = styled.p`
   line-height: 1.3;
+  white-space: pre-wrap;
 `
 
 const InfoContainer = styled.div`

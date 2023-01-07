@@ -38,7 +38,7 @@ const Nav = ({user}) => {
   return (
     <IconContext.Provider value={{ style: {cursor: 'pointer'}, size: 24 }}>
       <Navbar>
-        <Sidebar active={sidebar} content={active} />
+        <Sidebar active={sidebar} content={active} setSidebar={setSidebar} />
         <LogoContainer>
           <BsIcons.BsInstagram alt='instalogo'/>
         </LogoContainer>

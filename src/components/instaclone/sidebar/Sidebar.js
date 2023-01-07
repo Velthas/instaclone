@@ -3,11 +3,11 @@ import styled from "styled-components";
 import Search from "./Search";
 import Notifications from "./Notifications";
 
-const Sidebar = ({ active, content }) => {
+const Sidebar = ({ active, content, setSidebar }) => {
   return (
     <Container active={active}>
-      {content === "search" && <Search />}
-      {content === "heart" && <Notifications />}
+      {content === "search" && <Search setSidebar={setSidebar} />}
+      {content === "heart" && <Notifications setSidebar={setSidebar} />}
     </Container>
   );
 };
