@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Nav from "./sections/Nav";
 
-const Instaclone = ({user}) => {
+const Instaclone = ({ user }) => {
   const navigate = useNavigate();
   useEffect(() => {
     if(!user) navigate('/auth');

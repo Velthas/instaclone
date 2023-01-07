@@ -115,11 +115,19 @@ const useUser = (username) => {
 
 const useFollow = (user) => {
   const currentUser = getCurrentUserUsername();
-  const [followed, setFollowed] = useState(user ? user.followed.indexOf(currentUser) !== -1 : false);
+  const [followed, setFollowed] = useState(false);
   useEffect(() => {
-    if(user)updateFollow(user.username, followed);
-  }, [followed]);
-  return [followed, setFollowed]
+    if(user) setFollowed(user.followed.indexOf(currentUser) !== -1);
+  }, [user]); // When user info is loaded make sure to update the default false value
+
+  const updateFollowed = (followed) => {
+    if(user) {
+      updateFollow(user.username, followed);
+      setFollowed(followed);
+    }
+  }
+  
+  return [followed, updateFollowed]
 };
 
 const useSearch = () => {

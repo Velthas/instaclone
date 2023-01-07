@@ -16,7 +16,7 @@ const FullPost = () => {
   const [settings, setSettings] = useState(false);
   const [post, user, liked, changeLiked] = usePost(username, postid);
   const [comments, insertComment] = useComments(postInfo, `#a${postInfo.id}`);
-  const [followed, setFollowed] = useFollow(user ? user : null);
+  const [followed, updateFollowed] = useFollow(user ? user : null);
 
   return (
     <Container>
@@ -30,7 +30,7 @@ const FullPost = () => {
         )}
         <Photo url={post ? post.photo : ""} />
         <Info>
-          <Header user={user} setSettings={setSettings} followed={followed} setFollowed={setFollowed} />
+          <Header user={user} setSettings={setSettings} followed={followed} updateFollowed={updateFollowed} />
           <Comments comments={comments} postInfo={postInfo} />
           <Icons liked={liked} changeLiked={changeLiked} />
           <Stats post={post} liked={liked} />
@@ -42,8 +42,9 @@ const FullPost = () => {
 };
 
 const Container = styled.div`
-  ${flexRowCenter};
-  min-height: 90vh;
+  ${flexRowCenter}
+  min-height: 100vh;
+  width: 100vw;
   background-color: #fdfdfd;
 `;
 
@@ -53,6 +54,9 @@ const PostWrapper = styled.div`
   height: 600px;
   position: relative;
   box-shadow: 3px 3px 6px gainsboro;
+
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
 `;
 
 const Photo = styled.div`
@@ -61,9 +65,6 @@ const Photo = styled.div`
   background-size: cover;
   height: 100%;
   width: 500px;
-
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
 `;
 
 const Info = styled.div`

@@ -3,14 +3,14 @@ import styled from "styled-components";
 import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
 import dots from "../../../../assets/icons/dots.svg";
 
-const Header = ({ user, setSettings, followed, setFollowed }) => {
+const Header = ({ user, setSettings, followed, updateFollowed }) => {
   return (
     <Container>
       <User>
         <UserPhoto url={user ? user.pfp : ""} />
         <Bold>{user ? user.username : ""}</Bold>
         <span>•</span>
-        <Button onClick={() => setFollowed(!followed)}>
+        <Button onClick={() => updateFollowed(!followed)}>
           {followed ? 'Unfollow' : 'Follow'}
         </Button>
       </User>

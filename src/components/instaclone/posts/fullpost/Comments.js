@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import ExtendedComment from "../comments/ExtendedComment";
 
-const Comments = ({post, comments, postInfo }) => {
+const Comments = ({comments, postInfo}) => {
   return (
     <Container>
       {comments &&
