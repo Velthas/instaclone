@@ -72,7 +72,7 @@ const likeDiscursiveFormat = (likedby, liked) => {
     : likedby.filter((user) => user !== currentUser).length;
   if(amount === 1) return `Liked by 1 person`;
   if(amount > 1) return `Liked by ${likedby.length} people`;
-  return '';
+  return 'Be the first to like this post!';
 }
 
 export { formatDate, formatDateLong, formatPostLikes, likeSimpleFormat, likeDiscursiveFormat};

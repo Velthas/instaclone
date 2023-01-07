@@ -4,18 +4,17 @@ import styled from "styled-components";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
 import EditProfileForm from "../../forms/EditProfileForm";
 
-const EditProfile = ({info, loading, loadInfo}) => {
+const EditProfile = ({info, loadInfo}) => {
  const navigate = useNavigate()
   useEffect(() => {
     const currentUser = getCurrentUserUsername();
-    if(info.username !== currentUser) navigate(`/users/${currentUser}/settings`);
+    if(info && info.username !== currentUser) navigate(`/users/${currentUser}/settings`);
   }, []);
 
   return (
     <Backdrop>
       <Container>
         <EditProfileForm
-          loading={loading}
           info={info}
           loadInfo={loadInfo}
         />
@@ -25,16 +24,15 @@ const EditProfile = ({info, loading, loadInfo}) => {
 };
 
 const Backdrop = styled.div`
-  background-color: #161719d9;
   width: 100%;
-  height: 90vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
 `
 const Container = styled.div`
-  border-radius: 20px;
-  width: 600px;
+  padding: 40px;
+  border: 1px solid #dfdfdf;
   background-color: white;
   padding-bottom: 20px;
 `

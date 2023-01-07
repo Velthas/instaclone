@@ -5,6 +5,7 @@ import {
   getPostInfo,
   getComments,
   getUserInfo,
+  getPosts,
   getCommentDocReference,
   updateFollow,
   searchForProfiles,
@@ -136,4 +137,24 @@ const useSearch = () => {
   return [profiles, setQuery];
 }
 
-export { useLiked, useCommentsLiked, useComments, usePost, useUser, useFollow, useSearch };
+const useProfile = (username) => {
+  const [user, setUser] = useState(null);
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    const loadAllInfo = async () => {
+      const userInfo = await getUserInfo(username);
+      const postInfo = await getPosts(username);
+      setUser(userInfo);
+      setPosts(postInfo);
+    }
+    loadAllInfo();
+  }, []);
+
+  const reloadInfo = async () => {
+    const userInfo = await getUserInfo(username);
+    setUser({...userInfo});
+  }
+  return [user, posts, reloadInfo]
+}
+
+export { useLiked, useCommentsLiked, useComments, usePost, useUser, useFollow, useSearch, useProfile };
