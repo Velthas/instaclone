@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { signOutCurrentUser } from "../../../firebase/authentication";
 import User from '../profile/User';
-import FullPost from "../posts/FullPost";
+import FullPost from "../posts/fullpost/FullPost";
 
 const Main = () => {
   return (
