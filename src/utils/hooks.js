@@ -19,10 +19,13 @@ import { getCurrentUserUsername } from "../firebase/authentication";
 const useLiked = (post) => {
   const currentUser = getCurrentUserUsername();
   const [liked, setLiked] = useState(post.likedby.indexOf(currentUser) !== -1);
-  useEffect(() => {
-    updateLikes(`Users/${post.username}/Posts/${post.id}`, currentUser, liked); // Backend update
-  }, [liked]);
-  return [liked, setLiked];
+
+  const changeLiked = (liked) => {
+    updateLikes(`Users/${post.username}/Posts/${post.id}`, currentUser, !liked);
+    setLiked(!liked);
+  };
+
+  return [liked, changeLiked];
 };
 
 // Works the same as the one above, but for comments on posts.
@@ -55,8 +58,7 @@ const useComments = (post, inputSelector) => {
   const insertComment = async () => {
     const input = document.querySelector(inputSelector)
     const content = input.value;
-    if (content.length === 0) return;
-    if (content.length > 25) content.slice(1, 25);
+    if (content.length === 0 || content.length > 2200) return;
     const commentRef = await getCommentDocReference(post);
     const timestamp = Timestamp.fromDate(new Date());
     const author = getCurrentUserUsername();

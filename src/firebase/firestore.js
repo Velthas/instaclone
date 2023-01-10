@@ -11,6 +11,8 @@ import {
   deleteDoc,
   query,
   where,
+  orderBy,
+  limit,
 } from "firebase/firestore";
 import { getCurrentUserUsername } from "./authentication";
 
@@ -116,6 +118,21 @@ const searchForProfiles = async (userQuery) => {
   return results.docs.map(doc => doc.data())
 }
 
+const getHomepageContent = async (username) => {
+  const userInfo = await getUserInfo(username);
+  const followed = userInfo.follows; // This is an array of usernames.
+  let posts = []; // This is where all the posts will be stored.
+  for(let i = 0; i < followed.length; i++) {
+    const postsRef = collection(db, 'Users', followed[i], 'Posts'); 
+    const q = query(postsRef, orderBy('timestamp'), limit(3));
+    const documents = await getDocs(q);
+    const info = documents.docs.map(doc => doc.data());
+    if(info) posts = posts.concat(info);
+  };
+  console.log(posts)
+  return posts;
+}
+
 export {
   createUserBucket,
   getUserInfo,
@@ -131,4 +148,5 @@ export {
   updateFollow,
   addComment,
   searchForProfiles,
+  getHomepageContent
 };

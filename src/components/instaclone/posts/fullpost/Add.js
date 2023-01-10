@@ -41,11 +41,6 @@ const Icon = styled.img`
   height: 24px;
   width: 24px;
   cursor: pointer;
-  ${({ liked }) => {
-    return liked
-      ? "filter: invert(50%) sepia(87%) saturate(5070%) hue-rotate(332deg) brightness(99%) contrast(85%);"
-      : "";
-  }}
 `;
 
 const CommentBox = styled.input`

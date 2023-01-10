@@ -14,7 +14,7 @@ const Instaclone = ({ user }) => {
     <Container>
       <Space />
       <Nav user={user} />
-      <Main />
+      <Main user={user} />
     </Container>
   );
 };
