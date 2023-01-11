@@ -110,6 +110,9 @@ const updateFollow = async (followee, followed) => {
   }
 }
 
+// Used when user writes something in the search bar
+// Matches what's typed in the input with usernames stored in firestore
+// Only works if prefix is exactly right
 const searchForProfiles = async (userQuery) => {
   const usersRef = collection(db, 'Users');
   const q = query(usersRef, where("username", '>=', userQuery), where('username', '<=', userQuery + '\uf8ff'));
@@ -118,6 +121,9 @@ const searchForProfiles = async (userQuery) => {
   return results.docs.map(doc => doc.data())
 }
 
+// Used to get posts for the homepage.
+// Load at each person followed by a user and draw 3 most recent posts.
+// It's okay for now, but will need improvement in the future
 const getHomepageContent = async (username) => {
   const userInfo = await getUserInfo(username);
   const followed = userInfo.follows; // This is an array of usernames.
@@ -129,7 +135,6 @@ const getHomepageContent = async (username) => {
     const info = documents.docs.map(doc => doc.data());
     if(info) posts = posts.concat(info);
   };
-  console.log(posts)
   return posts;
 }
 
