@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { getUserInfo } from "../../../../firebase/firestore";
-import { useLiked, useComments } from "../../../../utils/hooks";
+import { useLiked, useComments, useUser } from "../../../../utils/hooks";
 import { flexColumnCenter } from "../../../../styles/style";
 
 import PostSettings from "../PostSettings";
@@ -15,22 +14,14 @@ const HomePost = ({ post }) => {
   const [settings, setSettings] = useState(false);
   const [liked, changeLiked] = useLiked(post);
   const [comments, insertComment] = useComments(post, `#a${post.id}`); // Ensure it starts with a letter
-  const [user, setUser] = useState(null);
-  useEffect(() => {
-    const getPosterInfo = async () => {
-      const username = post.username;
-      const info = await getUserInfo(username);
-      setUser(info);
-    };
-    getPosterInfo();
-  }, []);
+  const [user, getUser] = useUser(post.username);
 
   return (
     <Container>
       <PostSettings settings={settings} setSettings={setSettings} post={post} />
       <Header setSettings={setSettings} user={user} />
       <Link to={`/posts/${post.username}/${post.id}`}>
-        <Picture url={!user ? "" : post.photo} />
+        <Picture title="Post picture" url={!user ? "" : post.photo} />
       </Link>
       <Icons liked={liked} changeLiked={changeLiked} />
       <Comments post={post} comments={comments} liked={liked} />

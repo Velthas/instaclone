@@ -22,7 +22,7 @@ const Icons = ({ liked, changeLiked }) => {
         <Icon src={comment} alt="speech bubble" />
         <Icon src={share} alt="go-to" />
       </IconContainer>
-      <Icon src={share2} onClick={openNativeShare} />
+      <Icon src={share2} alt="share with device" onClick={openNativeShare} />
     </Container>
   );
 };

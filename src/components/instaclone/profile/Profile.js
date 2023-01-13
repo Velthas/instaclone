@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Buttons from "./Buttons";
 import PostPreview from "../posts/PostPreview";
 import uniqid from 'uniqid'
-import { flexRowCenter } from "../../../styles/style";
 import ProfileHeader from "./ProfileHeader";
 import ProfileSections from "./ProfileSections";
 

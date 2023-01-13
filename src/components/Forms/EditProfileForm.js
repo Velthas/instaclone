@@ -38,7 +38,8 @@ const EditProfileForm = ({ info, loadInfo }) => {
       case isDescrValid !== true:
         setError(isDescrValid);
         return;
-      default: 
+      default: // Updates user info on firebase.
+      // Updates the user info on the client side.
         // Before updating we run final checks.
         // Update the changed fields on the firestore db only if they changed
         if (name.value !== info.name) payload.name = name.value;
@@ -48,8 +49,8 @@ const EditProfileForm = ({ info, loadInfo }) => {
             `users/${info.username}/pfp`,
             pfp.files[0]
           );
-        updateDocument(info.username, payload); // Updates user info on firebase.
-        loadInfo(); // Updates the user info on the client side.
+        updateDocument(info.username, payload);
+        loadInfo();
         navigate(`/profile/${info.username}`); // Go back to the profile.
     }
   };

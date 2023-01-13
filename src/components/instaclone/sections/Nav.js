@@ -40,33 +40,33 @@ const Nav = ({ user }) => {
       <Navbar>
         <Sidebar active={sidebar} content={active} setSidebar={setSidebar} />
         <LogoContainer>
-          <BsIcons.BsInstagram alt="instalogo" />
+          <BsIcons.BsInstagram title="instalogo" />
         </LogoContainer>
         <Icons>
           <StyledLink to={"/"}>
             <ListItem>
               {active === "home" ? (
-                <BsIcons.BsHouseDoorFill />
+                <BsIcons.BsHouseDoorFill title="home" />
               ) : (
                 <BsIcons.BsHouseDoor
                   onClick={() => handleClick("home")}
-                  alt="home"
+                  title="home"
                 />
               )}
             </ListItem>
           </StyledLink>
           <ListItem>
             <BsIcons.BsSearch
-              alt="search"
+              title="search"
               onClick={() => openSidebar("search")}
             />
           </ListItem>
           <ListItem>
             {active === "add" ? (
-              <BsIcons.BsPlusCircleFill alt="add" />
+              <BsIcons.BsPlusCircleFill title="add" />
             ) : (
-              <BsIcons.BsPlusCircle
-                alt="add"
+              <BsIcons.BsPlusCircle 
+                title="add"
                 onClick={() => {
                   handleClick("add");
                   setPostForm(true);
@@ -76,9 +76,9 @@ const Nav = ({ user }) => {
           </ListItem>
           <ListItem onClick={() => openSidebar("heart")}>
             {active === "heart" ? (
-              <BsIcons.BsHeartFill alt="heart" />
+              <BsIcons.BsHeartFill title="heart" />
             ) : (
-              <BsIcons.BsHeart alt="heart" />
+              <BsIcons.BsHeart title="heart" />
             )}
           </ListItem>
           <StyledLink to={user !== null ? "/profile/" + user.displayName : "/"}>
@@ -87,7 +87,7 @@ const Nav = ({ user }) => {
             </ListItem>
           </StyledLink>
         </Icons>
-        <BsIcons.BsList alt="burger" />
+        <BsIcons.BsList title="burger" />
       </Navbar>
       {postForm && <PostForm closeForm={closeForm} user={userdata} />}
     </IconContext.Provider>

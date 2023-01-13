@@ -9,11 +9,11 @@ const Header = ({ user, setSettings }) => {
     <Container>
       <StyledLink to={user ? `/profile/${user.username}` : ''}>
         <User>
-          <UserPhoto url={user ? user.pfp : ""} />
+          <UserPhoto title="author profile picture" url={user ? user.pfp : ""} />
           <Bold>{user ? user.username : ""}</Bold>
         </User>
       </StyledLink>
-      <Dots onClick={() => setSettings(true)} />
+      <Dots title="settings" onClick={() => setSettings(true)} />
     </Container>
   );
 };
