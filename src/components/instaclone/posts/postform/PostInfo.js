@@ -17,7 +17,7 @@ const PostInfo = ({ user, loading, photo }) => {
           placeholder="Add a description..."
         />
         <Extra>
-          <BsEmojiSmile size={20} />
+          <BsEmojiSmile title="emoji" size={20} />
           <WordCount>0/2200</WordCount>
         </Extra>
       </TextBox>

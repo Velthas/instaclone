@@ -28,10 +28,10 @@ const FullPost = () => {
             post={post}
           />
         )}
-        <Photo url={post ? post.photo : ""} />
+        <Photo title='post picture' url={post ? post.photo : ""} />
         <Info>
           <Header user={user} setSettings={setSettings} followed={followed} updateFollowed={updateFollowed} />
-          <Comments comments={comments} postInfo={postInfo} />
+          <Comments post={post} user={user} comments={comments} postInfo={postInfo} />
           <Icons liked={liked} changeLiked={changeLiked} />
           <Stats post={post} liked={liked} />
           <Add postInfo={postInfo} insertComment={insertComment} />

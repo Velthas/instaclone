@@ -1,20 +1,25 @@
 import React from "react";
 import styled from "styled-components";
 import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
-import dots from "../../../../assets/icons/dots.svg";
+import { BsThreeDots } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 const Header = ({ user, setSettings, followed, updateFollowed }) => {
   return (
     <Container>
       <User>
-        <UserPhoto url={user ? user.pfp : ""} />
-        <Bold>{user ? user.username : ""}</Bold>
+        <Link>
+          <UserPhoto title="profile picture" url={user ? user.pfp : ""} />
+        </Link>
+        <StyledLink>
+          <Username>{user ? user.username : ""}</Username>
+        </StyledLink>
         <span>•</span>
         <Button onClick={() => updateFollowed(!followed)}>
-          {followed ? 'Unfollow' : 'Follow'}
+          {followed ? "Unfollow" : "Follow"}
         </Button>
       </User>
-      <Dots src={dots} onClick={() => setSettings(true)} />
+      <Dots title="settings" onClick={() => setSettings(true)} />
     </Container>
   );
 };
@@ -28,17 +33,22 @@ const Container = styled.div`
   padding: 0px 5%;
 `;
 
+const StyledLink = styled(Link)`
+  color: #262626;
+  text-decoration: none;
+`
+
 const User = styled.div`
   ${flexRowCenter};
   gap: 8px;
 `;
 
-const Bold = styled.p`
-  font-weight: bold;
+const Username = styled.p`
+  font-weight: 500;
   color: #262626;
 `;
 
-const UserPhoto = styled.img`
+const UserPhoto = styled.div`
   width: 32px;
   height 32px;
   border-radius: 100%;
@@ -47,11 +57,15 @@ const UserPhoto = styled.img`
   background-size: cover;
 `;
 
-const Dots = styled.img`
-  width: 15px;
-  height: 15px;
+const Dots = styled(BsThreeDots)`
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  color: black;
+  &:hover {
+    color: gray;
+  }
 `;
-
 const Button = styled.button`
   font-weight: bold;
   color: #3897f0;
@@ -59,7 +73,7 @@ const Button = styled.button`
   border-radius: 3px;
   background-color: transparent;
   cursor: pointer;
-  &:hover{
+  &:hover {
     color: #00376b;
   }
 `;

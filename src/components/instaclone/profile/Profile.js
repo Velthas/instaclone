@@ -34,7 +34,6 @@ const PostList = styled.div`
   display: grid;
   gap: 28px;
   grid-template-columns: 1fr 1fr 1fr;
-  margin: 0 5%;
 `;
 
 export default Profile;

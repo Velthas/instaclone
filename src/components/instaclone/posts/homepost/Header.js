@@ -40,7 +40,7 @@ const Bold = styled.p`
   color: #262626;
 `;
 
-const UserPhoto = styled.img`
+const UserPhoto = styled.div`
   width: 32px;
   height 32px;
   border-radius: 100%;
@@ -51,6 +51,7 @@ const UserPhoto = styled.img`
 `;
 
 const Dots = styled(BsThreeDots)`
+  cursor: pointer;
   width: 18px;
   height: 18px;
   color: black;

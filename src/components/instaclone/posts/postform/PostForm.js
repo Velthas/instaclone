@@ -63,7 +63,7 @@ const PostForm = ({ closeForm, user }) => {
 
   return (
     <Backdrop>
-      <CloseForm onClick={() => closeForm(false)} />
+      <CloseForm title="close form" onClick={() => closeForm(false)} />
       <Container>
         <PostFormHeader
           photo={photo}

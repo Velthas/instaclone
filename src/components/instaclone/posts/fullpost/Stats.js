@@ -21,15 +21,15 @@ const Container = styled.div`
 `;
 
 const Likes = styled.p`
-  font-weight: bold;
+  font-weight: 500;
   color: #262626;
-  font-size: 0.9rem;
+  font-size: 1rem;
 `;
 
 const Date = styled.p`
   color: gray;
   text-transform: uppercase;
-  font-size: 0.6rem;
+  font-size: 0.8rem;
 `;
 
 export default Stats;

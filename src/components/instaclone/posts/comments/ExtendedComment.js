@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
 import { useCommentsLiked, useUser } from "../../../../utils/hooks";
-import { likeSimpleFormat, formatDate } from "../../../../utils/formatting";
+import { likeDiscursiveFormat, formatDate } from "../../../../utils/formatting";
 import heart from "../../../../assets/icons/heart.svg";
 import fillheart from "../../../../assets/icons/fillheart.svg";
 
@@ -12,10 +13,14 @@ const ExtendedComment = ({ comment, post }) => {
   return (
     <Comment>
       <Main>
-        <UserPic url={user ? user.pfp : ""} />
+        <Link to={`/profile/${comment.author}`}>
+          <UserPic title={`${comment.author}'s profile picture`} url={user ? user.pfp : ""} />
+        </Link>
         <Wrapper>
           <div>
-            <Username>{comment.author}</Username>
+            <StyledLink to={`/profile/${comment.author}`}>
+              <Username>{comment.author}</Username>
+            </StyledLink>
             <Message>{comment.content}</Message>
           </div>
           <Extra>
@@ -23,7 +28,7 @@ const ExtendedComment = ({ comment, post }) => {
               {formatDate(comment.timestamp)}
             </Undercomment>
             <Underimportant>
-              {likeSimpleFormat(comment.likedby, liked)}
+              {comment.likedby.length === 0 ? '' : likeDiscursiveFormat(comment.likedby, liked)}
             </Underimportant>
             <Underimportant>Reply</Underimportant>
           </Extra>
@@ -70,14 +75,18 @@ const Wrapper = styled.div`
   align-items: flex-start;
 `;
 
+const StyledLink = styled(Link)`
+  color: #262626;
+`
+
 const Username = styled.div`
-  font-weight: bold;
+  font-weight: 500;
   display: inline-block;
   padding-right: 5px;
 `;
 
 const Message = styled.div`
-  font-size: 0.9rem;
+  font-size: 1rem;
   display: inline;
 `;
 
@@ -89,12 +98,12 @@ const Extra = styled.div`
 
 const Undercomment = styled.div`
   margin-top: 5px;
-  font-size: 0.7rem;
-  color: gray;
+  color: #8e8e8e;
+  font-size: 0.9rem;
 `;
 
 const Underimportant = styled(Undercomment)`
-  font-weight: bold;
+  font-weight: 500;
 `
 
 const LikeIcon = styled.img`

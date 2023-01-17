@@ -44,8 +44,6 @@ const Picture = styled.div`
   background-size: cover;
   width: 469px;
   height: 470px;
-  border-left: 1px solid #dbdbdb;
-  border-right: 1px solid #dbdbdb;
 `;
 
 export default HomePost;

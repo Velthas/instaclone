@@ -6,7 +6,7 @@ import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
 const PostFormHeader = ({ photo, setPhoto, handleSubmit }) => {
   return (
     <FormTitle photo={photo}>
-      {photo && <BsArrowLeft size={24} onClick={() => setPhoto(false)} />}
+      {photo && <BsArrowLeft size={24} title="go back" onClick={() => setPhoto(false)} />}
       <Heading>Create a new post</Heading>
       {photo && <SharePost onClick={(e) => handleSubmit(e)}>Share</SharePost>}
     </FormTitle>

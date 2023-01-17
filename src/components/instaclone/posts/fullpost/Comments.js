@@ -1,10 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import ExtendedComment from "../comments/ExtendedComment";
+import Description from "./Description";
 
-const Comments = ({comments, postInfo}) => {
+const Comments = ({comments, postInfo, post, user}) => {
   return (
     <Container>
+      <Description post={post} user={user} />
       {comments &&
         comments.map((comment) => (
           <ExtendedComment post={postInfo} key={comment.id} comment={comment} />
