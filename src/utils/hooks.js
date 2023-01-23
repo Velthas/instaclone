@@ -9,9 +9,12 @@ import {
   getCommentDocReference,
   updateFollow,
   searchForProfiles,
+  addNotification,
+  setupNotifListener,
 } from "../firebase/firestore";
 import { Timestamp } from "firebase/firestore";
 import { getCurrentUserUsername } from "../firebase/authentication";
+import { formatNotification } from "./formatting";
 
 // Used in post components to provide user feedback about
 // liking posts, as well as updating things on the backend.
@@ -21,6 +24,10 @@ const useLiked = (post) => {
   const [liked, setLiked] = useState(post.likedby.indexOf(currentUser) !== -1);
 
   const changeLiked = (liked) => {
+    if(!liked) { // Only append a notification if the user is liking a post
+      const likeNotification = formatNotification('l', post.id);
+      addNotification(post.username, likeNotification);
+    }
     updateLikes(`Users/${post.username}/Posts/${post.id}`, currentUser, !liked);
     setLiked(!liked);
   };
@@ -33,10 +40,16 @@ const useLiked = (post) => {
 const useCommentsLiked = (comment, post) => {
   const currentUser = getCurrentUserUsername();
   const [liked, setLiked] = useState(comment.likedby.indexOf(currentUser) !== -1);
-  useEffect(() => {
-    updateLikes(`Users/${post.username}/Posts/${post.id}/Comments/${comment.id}`, currentUser, liked);
-  }, [liked]);
-  return [liked, setLiked];
+
+  const changeLiked = (liked) => {
+    if(!liked) { // Only append a notification if the user is liking a comment
+      const clNotification = formatNotification('cl', post.id, post.username, comment.content, comment.id);
+      addNotification(comment.author, clNotification);
+    }
+    updateLikes(`Users/${post.username}/Posts/${post.id}/Comments/${comment.id}`, currentUser, !liked);
+    setLiked(!liked);
+  };
+  return [liked, changeLiked];
 };
 
 // Used in post components to handle adding comments on front and backend.
@@ -65,8 +78,10 @@ const useComments = (post, inputSelector) => {
     const id = commentRef.id;
     const likedby = [];
     const comment = { content, author, timestamp, id, likedby };
-    addComment(commentRef, comment);
-    setComments([comment].concat(comments));
+    const commentNotification = formatNotification('c', post.id, post.username, content, id);
+    addNotification(post.username, commentNotification); // Send a notification to the post's author
+    addComment(commentRef, comment); // Add doc to the db for permanent storage
+    setComments([comment].concat(comments)); // Make change apparent on front-end
     input.value = ''; // Reset the text field
   };
 
@@ -89,18 +104,24 @@ const usePost = (username, postId) => {
       setLiked(postData.likedby.indexOf(currentUser) !== -1);
     };
     getPost();
-  }, []);
+  }, [username, postId]);
 
+  // Used to change the liked status of a post
   const changeLiked = (liked) => {
+    if(!liked) { // Only append a notification if the user is liking a post
+      const likeNotification = formatNotification('l', postId, username)
+      addNotification(post.username, likeNotification)
+    }
+    // This updates notifications on the backend using the username and postid
     updateLikes(`Users/${post.username}/Posts/${post.id}`, currentUser, !liked);
-    setLiked(!liked);
+    setLiked(!liked); // liked state is used to display changes on the front-end
   };
 
   return [post, user, liked, changeLiked];
 };
 
 // Using this hook to fetch user information and update it when needed using updateUser.
-// Using it in comments when profile picture has to be displayed.
+// Using it in comments/notifications when only pfp and username is needed.
 const useUser = (username) => {
   const [user, setUser] = useState(null);
   useEffect(() => {
@@ -124,14 +145,21 @@ const useFollow = (user) => {
 
   const updateFollowed = (followed) => {
     if(user) {
-      updateFollow(user.username, followed);
-      setFollowed(followed);
+      updateFollow(user.username, followed); // Updates on the backend
+      if(followed) { // Only send a notification if the user is following 
+        const followNotification = formatNotification('f');
+        addNotification(user.username, followNotification);
+      }
+      setFollowed(followed); // Triggers change on the frontend
     }
   }
-  
   return [followed, updateFollowed]
 };
 
+// This hook is used to handle search queries.
+// As of now, it will give back only profiles whose username's prefix matches the query
+// So if I search for 'te', and an account named 'test' exists, it will appear on screen.
+// Just the same, if there is a profile named 'footest', it would not appear under the same query
 const useSearch = () => {
   const [query, setQuery] = useState(false);
   const [profiles, setProfiles] = useState([])
@@ -147,6 +175,7 @@ const useSearch = () => {
   return [profiles, setQuery];
 }
 
+// This hook is used inside of profiles where we need user info and posts.
 const useProfile = (username) => {
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -167,4 +196,40 @@ const useProfile = (username) => {
   return [user, posts, reloadInfo]
 }
 
-export { useLiked, useCommentsLiked, useComments, usePost, useUser, useFollow, useSearch, useProfile };
+// This hook handles notifications for the logged user.
+// A listener looks for changes in the notification collection and adds them as they come in
+// I limit the entries by using the limit state variable, default is 20.
+// Notifications are sorted by state so new ones will always be at the top of the list.
+// Each time increaseLimit is called, this 'roof' is extended by 5. 
+const useNotifications = (username) => {
+  const [notifications, setNotifications] = useState([]); // We set data we get from the db in state.
+  const [limit, setLimit] = useState(20); // This is used to regulate how many notifications are shown.
+  useEffect(() => {
+    let unsubscribe;
+    const setup = () => { 
+      const unsubscribe = setupNotifListener(username, setNotifications, setLimit);
+      return unsubscribe; // This will be used to stop the listener when component unmounts
+    }
+    if(username) unsubscribe = setup(); // Only set up the listener once we receive user username
+
+    return () => { if(username) unsubscribe(); } // Destroy listener when component unmounts
+  }, [username]); // When current user is loaded, triggers first fetch and turn on listener
+
+  const increaseLimit = () => {
+    setLimit(limit + 5);
+  };
+
+  return [notifications, increaseLimit]
+}
+
+export { 
+  useLiked,
+  useCommentsLiked,
+  useComments,
+  usePost,
+  useUser,
+  useFollow,
+  useSearch,
+  useProfile,
+  useNotifications
+ };

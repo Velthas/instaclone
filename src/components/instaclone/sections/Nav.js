@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useUser } from "../../../utils/hooks";
+import { useNotifications, useUser } from "../../../utils/hooks";
 import { Link } from "react-router-dom";
 import PostForm from "../posts/postform/PostForm";
 import styled from "styled-components";
@@ -7,26 +7,29 @@ import * as BsIcons from "react-icons/bs";
 import { IconContext } from "react-icons";
 import { flexRowCenter } from "../../../styles/style";
 import Sidebar from "../sidebar/Sidebar";
+import NotifPopup from "../sidebar/notifications/NotifPopup";
 
 const Nav = ({ user }) => {
   const [sidebar, setSidebar] = useState(false);
   const [userdata, getUserData] = useUser(user ? user.displayName : null);
+  const [notifications, increaseLimit] = useNotifications(user ? user.displayName : null);
   const [postForm, setPostForm] = useState(false);
   const [active, setActive] = useState("home");
 
-  const isActive = (icon) => icon === active;
-
+  // Used on options who don't open the sidebar
+  // They close the sidebar if it is open
   const handleClick = (icon) => {
     if (sidebar) setSidebar(false);
     setActive(icon);
   };
 
-  const openSidebar = (icon) => {
-    if (icon === active && sidebar === true)
+  const toggleSidebar = (icon) => {
+    if (icon === active && sidebar === true) {
       setSidebar(false); // Close sidebar on same icon click
-    else {
-      handleClick(icon);
-      setSidebar(true);
+      setActive("");
+    } else {
+      setActive(icon); // Set icon active
+      setSidebar(true); // Open related sidebar
     }
   };
 
@@ -38,7 +41,12 @@ const Nav = ({ user }) => {
   return (
     <IconContext.Provider value={{ style: { cursor: "pointer" }, size: 24 }}>
       <Navbar>
-        <Sidebar active={sidebar} content={active} setSidebar={setSidebar} />
+        <Sidebar
+          active={sidebar}
+          content={active}
+          toggleSidebar={toggleSidebar}
+          notifications={notifications}
+        />
         <LogoContainer>
           <BsIcons.BsInstagram title="instalogo" />
         </LogoContainer>
@@ -58,14 +66,14 @@ const Nav = ({ user }) => {
           <ListItem>
             <BsIcons.BsSearch
               title="search"
-              onClick={() => openSidebar("search")}
+              onClick={() => toggleSidebar("search")}
             />
           </ListItem>
           <ListItem>
             {active === "add" ? (
               <BsIcons.BsPlusCircleFill title="add" />
             ) : (
-              <BsIcons.BsPlusCircle 
+              <BsIcons.BsPlusCircle
                 title="add"
                 onClick={() => {
                   handleClick("add");
@@ -74,13 +82,14 @@ const Nav = ({ user }) => {
               />
             )}
           </ListItem>
-          <ListItem onClick={() => openSidebar("heart")}>
+          <NotifListItem notif={notifications} onClick={() => toggleSidebar("heart")}>
+            <NotifPopup notifications={notifications ? notifications : []} />
             {active === "heart" ? (
               <BsIcons.BsHeartFill title="heart" />
             ) : (
               <BsIcons.BsHeart title="heart" />
             )}
-          </ListItem>
+          </NotifListItem>
           <StyledLink to={user !== null ? "/profile/" + user.displayName : "/"}>
             <ListItem onClick={() => handleClick("")}>
               <User url={userdata ? userdata.pfp : ""} />
@@ -138,9 +147,25 @@ const Icons = styled.ul`
 `;
 
 const ListItem = styled.li`
+  position: relative;
   transition: 0.15s ease-out;
   &:hover {
     transform: scale(1.1);
+  }
+`;
+
+const NotifListItem = styled(ListItem)`
+  &::after {
+    ${({ notif }) => (notif.length > 0 && !notif[0].seen ? "content: '';" : "")}
+    position: absolute;
+    top: -3px;
+    right: -4px;
+    border: 2px solid #fff;
+    border-radius: 100%;
+    height: 10px;
+    width: 10px;
+
+    background-color: #fe004b;
   }
 `;
 

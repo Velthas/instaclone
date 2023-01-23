@@ -8,7 +8,7 @@ import heart from "../../../../assets/icons/heart.svg";
 import fillheart from "../../../../assets/icons/fillheart.svg";
 
 const MinimalComment = ({ comment, post }) => {
-  const [liked, setLiked] = useCommentsLiked(comment, post);
+  const [liked, changeLiked] = useCommentsLiked(comment, post);
   return (
     <Container>
       <div>
@@ -23,7 +23,7 @@ const MinimalComment = ({ comment, post }) => {
       </div>
       <LikeIcon
         liked={liked}
-        onClick={() => setLiked(!liked)}
+        onClick={() => changeLiked(liked)}
         src={liked ? fillheart : heart}
         alt="like comment"
       />

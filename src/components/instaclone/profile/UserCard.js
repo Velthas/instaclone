@@ -2,11 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-const UserCard = ({user, setSidebar}) => {
+const UserCard = ({user, toggleSidebar}) => {
   const navigate = useNavigate();
   const handleClick = () => {
     navigate('./profile/' + user.username)
-    setSidebar(false);
+    toggleSidebar('search');
   }
 
   return (
@@ -28,6 +28,11 @@ const Container = styled.div`
   justify-content: flex-start;
   align-items: center;
   gap: 5px;
+  cursor: pointer;
+
+  &hover: {
+    background-color: #fafafa;
+  }
 `;
 
 const Picture = styled.div`
@@ -42,11 +47,11 @@ const Picture = styled.div`
 
 const Username = styled.div`
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: 1rem;
 `;
 
 const Name = styled.div`
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: #8e8e8e;
 `;
 

@@ -2,13 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { flexRowCenter } from "../../../../styles/style";
-import { formatDate } from "../../../../utils/formatting";
+import { formatDateShort } from "../../../../utils/formatting";
 
 const Description = ({ user, post }) => {
   return (
     <Comment>
       <Main>
-        <Link>
+        <Link to={user ? `/profile/${user.username}` : ''}>
           <UserPic url={user ? user.pfp : ""} />
         </Link>
         <Wrapper>
@@ -19,7 +19,7 @@ const Description = ({ user, post }) => {
             <PostDescription>{post ? post.description : ""}</PostDescription>
           </div>
           <Extra>
-            <Undercomment>{post ? formatDate(post.timestamp) : ''}</Undercomment>
+            <Undercomment>{post ? formatDateShort(post.timestamp) : ''}</Undercomment>
           </Extra>
         </Wrapper>
       </Main>

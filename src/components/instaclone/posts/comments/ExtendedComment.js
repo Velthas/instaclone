@@ -3,13 +3,13 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
 import { useCommentsLiked, useUser } from "../../../../utils/hooks";
-import { likeDiscursiveFormat, formatDate } from "../../../../utils/formatting";
+import { likeDiscursiveFormat, formatDateShort } from "../../../../utils/formatting";
 import heart from "../../../../assets/icons/heart.svg";
 import fillheart from "../../../../assets/icons/fillheart.svg";
 
 const ExtendedComment = ({ comment, post }) => {
   const [user, getUser] = useUser(comment.author);
-  const [liked, setLiked] = useCommentsLiked(comment, post);
+  const [liked, changeLiked] = useCommentsLiked(comment, post);
   return (
     <Comment>
       <Main>
@@ -25,7 +25,7 @@ const ExtendedComment = ({ comment, post }) => {
           </div>
           <Extra>
             <Undercomment>
-              {formatDate(comment.timestamp)}
+              {formatDateShort(comment.timestamp)}
             </Undercomment>
             <Underimportant>
               {comment.likedby.length === 0 ? '' : likeDiscursiveFormat(comment.likedby, liked)}
@@ -36,7 +36,7 @@ const ExtendedComment = ({ comment, post }) => {
       </Main>
       <LikeIcon
         liked={liked}
-        onClick={() => setLiked(!liked)}
+        onClick={() => changeLiked(liked)}
         src={liked ? fillheart : heart}
         alt="like comment"
       />

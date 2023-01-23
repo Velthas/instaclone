@@ -13,6 +13,7 @@ import {
   where,
   orderBy,
   limit,
+  onSnapshot
 } from "firebase/firestore";
 import { getCurrentUserUsername } from "./authentication";
 
@@ -44,7 +45,8 @@ const getUserInfo = async (username) => {
 
 const getPosts = async (username) => {
   const colRef = collection(db, "Users", username, "Posts");
-  const posts = await getDocs(colRef);
+  const q = query(colRef, orderBy('timestamp', 'desc'));
+  const posts = await getDocs(q);
   if (posts.empty) return [];
   else return posts.docs.map((doc) => doc.data());
 };
@@ -130,13 +132,44 @@ const getHomepageContent = async (username) => {
   let posts = []; // This is where all the posts will be stored.
   for(let i = 0; i < followed.length; i++) {
     const postsRef = collection(db, 'Users', followed[i], 'Posts'); 
-    const q = query(postsRef, orderBy('timestamp'), limit(3));
+    const q = query(postsRef, orderBy('timestamp', 'desc'), limit(3));
     const documents = await getDocs(q);
     const info = documents.docs.map(doc => doc.data());
     if(info) posts = posts.concat(info);
   };
   return posts;
 }
+
+const addNotification = (receiver, payload) => {
+  const docRef = doc(collection(db, "Users", receiver, "Notifications"));
+  payload.id = docRef.id; // Store reference to own doc id inside
+  setDoc(docRef, payload); // Append it to the user's notification subcollection
+}
+
+const getNotifications = async (username, quantity) => {
+    const notifRef = collection(db, 'Users', username, 'Notifications'); 
+    const q = query(notifRef, orderBy('timestamp', 'desc'), limit(quantity));
+    const notificationDocs = await getDocs(q);
+    const notifications = notificationDocs.docs.map(doc => doc.data());
+    if(notifications.length > 0) return notifications;
+    else return []
+}
+
+const setupNotifListener = (username, setNotif, setLimit) => {
+  const q = query( // Get all the new notifications after the component first mounts
+    collection(db, "Users", username, "Notifications"),
+    orderBy("timestamp", 'desc'));
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+  const data = querySnapshot.docs.map(doc => doc.data()); // Get the data entries from the snapshot
+  setNotif(data); // Tack the new entries at the end here
+  setLimit(prevState => prevState + data.length); 
+  // It's ok for new notif. to be added on top of the existing ones. 
+  // All new notifications must be displayed, and if user wants to load more
+  // the limit roof will have to account for the notifications added through the listener. 
+  //TODO: setlimit should just be a front end thing limiting the array of things we fetch. I can think of solutions later down the line to avoid loading all notifications as it might get slower as the number of docs increases
+  });
+  return unsubscribe; // We can use this to unsubscribe to the listener
+};
 
 export {
   createUserBucket,
@@ -152,6 +185,9 @@ export {
   updateLikes,
   updateFollow,
   addComment,
+  addNotification,
+  getNotifications,
+  setupNotifListener,
   searchForProfiles,
-  getHomepageContent
+  getHomepageContent,
 };

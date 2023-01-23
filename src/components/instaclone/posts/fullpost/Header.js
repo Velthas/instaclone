@@ -8,7 +8,7 @@ const Header = ({ user, setSettings, followed, updateFollowed }) => {
   return (
     <Container>
       <User>
-        <Link>
+        <Link to={user ? `/profile/${user.username}` : ''}>
           <UserPhoto title="profile picture" url={user ? user.pfp : ""} />
         </Link>
         <StyledLink>

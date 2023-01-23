@@ -5,7 +5,7 @@ import { useSearch } from "../../../utils/hooks";
 import Searchbar from "../../inputs/Searchbar";
 import UserCard from "../profile/UserCard";
 
-const Search = ({setSidebar}) => {
+const Search = ({toggleSidebar}) => {
   const [profiles, setQuery] = useSearch()
 
   return (
@@ -15,7 +15,7 @@ const Search = ({setSidebar}) => {
         <Searchbar id='search-side' setQuery={setQuery} />
       </Container>
       <div>
-        {profiles && profiles.map(prof => <UserCard setSidebar={setSidebar} user={prof} key={prof.id} /> )}
+        {profiles && profiles.map(prof => <UserCard toggleSidebar={toggleSidebar} user={prof} key={prof.id} /> )}
       </div>
     </>
   )
