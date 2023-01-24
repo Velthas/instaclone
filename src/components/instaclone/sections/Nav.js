@@ -10,17 +10,15 @@ import Sidebar from "../sidebar/Sidebar";
 import NotifPopup from "../sidebar/notifications/NotifPopup";
 
 const Nav = ({ user }) => {
-  const [sidebar, setSidebar] = useState(false);
-  const [userdata, getUserData] = useUser(user ? user.displayName : null);
-  const [notifications, increaseLimit] = useNotifications(user ? user.displayName : null);
-  const [postForm, setPostForm] = useState(false);
-  const [active, setActive] = useState("home");
+  const [sidebar, setSidebar] = useState(false); // Regulates sidebar display
+  const [userdata, getUserData] = useUser(user ? user.displayName : null); // Is responsible for user data
+  const [notifications, increaseLimit, markAllAsSeen] = useNotifications(user ? user.displayName : null);
+  const [postForm, setPostForm] = useState(false); // Regulates new post form display
+  const [active, setActive] = useState("home"); // Determines which icon is marked as active
 
-  // Used on options who don't open the sidebar
-  // They close the sidebar if it is open
   const handleClick = (icon) => {
-    if (sidebar) setSidebar(false);
-    setActive(icon);
+    if (sidebar) setSidebar(false);  // Close the sidebar if it's open
+    setActive(icon); // Marks the 'icon' as active
   };
 
   const toggleSidebar = (icon) => {
@@ -33,9 +31,14 @@ const Nav = ({ user }) => {
     }
   };
 
-  const closeForm = () => {
-    setPostForm(false);
-    setActive("");
+  const closePostForm = () => {
+    setPostForm(false); // Closes the new post form
+    setActive(""); // Deactivates any active icon
+  };
+
+  const openPostForm = () => {
+    handleClick("add"); // Activates post icon
+    setPostForm(true); // Opens up the post form
   };
 
   return (
@@ -47,58 +50,50 @@ const Nav = ({ user }) => {
           toggleSidebar={toggleSidebar}
           notifications={notifications}
         />
+
         <LogoContainer>
           <BsIcons.BsInstagram title="instalogo" />
         </LogoContainer>
+
         <Icons>
           <StyledLink to={"/"}>
-            <ListItem>
-              {active === "home" ? (
-                <BsIcons.BsHouseDoorFill title="home" />
-              ) : (
-                <BsIcons.BsHouseDoor
-                  onClick={() => handleClick("home")}
-                  title="home"
-                />
-              )}
+            <ListItem onClick={() => handleClick("home")}>
+              {active === "home" 
+                ? <BsIcons.BsHouseDoorFill title="home" />
+                : <BsIcons.BsHouseDoor title="home" />
+              }
             </ListItem>
           </StyledLink>
+
           <ListItem>
-            <BsIcons.BsSearch
-              title="search"
-              onClick={() => toggleSidebar("search")}
-            />
+            <BsIcons.BsSearch title="search" onClick={() => toggleSidebar("search")} />
           </ListItem>
+
           <ListItem>
-            {active === "add" ? (
-              <BsIcons.BsPlusCircleFill title="add" />
-            ) : (
-              <BsIcons.BsPlusCircle
-                title="add"
-                onClick={() => {
-                  handleClick("add");
-                  setPostForm(true);
-                }}
-              />
-            )}
+            {active === "add" 
+              ? <BsIcons.BsPlusCircleFill title="add" />
+              : <BsIcons.BsPlusCircle title="add" onClick={openPostForm} />
+            }
           </ListItem>
-          <NotifListItem notif={notifications} onClick={() => toggleSidebar("heart")}>
+
+          <NotifListItem notif={notifications} onClick={() => { markAllAsSeen(toggleSidebar) }}>
             <NotifPopup notifications={notifications ? notifications : []} />
-            {active === "heart" ? (
-              <BsIcons.BsHeartFill title="heart" />
-            ) : (
-              <BsIcons.BsHeart title="heart" />
-            )}
+            {active === "heart" 
+              ? <BsIcons.BsHeartFill title="heart" />
+              : <BsIcons.BsHeart title="heart" />
+            }
           </NotifListItem>
+
           <StyledLink to={user !== null ? "/profile/" + user.displayName : "/"}>
             <ListItem onClick={() => handleClick("")}>
               <User url={userdata ? userdata.pfp : ""} />
             </ListItem>
           </StyledLink>
         </Icons>
+
         <BsIcons.BsList title="burger" />
       </Navbar>
-      {postForm && <PostForm closeForm={closeForm} user={userdata} />}
+      {postForm && <PostForm closeForm={closePostForm} user={userdata} />}
     </IconContext.Provider>
   );
 };

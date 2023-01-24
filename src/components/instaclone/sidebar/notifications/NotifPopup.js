@@ -4,36 +4,36 @@ import { BsPersonFill, BsHeartFill } from "react-icons/bs";
 import { IoChatbubble } from "react-icons/io5";
 
 const NotifPopup = ({ notifications }) => {
-  // Returns the number of unseen notification by type
   const getUnseenByType = (notitype) =>
     notifications.filter(
       (notif) => notif.type === notitype && notif.seen === false
     ).length;
 
-  const likes = getUnseenByType("l") + getUnseenByType("cl");
-  const follows = getUnseenByType("f");
-  const comments = getUnseenByType("c");
+  const likes = getUnseenByType("l") + getUnseenByType("cl"); // Unseen like notifications
+  const follows = getUnseenByType("f"); // Unseen follow notifications
+  const comments = getUnseenByType("c"); // Unseen comments notifications
 
   // This functions returns true if there is at least 1 new notification
+  // Used to determine wether or not this popup should be displayed
   const areNewNotifications = () => likes + follows + comments > 0;
 
   return (
     <>
       {areNewNotifications() && (
         <Container>
-          {comments && (
+          {comments > 0 && (
             <Section>
               <ChatIcon />
               <span>{comments}</span>
             </Section>
           )}
-          {likes && (
+          {likes > 0 && (
             <Section>
               <LikeIcon />
               <span>{likes}</span>
             </Section>
           )}
-          {follows && (
+          {follows > 0 && (
             <Section>
               <FollowIcon />
               <span>{follows}</span>
@@ -60,6 +60,7 @@ const Container = styled.div`
   padding: 8px;
   border-radius: 3px;
   gap: 8px;
+  cursor: pointer;
 
 
   &::after {

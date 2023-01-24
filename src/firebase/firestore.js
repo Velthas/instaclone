@@ -13,7 +13,8 @@ import {
   where,
   orderBy,
   limit,
-  onSnapshot
+  onSnapshot,
+  writeBatch
 } from "firebase/firestore";
 import { getCurrentUserUsername } from "./authentication";
 
@@ -155,21 +156,33 @@ const getNotifications = async (username, quantity) => {
     else return []
 }
 
-const setupNotifListener = (username, setNotif, setLimit) => {
-  const q = query( // Get all the new notifications after the component first mounts
+const setupNotifListener = (username, setNotif, queryLimit) => {
+  const q = query(
     collection(db, "Users", username, "Notifications"),
-    orderBy("timestamp", 'desc'));
+    orderBy("timestamp", 'desc'),
+    limit(queryLimit));
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
-  const data = querySnapshot.docs.map(doc => doc.data()); // Get the data entries from the snapshot
-  setNotif(data); // Tack the new entries at the end here
-  setLimit(prevState => prevState + data.length); 
-  // It's ok for new notif. to be added on top of the existing ones. 
-  // All new notifications must be displayed, and if user wants to load more
-  // the limit roof will have to account for the notifications added through the listener. 
-  //TODO: setlimit should just be a front end thing limiting the array of things we fetch. I can think of solutions later down the line to avoid loading all notifications as it might get slower as the number of docs increases
+  const data = querySnapshot.docs.map(doc => doc.data()); 
+  setNotif(data); // Each time there is a change, set the new data in state.
   });
   return unsubscribe; // We can use this to unsubscribe to the listener
 };
+
+// Sets all notifications as seen.
+// Worth noting that batches have a 500 operations limit
+// Might need to think of alternatives to avoid bugs in the long run. 
+const setNotificationsSeen = async (username) => {
+  const batch = writeBatch(db); // We use batch here because they're faster than singular updates
+  const q = query(
+    collection(db, "Users", username, "Notifications"),
+    where('seen', '==',  false));
+  const result = await getDocs(q);
+  result.docs.forEach((document => {
+    const docRef = doc(db, 'Users', username, 'Notifications', document.id);
+    batch.update(docRef, {seen: true});
+  }))
+  batch.commit();
+}
 
 export {
   createUserBucket,
@@ -190,4 +203,5 @@ export {
   setupNotifListener,
   searchForProfiles,
   getHomepageContent,
+  setNotificationsSeen
 };

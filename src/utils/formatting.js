@@ -112,9 +112,8 @@ const likeDiscursiveFormat = (likedby, liked) => {
 // Payload will then be sent over to the db and inserted as a new document.
 const formatNotification = (type, postid, poster, message, commentid) => {
   const timestamp = Timestamp.fromDate(new Date()) // Get a timestamp for each notification
-  const seen = false; // all notifications are unseen by default
-  const author = getCurrentUserUsername(); // notifications are only sent when logged user performs
-  // an action of sorts, so we can safely assume the currently logged user to be responsible
+  const seen = false; // All notifications are unseen by default
+  const author = getCurrentUserUsername(); // Author of notifications is always the user
   switch (true) {
     case (type === 'l'):
       const likeNotification = {type, author, poster, timestamp, postid, seen};
