@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import PostForm from "../posts/postform/PostForm";
 import styled from "styled-components";
 import * as BsIcons from "react-icons/bs";
+import { IoPaperPlaneOutline, IoPaperPlaneSharp } from "react-icons/io5";
 import { IconContext } from "react-icons";
 import { flexRowCenter } from "../../../styles/style";
 import Sidebar from "../sidebar/Sidebar";
@@ -69,6 +70,15 @@ const Nav = ({ user }) => {
             <BsIcons.BsSearch title="search" onClick={() => toggleSidebar("search")} />
           </ListItem>
 
+          <ListItem onClick={() => handleClick("message")}>
+            <Link to={'/direct'}>
+            {active === "message" 
+              ? <IoPaperPlaneSharp title="direct messages" />
+              : <IoPaperPlaneOutline title="direct messages" />
+            }
+            </Link>
+          </ListItem>
+
           <ListItem>
             {active === "add" 
               ? <BsIcons.BsPlusCircleFill title="add" />
@@ -85,8 +95,8 @@ const Nav = ({ user }) => {
           </NotifListItem>
 
           <StyledLink to={user !== null ? "/profile/" + user.displayName : "/"}>
-            <ListItem onClick={() => handleClick("")}>
-              <User url={userdata ? userdata.pfp : ""} />
+            <ListItem onClick={() => handleClick("profile")}>
+              <User active={active === "profile"} url={userdata ? userdata.pfp : ""} />
             </ListItem>
           </StyledLink>
         </Icons>
@@ -130,7 +140,11 @@ const User = styled.div`
   width: 24px;
   height: 24px;
   border-radius: 100%;
-  border: 1px solid #dfdfdf;
+  transition: 0.3s ease-out;
+
+  ${({ active }) => active 
+  ? 'border: 3px solid #262626; height: 27px; width: 27px;'
+  : 'border: 1px solid #dfdfdf'});
 `;
 
 const Icons = styled.ul`
