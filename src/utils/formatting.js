@@ -130,6 +130,14 @@ const formatNotification = (type, postid, poster, message, commentid) => {
   }
 };
 
+// Packages up a message before shipping to backend
+const formatMessage = (message) => {
+  const timestamp = Timestamp.fromDate(new Date());
+  const author = getCurrentUserUsername();
+  const content = message;
+  return {content, author, timestamp} // Is only missing id assigned in firestore function.
+}
+
 export {
   formatDateShort,
   formatDateDiscursive,
@@ -137,5 +145,6 @@ export {
   formatPostLikes,
   likeSimpleFormat,
   likeDiscursiveFormat,
-  formatNotification
+  formatNotification,
+  formatMessage
 };

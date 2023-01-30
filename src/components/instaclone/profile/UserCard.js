@@ -46,7 +46,7 @@ const Picture = styled.div`
 `;
 
 const Username = styled.div`
-  font-weight: bold;
+  font-weight: 500;
   font-size: 1rem;
 `;
 

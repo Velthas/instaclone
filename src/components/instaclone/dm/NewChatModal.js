@@ -2,15 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import { IoMdClose } from "react-icons/io";
-import {
-  flexColumnCenter,
-  flexRowBetween,
-  flexRowCenter,
-} from "../../../styles/style";
+import { flexColumnCenter, flexRowBetween, flexRowCenter } from "../../../styles/style";
 import { useSearch } from "../../../utils/hooks";
 import UserCardChat from "./UserCardChat";
 
-const NewChatModal = ({ setModal }) => {
+const NewChatModal = ({ setModal, createRoom }) => {
   const [profiles, setQuery] = useSearch(); // Handles search queries to the backend
   const [selected, setSelected] = useState(null); // Use this to store username of selected user
 
@@ -29,7 +25,7 @@ const NewChatModal = ({ setModal }) => {
             title="close form"
           />
           <Heading>New Message</Heading>
-          <Continue>Continue</Continue>
+          <Continue onClick={() => createRoom(selected)}>Continue</Continue>
         </Header>
         <Search>
           <To>To:</To>
@@ -139,7 +135,6 @@ const To = styled.h4`
   font-weight: 500;
   color: #262626;
 `
-
 
 const Profiles = styled.div`
   width: 100%;

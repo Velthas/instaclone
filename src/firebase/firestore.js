@@ -1,5 +1,6 @@
 import { db } from "./firebase-config";
 import {
+  addDoc,
   setDoc,
   getDoc,
   updateDoc,
@@ -17,6 +18,7 @@ import {
   writeBatch
 } from "firebase/firestore";
 import { getCurrentUserUsername } from "./authentication";
+import uniqid from 'uniqid'
 
 const createUserBucket = (name, username) => {
   const defaultPfp =
@@ -156,6 +158,8 @@ const getNotifications = async (username, quantity) => {
     else return []
 }
 
+// Listens for recent notifications and filters them by timestamp
+// The querylimit limits the amount of docs returned, for now it's hard set at 80 
 const setupNotifListener = (username, setNotif, queryLimit) => {
   const q = query(
     collection(db, "Users", username, "Notifications"),
@@ -184,6 +188,63 @@ const setNotificationsSeen = async (username) => {
   batch.commit();
 }
 
+// This is a general listener that listens for all of the user's chats
+const setupAllChatsListener = (username, setRooms) => {
+  const q = query(collection(db, "Users", username, "Dm")); // Get all the rooms.
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+  const data = querySnapshot.docs.map(doc => doc.data()); 
+  setRooms(data); // Each time there is a change, set the new data in state.
+  });
+  return unsubscribe; // Will be used to unsubscribe to the listener
+}
+
+// This creates a listener for a specific chat room's messages.
+const setupMessagesListener = (id, setMessages) => {
+  const q = query(
+    collection(db, 'Chats', id, 'Messages'), // Look into messages for that user
+    orderBy('timestamp', 'asc')); // Order them by timestamp
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+  const data = querySnapshot.docs.map(doc => doc.data()); 
+  setMessages(data); 
+  });
+  return unsubscribe; // Will be used to unsubscribe to the listener
+};
+
+// Will use this function to create chat bucket & info on both profiles
+const createChatRoom = async (author, receiver) => {
+  const newChat = doc(collection(db, 'Chats')); // Creates a unique doc ref to extract id from for chat
+  await setDoc(newChat, {exists: true}); // Adds the chat to the chats collection. Exists prop prevents auto-deletion
+
+  // We create a bucket in each user's dms docs
+  // It will store chat id and last message to provide notifications
+  const authorDocRef = doc(db, "Users", author, 'Dm', receiver); // Sender;
+  const receivDocRef = doc(db, "Users", receiver, 'Dm', author); // Receiver;
+
+  // This will create a bucket on both of the user profiles.
+  // Most important here is chat id, that we need to listen to the right chatroom. 
+  setDoc(authorDocRef, {username: receiver, chatId: newChat.id, lastMessage: null }); // Updates sender
+  setDoc(receivDocRef, {username: author, chatId: newChat.id, lastMessage: null}); // And receiver
+
+  return newChat.id // Returns the chat id;
+}
+
+// Function used to add messages on backend
+const addMessage = async (author, receiver, chatId, payload) => {
+  console.log(author, receiver, chatId, payload)
+  // Get references to both author and receiver dm docs
+  const authorDocRef = doc(db, "Users", author, 'Dm', receiver); // Sender;
+  const receivDocRef = doc(db, "Users", receiver, 'Dm', author); // Receiver;
+
+  // Add message to the chat
+  const newMessageRef = doc(collection(db, 'Chats', chatId, 'Messages'));
+  const {id} = newMessageRef;
+  await setDoc(newMessageRef, {...payload, id});
+
+  // Store last message info on both sender and receiver's 
+  await updateDoc(authorDocRef, {lastMessage: {...payload, id}});
+  await updateDoc(receivDocRef, {lastMessage: {...payload, id}});
+}
+
 export {
   createUserBucket,
   getUserInfo,
@@ -203,5 +264,9 @@ export {
   setupNotifListener,
   searchForProfiles,
   getHomepageContent,
-  setNotificationsSeen
+  setNotificationsSeen,
+  createChatRoom,
+  setupAllChatsListener,
+  setupMessagesListener,
+  addMessage
 };

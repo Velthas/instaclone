@@ -9,6 +9,7 @@ import { IconContext } from "react-icons";
 import { flexRowCenter } from "../../../styles/style";
 import Sidebar from "../sidebar/Sidebar";
 import NotifPopup from "../sidebar/notifications/NotifPopup";
+import { signOutCurrentUser } from "../../../firebase/authentication";
 
 const Nav = ({ user }) => {
   const [sidebar, setSidebar] = useState(false); // Regulates sidebar display
@@ -101,7 +102,7 @@ const Nav = ({ user }) => {
           </StyledLink>
         </Icons>
 
-        <BsIcons.BsList title="burger" />
+        <BsIcons.BsList title="burger" onClick={() => signOutCurrentUser()} />
       </Navbar>
       {postForm && <PostForm closeForm={closePostForm} user={userdata} />}
     </IconContext.Provider>
