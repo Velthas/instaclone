@@ -1,9 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Input from "../inputs/Input";
+import styled from "styled-components";
 import { validateMail, validatePsw } from "../../utils/validation";
+import { flexRowCenter } from "../../styles/style";
 import { loginUser } from "../../firebase/authentication";
 import { redirect } from "react-router-dom";
+
+import InterInput from "../inputs/InterInput";
+
 
 const LoginForm = ({displayError}) => {
   const handleSubmit = (e) => {
@@ -29,18 +33,41 @@ const LoginForm = ({displayError}) => {
   };
 
   return (
-    <form id="login">
-      <Input id="mail" type="text" placeholder="Email" />
-      <Input id="pass" type="password" placeholder="Password" />
-      <button type="submit" onClick={(e) => handleSubmit(e)}>
+    <Form id="login">
+      <InterInput id='mail' type='text' label='E-mail' checkValid={validateMail} />
+      <InterInput id="pass" type="password" label="Password" checkValid={validatePsw} />
+      <Button type="submit" onClick={(e) => handleSubmit(e)}>
         Log in
-      </button>
-    </form>
+      </Button>
+    </Form>
   )
 }
 
 LoginForm.propTypes = {
   displayError: PropTypes.func.isRequired,
 };
+
+const Form = styled.form`
+  width: 100%;
+`;
+
+const Button = styled.button`
+  ${flexRowCenter};
+  width: 100%;
+  height: 32px;
+  margin-top: 20px;
+  padding: 7px 16px;
+  border: none;
+  border-radius: 10px;
+
+  cursor: pointer;
+  background-color: #0095f6;
+  color: #fff;
+  font-weight: 500;
+
+  &:hover {
+    background-color: #1877f2;
+  }
+`;
 
 export default LoginForm;
