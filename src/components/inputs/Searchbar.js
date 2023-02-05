@@ -4,7 +4,6 @@ import { BsSearch, BsXCircleFill } from 'react-icons/bs';
 
 const Searchbar = ({setQuery, id}) => {
   const [focused, setFocused] = useState(false);
-  
 
   return (
     <>
@@ -49,7 +48,7 @@ const InputContainer = styled.div`
   position: relative;
   padding: 0 16px;
   height: 35px;
-  width: 90%;
+  width: 100%;
   border-radius: 8px;
   background-color: #efefef;
   color: #8e8e8e;

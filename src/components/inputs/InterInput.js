@@ -10,7 +10,7 @@ const InterInput = ({ label, type, id, checkValid }) => {
 
   const handleChange = (e) => {
     setValid(true);
-    const valueIsValid = checkValid(value);
+    const valueIsValid = checkValid(e.target.value);
     if(valueIsValid !== true) setValid(false);
     setValue(e.target.value);
   };

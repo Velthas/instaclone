@@ -6,6 +6,8 @@ import instalogo from "../../../assets/logo/instalogo.png";
 import Phone from "./Phone";
 import LoginForm from "../../forms/LoginForm";
 import Facebook from "./Facebook";
+import Register from "./Register";
+import TestLogin from "./TestLogin";
 
 const Login = () => {
   const [error, setError] = useState(null);
@@ -14,13 +16,17 @@ const Login = () => {
   return (
     <Container>
       <Phone />
-      <FormContainer>
-        <Logo src={instalogo} alt="Instagram Logo" />
-        <LoginForm displayError={displayError} />
-        <Facebook />
-        <ForgotPass>Forgot your password?</ForgotPass>
-        {error && <Error>{error}</Error>}
-      </FormContainer>
+      <div>
+        <FormContainer>
+          <Logo src={instalogo} alt="Instagram Logo" />
+          <LoginForm displayError={displayError} />
+          <Facebook />
+          <ForgotPass>Forgot your password?</ForgotPass>
+          {error && <Error>{error}</Error>}
+        </FormContainer>
+        <Register />
+        <TestLogin />
+      </div>
     </Container>
   );
 };

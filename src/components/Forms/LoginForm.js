@@ -34,7 +34,7 @@ const LoginForm = ({displayError}) => {
 
   return (
     <Form id="login">
-      <InterInput id='mail' type='text' label='E-mail' checkValid={validateMail} />
+      <InterInput id='mail' type='text' label='Email' checkValid={validateMail} />
       <InterInput id="pass" type="password" label="Password" checkValid={validatePsw} />
       <Button type="submit" onClick={(e) => handleSubmit(e)}>
         Log in
