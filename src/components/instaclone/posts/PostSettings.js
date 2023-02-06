@@ -1,17 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { flexColumnCenter, flexRowCenter } from "../../../styles/style";
-import trashcan from "../../../assets/icons/delete.svg";
-import url from "../../../assets/icons/url.svg";
-import share from "../../../assets/icons/share.svg";
-import closeIcon from "../../../assets/icons/crossIcon.svg";
+import { flexColumnCenter } from "../../../styles/style";
 import { deletePost } from "../../../firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
-import {
-  copyPostUrlToClipboard,
-  openNativeShare,
-} from "../../../utils/sharing";
+import { copyPostUrlToClipboard, openNativeShare } from "../../../utils/sharing";
 import { deletePostPhoto } from "../../../firebase/storage";
 
 const PostSettings = ({ settings, setSettings, post }) => {

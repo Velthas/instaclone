@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { flexColumnCenter } from "../../../styles/style";
+import { flexColumnCenter, fadeIn } from "../../../styles/style";
 import { useSearch } from "../../../utils/hooks";
 import Searchbar from "../../inputs/Searchbar";
 import UserCard from "../profile/UserCard";
@@ -30,6 +30,9 @@ const Container = styled.div`
   padding: 24px 16px;
 
   border-bottom: 1px solid #dfdfdf;
+  animation-name: ${fadeIn};
+  animation-duration: 1s;
+  transition-timing-function: ease-out;
 `;
 
 const Heading = styled.h1`

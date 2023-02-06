@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { flexRowCenter } from "../../../styles/style";
+import { flexRowCenter, fadeIn } from "../../../styles/style";
 import { BsPersonPlus, BsThreeDots } from "react-icons/bs";
-import { getCurrentUserUsername } from "../../../firebase/authentication";
+import { getCurrentUserUsername, signOutCurrentUser } from "../../../firebase/authentication";
 import { useNavigate } from "react-router-dom";
 import { useFollow } from "../../../utils/hooks";
 
@@ -37,7 +37,10 @@ const ProfileHeader = ({ user, posts }) => {
                 </IconButton>
               </>
               :
-              <Button onClick={() => navigate('settings')}>Edit Profile</Button>
+              <>
+                <Button onClick={() => navigate('settings')}>Edit Profile</Button>
+                <Button onClick={() => signOutCurrentUser() }>Log out</Button>
+              </>
               }
             </ButtonContainer>
             <BsThreeDots size={20} />
@@ -80,6 +83,10 @@ const ProfilePic = styled.div`
   height: 150px;
   width: 150px;
   border-radius: 100%;
+
+  animation-name: ${fadeIn};
+  animation-duration: 1s;
+  transition-timing-function: ease-out;
 `;
 
 const PicWrapper = styled.div`

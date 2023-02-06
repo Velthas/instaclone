@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { flexColumnCenter } from "../../../../styles/style";
+import { fadeIn } from "../../../../styles/style";
 import Notification from "./Notification";
 
 const Notifications = ({ notifications, toggleSidebar }) => {
@@ -30,6 +31,9 @@ const Container = styled.nav`
   justify-content: flex-start;
   gap: 24px;
   padding: 24px 0;
+  animation-name: ${fadeIn};
+  animation-duration: 1s;
+  transition-timing-function: ease-out;
 `;
 
 const Heading = styled.h1`

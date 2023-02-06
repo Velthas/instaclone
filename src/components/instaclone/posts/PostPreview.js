@@ -1,33 +1,33 @@
 import React, { useState } from "react";
 import { useComments } from "../../../utils/hooks";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { fadeIn } from "../../../styles/style";
 import styled from "styled-components";
-import comment from "../../../assets/icons/chat.png";
-import heart from "../../../assets/icons/heart.svg";
+import { IoHeart, IoChatbubbleSharp } from "react-icons/io5";
 
 const PostPreview = ({ post }) => {
   const [showStat, setShowStat] = useState(false);
   const [comments, addComment] = useComments(post);
+  const navigate = useNavigate();
 
   return (
-    <Link to={'/posts/' + post.username + '/' + post.id}>
-      <PostCard
-        onMouseEnter={() => setShowStat(true)}
-        onMouseLeave={() => setShowStat(false)}
-      >
-        <PostStats show={showStat}>
-          <StatContainer>
-            <ChatIcon src={comment} />
-            <StatPara>{comments ? comments.length : ""}</StatPara>
-          </StatContainer>
-          <StatContainer>
-            <HeartIcon src={heart} />
-            <StatPara>{post.likedby.length}</StatPara>
-          </StatContainer>
-        </PostStats>
-        <PreviewImg src={post.photo} />
-      </PostCard>
-    </Link>
+    <PostCard
+      onClick={() => navigate("/posts/" + post.username + "/" + post.id)}
+      onMouseEnter={() => setShowStat(true)}
+      onMouseLeave={() => setShowStat(false)}
+    >
+      <PostStats show={showStat}>
+        <StatContainer>
+          <HeartIcon />
+          <StatPara>{post.likedby.length}</StatPara>
+        </StatContainer>
+        <StatContainer>
+          <ChatIcon />
+          <StatPara>{comments ? comments.length : ""}</StatPara>
+        </StatContainer>
+      </PostStats>
+      <PreviewImg src={post.photo} />
+    </PostCard>
   );
 };
 
@@ -69,18 +69,22 @@ const PreviewImg = styled.img`
   &:hover {
     filter: brightness(0.7);
   }
+
+  animation-name: ${fadeIn};
+  animation-duration: 1s;
+  transition-timing-function: ease-out;
 `;
 
-const HeartIcon = styled.img`
-  width: 24px;
-  height: 24px;
-  filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%)
-    hue-rotate(306deg) brightness(102%) contrast(105%);
+const HeartIcon = styled(IoHeart)`
+  width: 26px;
+  height: 26px;
+  color: white;
 `;
 
-const ChatIcon = styled(HeartIcon)`
-  width: 18px;
-  height: 18px;
+const ChatIcon = styled(IoChatbubbleSharp)`
+  width: 22px;
+  height: 22px;
+  color: white;
 `;
 
 const StatPara = styled.p`

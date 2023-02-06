@@ -33,7 +33,7 @@ const Container = styled.div`
 
   background-color: #fff;
   border-right: 1px solid #dfdfdf;
-  transition: 0.3s ease-out;
+  transition: 0.5s ease;
 
   z-index: -1;
   ${({ active }) => (active ? "transform: translateX(80px);" : "")}

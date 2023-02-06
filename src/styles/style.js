@@ -1,3 +1,5 @@
+import { keyframes } from "styled-components";
+
 const flexRowCenter = `
   display: flex;
   align-items: center;
@@ -16,4 +18,9 @@ const flexRowBetween = `
   justify-content: space-between;
 `;
 
-export {flexRowCenter, flexColumnCenter, flexRowBetween}
+const fadeIn = keyframes` 
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+`;
+
+export { flexRowCenter, flexColumnCenter, flexRowBetween, fadeIn };
