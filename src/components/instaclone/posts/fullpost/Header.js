@@ -3,21 +3,26 @@ import styled from "styled-components";
 import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
 import { BsThreeDots } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { getCurrentUserUsername } from "../../../../firebase/authentication";
 
 const Header = ({ user, setSettings, followed, updateFollowed }) => {
+  const currentUser = getCurrentUserUsername();
+
   return (
     <Container>
       <User>
-        <Link to={user ? `/profile/${user.username}` : ''}>
+        <Link to={user ? `/profile/${user.username}` : ""}>
           <UserPhoto title="profile picture" url={user ? user.pfp : ""} />
         </Link>
         <StyledLink>
           <Username>{user ? user.username : ""}</Username>
         </StyledLink>
         <span>•</span>
-        <Button onClick={() => updateFollowed(!followed)}>
-          {followed ? "Unfollow" : "Follow"}
-        </Button>
+        {user && currentUser && user.username !== currentUser && (
+          <Button onClick={() => updateFollowed(!followed)}>
+            {followed ? "Unfollow" : "Follow"}
+          </Button>
+        )}
       </User>
       <Dots title="settings" onClick={() => setSettings(true)} />
     </Container>
@@ -36,7 +41,7 @@ const Container = styled.div`
 const StyledLink = styled(Link)`
   color: #262626;
   text-decoration: none;
-`
+`;
 
 const User = styled.div`
   ${flexRowCenter};

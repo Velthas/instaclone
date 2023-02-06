@@ -27,8 +27,8 @@ const Suggestions = ({ currentUser }) => {
       <SuggestionsWrapper>
         {userList.map((suggestion) => (
           <SuggestionCard
+            currentUser={currentUser}
             key={uniqid()}
-            userFollows={user ? user.follows : []}
             suggestion={suggestion}
           />
         ))}

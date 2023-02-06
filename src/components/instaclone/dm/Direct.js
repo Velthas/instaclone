@@ -39,22 +39,21 @@ const Direct = ({ user }) => {
       document.querySelector(`#${room.chatId}`).click();
     else if (room && !room.lastMessage) {
       // If the room exists but is not displayed (no messages), make it appear and open the room
-      openChatRoom(room.chatId); // If there is a chat room with no messages, open it
+      openChatRoom(room.chatId, room.username); // If there is a chat room with no messages, open it
       setNewRoom(room); // The NewRoom will be displayed even if there are no messages.
-      setActive({username, id: room.chatId})
     } else {
       // If the room doesn't exist we must create it
       const chatId = await createChatRoom(currentUser, username); // Will create buckets on both users and chat room
       const newChat = { username, chatId }; // We add this manually to our front-end state.
       setNewRoom(newChat); // This will make the new room appear on the page
-      openChatRoom(chatId); // Sets the room as active and sends user to the appropriate route
+      openChatRoom(chatId, username); // Sets the room as active and sends user to the appropriate route
     }
-    setModal(false); // close the modal
+    setModal(false); // Close the modal
   };
 
   const openChatRoom = (id, username) => {
-    navigate(`${id}`); // Redirects to the appropriate route
     setActive({id, username}); // Will make it so the chat is highlighted
+    navigate(`${id}`); // Redirects to the appropriate route
   };
 
   return (
@@ -82,6 +81,8 @@ const Direct = ({ user }) => {
               {rooms &&
                 rooms
                   .filter(room => room.lastMessage !== null)
+                  .filter(room => newRoom ? newRoom.username !== room.username : true)
+                  .sort((a, b) => b.lastMessage.timestamp - a.lastMessage.timestamp)
                   .map((room) => (
                   <ChatEntry
                     key={room.username}

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { flexRowBetween, flexRowCenter } from "../../../styles/style";
 import { useFollow, useUser } from "../../../utils/hooks";
 
-const SuggestionCard = ({ suggestion, userFollows }) => {
+const SuggestionCard = ({ suggestion, currentUser }) => {
   const [user, updateUser] = useUser(suggestion);
   const [followed, updateFollowed] = useFollow(user ? user : null);
   return (
@@ -16,9 +16,11 @@ const SuggestionCard = ({ suggestion, userFollows }) => {
           <Name>Popular</Name>
         </div>
       </InfoWrapper>
-      <FollowButton onClick={() => updateFollowed(!followed)}>
-        {followed ? "Unfollow" : "Follow"}
-      </FollowButton>
+      {(currentUser && user) && user.username !== currentUser.displayName && (
+        <FollowButton onClick={() => updateFollowed(!followed)}>
+          {followed ? "Unfollow" : "Follow"}
+        </FollowButton>
+      )}
     </Container>
   );
 };

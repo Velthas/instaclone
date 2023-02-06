@@ -12,6 +12,7 @@ import { formatMessage } from "../../../utils/formatting";
 import Message from "./Message";
 
 const Room = ({active}) => {
+  console.log(active)
   const user = getCurrentUserUsername();
   const unsubscribe = useRef(null); // DB listener unsubscribe function will be stored here
   const { id } = useParams();
@@ -26,10 +27,13 @@ const Room = ({active}) => {
   }, [id]); // Only setup and kill listeners when the chatroom changes
 
   const sendMessage = () => {
-    const message = document.querySelector('#add-message').value;
+    const messageBox = document.querySelector('#add-message')
+    const message = messageBox.value;
     if(message.length > 2200 || message.length < 0) return;
     const formattedMessage = formatMessage(message);
     addMessage(user, active.username, id, formattedMessage);
+    messageBox.value = '';
+
   }
 
   return (
