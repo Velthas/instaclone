@@ -6,24 +6,32 @@ import { formatDateShort } from "../../../../utils/formatting";
 
 const Description = ({ user, post }) => {
   return (
-    <Comment>
-      <Main>
-        <Link to={user ? `/profile/${user.username}` : ''}>
-          <UserPic url={user ? user.pfp : ""} />
-        </Link>
-        <Wrapper>
-          <div>
-            <StyledLink>
-              <Username>{post ? post.username : ""}</Username>
-            </StyledLink>
-            <PostDescription>{post ? post.description : ""}</PostDescription>
-          </div>
-          <Extra>
-            <Undercomment>{post ? formatDateShort(post.timestamp) : ''}</Undercomment>
-          </Extra>
-        </Wrapper>
-      </Main>
-    </Comment>
+    <>
+      {post && post.description && (
+        <Comment>
+          <Main>
+            <Link to={user ? `/profile/${user.username}` : ""}>
+              <UserPic url={user ? user.pfp : ""} />
+            </Link>
+            <Wrapper>
+              <div>
+                <StyledLink>
+                  <Username>{post ? post.username : ""}</Username>
+                </StyledLink>
+                <PostDescription>
+                  {post ? post.description : ""}
+                </PostDescription>
+              </div>
+              <Extra>
+                <Undercomment>
+                  {post ? formatDateShort(post.timestamp) : ""}
+                </Undercomment>
+              </Extra>
+            </Wrapper>
+          </Main>
+        </Comment>
+      )}
+    </>
   );
 };
 
@@ -61,7 +69,7 @@ const Wrapper = styled.div`
 
 const StyledLink = styled(Link)`
   color: #262626;
-`
+`;
 
 const Username = styled.div`
   font-weight: 500;

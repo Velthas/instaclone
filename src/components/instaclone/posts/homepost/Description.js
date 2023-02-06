@@ -6,17 +6,21 @@ const Description = ({ description }) => {
   const [limit, setLimit] = useState(100)
   return (
     <Container>
-      <StyledLink to={`/profile/${description.author}`}>
-        <Username>{description.author}</Username>
-      </StyledLink>
-      <PostDescription>
-        {description.content.length > limit
-          ? description.content.slice(0, limit) + "..."
-          : description.content}
+      {description.content.length > 0 &&
+      <>
+        <StyledLink to={`/profile/${description.author}`}>
+          <Username>{description.author}</Username>
+        </StyledLink>
+        <PostDescription>
           {description.content.length > limit
-          ? <More onClick={() => setLimit(2201)}>Show more</More> 
-          : ''}
-      </PostDescription>
+            ? description.content.slice(0, limit) + "..."
+            : description.content}
+            {description.content.length > limit
+            ? <More onClick={() => setLimit(2201)}>Show more</More> 
+            : ''}
+        </PostDescription>
+      </>
+      }
     </Container>
   );
 };
