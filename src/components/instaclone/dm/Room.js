@@ -3,10 +3,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { IconContext } from "react-icons";
 import {
-  BsEmojiSmile,
-  BsTelephone,
-  BsCameraVideo,
-  BsInfoCircle,
+  BsEmojiSmile, BsTelephone, BsCameraVideo, BsInfoCircle,
 } from "react-icons/bs";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
 import { addMessage, setupMessagesListener } from "../../../firebase/firestore";

@@ -3,16 +3,16 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { flexRowCenter } from "../../../styles/style";
 
-const Register = () => {
+const GoLogin = () => {
   return (
     <Container>
-      Don't have an account?
-      <StyledLink to="/auth/signup">Sign up</StyledLink>
+      Already have an account?
+      <StyledLink to="/auth">Log in</StyledLink>
     </Container>
   );
 };
 
-export default Register;
+export default GoLogin;
 
 const Container = styled.div`
   ${flexRowCenter};
@@ -21,6 +21,7 @@ const Container = styled.div`
   margin: 15px 0;
   border: 1px solid #dbdbdb;
   font-size: 1rem;
+  margin-bottom: 36px;
 `;
 
 const StyledLink = styled(Link)`
