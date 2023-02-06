@@ -79,9 +79,6 @@ const EditProfileForm = ({ info, loadInfo }) => {
       <Button blue onClick={(e) => handleSubmit(e)}>
         Save
       </Button>
-      <Button onClick={() => navigate(`/profile/${info.username}`)}>
-        Close
-      </Button>
     </Form>
   );
 };
@@ -115,6 +112,11 @@ const FileLabel = styled.label`
   font-size: 0.8rem;
   font-weight: 500;
   color: #5295f6;
+  cursor: pointer;
+
+  &:hover {
+    color: #00376b;
+  }
 `;
 
 const ImageStyle = `
@@ -143,10 +145,11 @@ const Button = styled.button`
   border-radius: 6px;
   font-weight: 500;
   font-size: 0.9rem;
+  cursor: pointer;
   color: ${(props) => (props.blue ? "#fff" : "#000")};
   background-color: ${(props) => (props.blue ? "#0095f6" : "#efefef")};
   &:hover {
-    background-color: ${(props) => (props.blue ? "#1877f2" : "#dbdbdb")}<;
+    background-color: ${(props) => (props.blue ? "#1877f2" : "#dbdbdb")};
   }
 `;
 

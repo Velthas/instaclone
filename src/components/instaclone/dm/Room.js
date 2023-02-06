@@ -26,6 +26,11 @@ const Room = ({active}) => {
     };
   }, [id]); // Only setup and kill listeners when the chatroom changes
 
+  useEffect(() => {
+    var objDiv = document.getElementById("message-box");
+    objDiv.scrollTop = objDiv.scrollHeight;
+  }, [messages])
+
   const sendMessage = () => {
     const messageBox = document.querySelector('#add-message')
     const message = messageBox.value;
@@ -47,7 +52,7 @@ const Room = ({active}) => {
             <BsInfoCircle />
           </Icons>
         </Header>
-        <MessagesContainer>
+        <MessagesContainer id={'message-box'}>
           {messages &&
             messages.map((message) => {
                 return <Message message={message} />
@@ -66,7 +71,7 @@ const Room = ({active}) => {
 };
 
 const Container = styled.div`
-  height: 100%;
+  max-height: 700px;
   width: 100%;
   ${flexColumnCenter}
 `;
@@ -94,6 +99,12 @@ const MessagesContainer = styled.div`
   width: 100%;
   height: calc(100% - 90px);
   padding: 8px 20px;
+
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const InputContainer = styled.div`

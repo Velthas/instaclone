@@ -28,6 +28,9 @@ const Icon = styled(BsEmojiSmile)`
   height: 24px;
   width: 24px;
   cursor: pointer;
+  &:hover {
+    color: gray;
+  }
 `;
 
 const Input = styled.input`

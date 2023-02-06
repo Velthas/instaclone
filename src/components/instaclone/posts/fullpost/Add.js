@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import { flexRowBetween } from "../../../../styles/style";
-import emoji from "../../../../assets/icons/emoji.svg";
+import { BsEmojiSmile } from "react-icons/bs";
 
 const Add = ({ postInfo, insertComment }) => {
   return (
     <Container>
-      <Icon src={emoji} />
+      <Icon />
       <CommentBox
         type="text"
         id={"a" + postInfo.id}
@@ -37,10 +37,16 @@ const Button = styled.button`
   }
 `;
 
-const Icon = styled.img`
+const Icon = styled(BsEmojiSmile)`
   height: 24px;
   width: 24px;
+  color: #262626;
   cursor: pointer;
+  margin-left: 5px;
+
+  &:hover {
+    color: gray;
+  }
 `;
 
 const CommentBox = styled.input`

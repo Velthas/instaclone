@@ -45,6 +45,10 @@ const TextBox = styled.input`
   border-radius: 4px;
   border: 1px solid #dfdfdf;
   padding: 5px;
+
+  &:focus-visible {
+    outline: 1px solid black;
+  }
 `;
 
 const Description = styled.p`

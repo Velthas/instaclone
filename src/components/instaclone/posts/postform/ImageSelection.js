@@ -17,14 +17,14 @@ const ImageSelection = ({ photo, setPhoto, fileError, setFileError }) => {
     <Container photo={photo}>
       <img alt={fileError ? 'warning sign' : 'picture icon'} src={fileError ? warningIcon : pictureIcon} />
       <span>{fileError ? fileError : "Drag your images and videos here"}</span>
-      <label htmlFor="post-photo">
+      <Label htmlFor="post-photo">
         <Input data-testid="post" id="post-photo" type="file" onChange={(e) => handleChange(e)} />
         <Button type="button" blue>
           {fileError
             ? "Try uploading other files"
             : "Click here to upload from your device"}
         </Button>
-      </label>
+      </Label>
     </Container>
   );
 };
@@ -37,6 +37,10 @@ const Container = styled.div`
 
 const Input = styled.input`
   display: none;
+`;
+
+const Label = styled.label`
+  cursor: pointer;
 `;
 
 const Button = styled.button`

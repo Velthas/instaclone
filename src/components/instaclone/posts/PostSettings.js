@@ -8,53 +8,43 @@ import closeIcon from "../../../assets/icons/crossIcon.svg";
 import { deletePost } from "../../../firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
-import { copyPostUrlToClipboard, openNativeShare } from "../../../utils/sharing";
+import {
+  copyPostUrlToClipboard,
+  openNativeShare,
+} from "../../../utils/sharing";
+import { deletePostPhoto } from "../../../firebase/storage";
 
 const PostSettings = ({ settings, setSettings, post }) => {
   const isOwn = post.username === getCurrentUserUsername(); // Determine if delete button can be displayed.
   const navigate = useNavigate();
 
   const handleDelete = async (post) => {
+    await deletePostPhoto(post.username, post.id); // Deletes picture from storage
     await deletePost(post); // Once a post is deleted, bring the user back to their profile.
-    navigate(`profile/${post.username}`); // The profile component mount will trigger a data fetch.
+    navigate(`/profile/${post.username}`); // The profile component mount will trigger a data fetch.
   };
 
   return (
-    <Settings settings={settings}>
-      <CloseFormIcon onClick={() => setSettings(false)} src={closeIcon} alt="close form"/>
+    <Settings settings={settings} onClick={() => setSettings(false)}>
       <SettingWrapper>
+        {isOwn && (
+          <Bubble isOwn={isOwn} onClick={() => handleDelete(post)}>
+            Delete
+          </Bubble>
+        )}
         <Bubble onClick={() => copyPostUrlToClipboard(post.username, post.id)}>
-          <Icon src={url} alt="url"/>
-          <p>Copy Link</p>
+          Copy Link
         </Bubble>
         <Bubble onClick={() => openNativeShare(post.username, post.id)}>
-          <Icon src={share} alt="post share"/>
-          <p>Share</p>
+          Share
+        </Bubble>
+        <Bubble onClick={() => setSettings(false)}>
+          Close
         </Bubble>
       </SettingWrapper>
-      {isOwn && (
-        <LongContainer onClick={() => handleDelete(post)}>
-          <Icon src={trashcan} alt="delete" />
-          <p>Delete</p>
-        </LongContainer>
-      )}
     </Settings>
   );
 };
-
-const CloseFormIcon = styled.img`
-  position: absolute;
-  height: 35px;
-  padding: 5px;
-  top: 2%;
-  right: 2%;
-  background-color: gainsboro;
-  border-radius: 100%;
-  cursor: pointer;
-  &:hover {
-    filter: brightness(0.8);
-  }
-`;
 
 const Settings = styled.div`
   position: absolute;
@@ -70,40 +60,30 @@ const Settings = styled.div`
   justify-content: center;
   gap: 10px;
 
-  background-color: #f5f5f5cf;
-`;
-
-const Icon = styled.img`
-  width: 40px;
+  background-color: #1d1d1dcf;
 `;
 
 const SettingWrapper = styled.div`
-  ${flexRowCenter}
-  width: 90%;
-  gap: 10px;
+  ${flexColumnCenter}
+  align-items: center;
+  background-color: #fafafa;
+  border-radius: 20px;
+  width: 300px;
+  overflow: hidden;
 `;
 
 const Bubble = styled.div`
-  width: 50%;
-  height: 100px;
-  border-radius: 8px;
-  border: 1px solid black;
-  background-color: transparent;
-  transition: ease-out 0.3s;
+  width: 100%;
+  padding: 14px 0;
+  text-align: center;
+  border-bottom: 1px solid #dfdfdf;
+  font-size: 0.8rem;
   cursor: pointer;
 
-  ${flexColumnCenter}
-  justify-content: center;
+  ${({ isOwn }) => (isOwn ? "font-weight: 500; color: red;" : "")};
   &:hover {
-    transform: scale(1.03);
+    background-color: #dfdfdf;
   }
-`;
-
-const LongContainer = styled(Bubble)`
-  width: 90%;
-  filter: invert(27%) sepia(92%) saturate(7490%) hue-rotate(357deg)
-    brightness(93%) contrast(119%);
-  border: 1px solid red;
 `;
 
 export default PostSettings;

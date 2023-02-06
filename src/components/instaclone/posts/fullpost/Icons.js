@@ -1,28 +1,20 @@
 import React from "react";
 import styled from "styled-components";
 import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
-import { openNativeShare } from "../../../../utils/sharing";
-
-import heart from "../../../../assets/icons/heart.svg";
-import fillheart from "../../../../assets/icons/fillheart.svg";
-import share from "../../../../assets/icons/share.svg";
-import comment from "../../../../assets/icons/chat.png";
-import share2 from "../../../../assets/icons/share2.svg";
+import * as io from "react-icons/io5";
 
 const Icons = ({ liked, changeLiked }) => {
   return (
     <Container>
       <IconContainer>
-        <Icon
-          liked={liked}
-          src={liked ? fillheart : heart}
-          onClick={() => changeLiked(liked)}
-          alt="heart"
-        />
-        <Icon src={comment} alt="speech bubble" />
-        <Icon src={share} alt="go-to" />
+        {liked 
+          ? <HeartFull liked={liked} title='heart' onClick={() => changeLiked(liked)} />
+          : <Heart title='heart' onClick={() => changeLiked(liked)} />
+        }
+        <Chat title="speech bubble" />
+        <Share title="go-to" />
       </IconContainer>
-      <Icon src={share2} alt="share with device" onClick={openNativeShare} />
+      <Bookmark title="share with device" />
     </Container>
   );
 };
@@ -38,15 +30,38 @@ const IconContainer = styled.div`
   gap: 10px;
 `;
 
-const Icon = styled.img`
+const Icon = `
   height: 24px;
   width: 24px;
   cursor: pointer;
-  ${({ liked }) => {
-    return liked
-      ? "filter: invert(50%) sepia(87%) saturate(5070%) hue-rotate(332deg) brightness(99%) contrast(85%);"
-      : "";
-  }}
+  color: #262626;
+  &:hover {
+    color: gray;
+  }
+`;
+
+const Heart = styled(io.IoHeartOutline)`
+  ${Icon}
+`;
+
+const HeartFull = styled(io.IoHeart)`
+  ${Icon}
+  color: ${({ liked }) => (liked ? "red" : "#262626")};
+  &:hover {
+    color: ${({ liked }) => (liked ? "crimson" : "gray")};
+  }
+`;
+
+const Chat = styled(io.IoChatbubbleOutline)`
+  ${Icon}
+`;
+
+const Share = styled(io.IoShareOutline)`
+  ${Icon}
+`;
+
+const Bookmark = styled(io.IoBookmarkOutline)`
+  ${Icon}
 `;
 
 export default Icons;

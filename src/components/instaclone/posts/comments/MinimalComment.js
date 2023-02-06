@@ -59,6 +59,7 @@ const LikeIcon = styled.img`
   width: 12px;
   height: 12px;
   align-self: center;
+  cursor: pointer;
   ${({ liked }) => {
     return liked
       ? "filter: invert(50%) sepia(87%) saturate(5070%) hue-rotate(332deg) brightness(99%) contrast(85%)"

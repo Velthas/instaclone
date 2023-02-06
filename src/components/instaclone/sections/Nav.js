@@ -72,12 +72,12 @@ const Nav = ({ user }) => {
           </ListItem>
 
           <ListItem onClick={() => handleClick("message")}>
-            <Link to={'/direct'}>
+            <StyledLink to={'/direct'}>
             {active === "message" 
               ? <IoPaperPlaneSharp title="direct messages" />
               : <IoPaperPlaneOutline title="direct messages" />
             }
-            </Link>
+            </StyledLink>
           </ListItem>
 
           <ListItem>

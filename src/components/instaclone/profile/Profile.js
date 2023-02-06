@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import Buttons from "./Buttons";
 import PostPreview from "../posts/PostPreview";
 import uniqid from 'uniqid'
 import ProfileHeader from "./ProfileHeader";
@@ -34,6 +33,7 @@ const PostList = styled.div`
   display: grid;
   gap: 28px;
   grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
 `;
 
 export default Profile;

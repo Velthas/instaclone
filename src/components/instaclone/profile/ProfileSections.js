@@ -24,9 +24,10 @@ const ProfileSections = () => {
 } 
 
 const Container = styled.div`
-  margin: 10px 5%;
+  margin: 10px 0;
   ${flexRowCenter}
   gap: 60px; 
+  border-top: 1px solid #dfdfdf;
 `;
 
 const Section = styled.div`

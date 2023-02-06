@@ -107,6 +107,7 @@ const Underimportant = styled(Undercomment)`
 `
 
 const LikeIcon = styled.img`
+  cursor: pointer;
   width: 12px;
   height: 12px;
   align-self: center;

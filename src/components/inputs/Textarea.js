@@ -33,13 +33,16 @@ const TextBox = styled.textarea`
   border-radius: 4px;
   border: 1px solid #dfdfdf;
   width: 350px;
-  outline: 1px solid black;
   resize: none;
+
+  &:focus-visible {
+    outline: 1px solid black;
+  }
 `;
 
 const Description = styled.p`
   font-size: 0.8rem;
-  color: #d5d5d5;
+  color: #8e8e8e;
 `;
 
 const Label = styled.label`
