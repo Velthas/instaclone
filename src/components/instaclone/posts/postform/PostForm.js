@@ -7,6 +7,7 @@ import { getCurrentUserUsername } from "../../../../firebase/authentication";
 import { createPost, getPostDocReference } from "../../../../firebase/firestore";
 import { uploadPhoto } from "../../../../firebase/storage";
 import { Timestamp } from "firebase/firestore";
+import { fadeIn } from "../../../../styles/style";
 import PostFormHeader from "./PostFormHeader";
 import ImageSelection from "./ImageSelection";
 import PostInfo from "./PostInfo";
@@ -117,6 +118,10 @@ const Container = styled.div`
   height: 600px;
   background-color: white;
   border-radius: 10px;
+
+  animation-name: ${fadeIn};
+  animation-duration: 0.5s;
+  transition-timing-function: ease-out;
 `;
 
 const Image = styled.img`

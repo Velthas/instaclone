@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
 import { copyPostUrlToClipboard, openNativeShare } from "../../../utils/sharing";
 import { deletePostPhoto } from "../../../firebase/storage";
+import { fadeIn } from "../../../styles/style";
 
 const PostSettings = ({ settings, setSettings, post }) => {
   const isOwn = post.username === getCurrentUserUsername(); // Determine if delete button can be displayed.
@@ -54,6 +55,10 @@ const Settings = styled.div`
   gap: 10px;
 
   background-color: #1d1d1dcf;
+
+  animation-name: ${fadeIn};
+  animation-duration: 0.5s;
+  transition-timing-function: ease-out;
 `;
 
 const SettingWrapper = styled.div`

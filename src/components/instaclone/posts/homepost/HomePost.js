@@ -33,8 +33,7 @@ const HomePost = ({ post }) => {
 const Container = styled.div`
   ${flexColumnCenter}
   width: 470px;
-  border-radius: 8px;
-  border: 1px solid #dbdbdb;
+  border-bottom: 1px solid #dbdbdb;
   position: relative;
 `;
 
@@ -44,6 +43,7 @@ const Picture = styled.div`
   background-size: cover;
   width: 469px;
   height: 470px;
+  border-radius: 3px;
 `;
 
 export default HomePost;

@@ -5,7 +5,7 @@ import { flexColumnCenter } from "../../../styles/style";
 import HomePost from "../posts/homepost/HomePost";
 import Suggestions from "./Suggestions";
 
-const Home = ({ user }) => {
+const Home = ({ user, closeSidebar }) => {
   const [content, setContent] = useState([]);
   const [display, setDisplay] = useState(2);
   useEffect(() => {
@@ -18,7 +18,7 @@ const Home = ({ user }) => {
   }, [user]);
 
   return (
-    <Container>
+    <Container onClick={() => closeSidebar("home")}>
       <PostContainer>
         {content.length !== 0 &&
           content.map((post) => <HomePost key={post.id} post={post} />)}
@@ -40,7 +40,7 @@ const PostContainer = styled.div`
   width: 50%;
   height: min-height;
   padding: 30px 5%;
-  gap: 40px;
+  gap: 10px;
 `;
 
 export default Home;

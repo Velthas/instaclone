@@ -11,12 +11,10 @@ import Sidebar from "../sidebar/Sidebar";
 import NotifPopup from "../sidebar/notifications/NotifPopup";
 import { signOutCurrentUser } from "../../../firebase/authentication";
 
-const Nav = ({ user }) => {
-  const [sidebar, setSidebar] = useState(false); // Regulates sidebar display
+const Nav = ({ user, sidebar, setSidebar, active, setActive }) => {
   const [userdata, getUserData] = useUser(user ? user.displayName : null); // Is responsible for user data
   const [notifications, increaseLimit, markAllAsSeen] = useNotifications(user ? user.displayName : null);
   const [postForm, setPostForm] = useState(false); // Regulates new post form display
-  const [active, setActive] = useState("home"); // Determines which icon is marked as active
 
   const handleClick = (icon) => {
     if (sidebar) setSidebar(false);  // Close the sidebar if it's open
@@ -45,6 +43,7 @@ const Nav = ({ user }) => {
 
   return (
     <IconContext.Provider value={{ style: { cursor: "pointer" }, size: 24 }}>
+      <Space sidebar={sidebar} active={active} />
       <Navbar>
         <Sidebar
           active={sidebar}
@@ -59,7 +58,7 @@ const Nav = ({ user }) => {
 
         <Icons>
           <StyledLink to={"/"}>
-            <ListItem onClick={() => handleClick("home")}>
+            <ListItem own={'home'} onClick={() => handleClick("home")}>
               {active === "home" 
                 ? <BsIcons.BsHouseDoorFill title="home" />
                 : <BsIcons.BsHouseDoor title="home" />
@@ -67,12 +66,12 @@ const Nav = ({ user }) => {
             </ListItem>
           </StyledLink>
 
-          <ListItem>
+          <ListItem active={active} own={"search"}>
             <BsIcons.BsSearch title="search" onClick={() => toggleSidebar("search")} />
           </ListItem>
 
-          <ListItem onClick={() => handleClick("message")}>
-            <StyledLink to={'/direct'}>
+          <ListItem own={"message"} onClick={() => handleClick("message")}>
+            <StyledLink to={"/direct"}>
             {active === "message" 
               ? <IoPaperPlaneSharp title="direct messages" />
               : <IoPaperPlaneOutline title="direct messages" />
@@ -80,14 +79,14 @@ const Nav = ({ user }) => {
             </StyledLink>
           </ListItem>
 
-          <ListItem>
+          <ListItem active={active} own={'add'}>
             {active === "add" 
               ? <BsIcons.BsPlusCircleFill title="add" />
               : <BsIcons.BsPlusCircle title="add" onClick={openPostForm} />
             }
           </ListItem>
 
-          <NotifListItem notif={notifications} onClick={() => { markAllAsSeen(toggleSidebar) }}>
+          <NotifListItem active={active} own="heart" notif={notifications} onClick={() => { markAllAsSeen(toggleSidebar) }}>
             <NotifPopup notifications={notifications ? notifications : []} />
             {active === "heart" 
               ? <BsIcons.BsHeartFill title="heart" />
@@ -96,7 +95,7 @@ const Nav = ({ user }) => {
           </NotifListItem>
 
           <StyledLink to={user !== null ? "/profile/" + user.displayName : "/"}>
-            <ListItem onClick={() => handleClick("profile")}>
+            <ListItem own="profile" onClick={() => handleClick("profile")}>
               <User active={active === "profile"} url={userdata ? userdata.pfp : ""} />
             </ListItem>
           </StyledLink>
@@ -108,6 +107,14 @@ const Nav = ({ user }) => {
     </IconContext.Provider>
   );
 };
+
+// Since Navbar is removed from the flow of the document
+// We need this to ensure things don't clip out of place.
+// and for better consistency when using padding-margin on main element.
+const Space = styled.div`
+  width: 80px;
+  flex-shrink: 0;
+`;
 
 const Navbar = styled.nav`
   position: fixed;
@@ -159,9 +166,16 @@ const Icons = styled.ul`
 const ListItem = styled.li`
   position: relative;
   transition: 0.15s ease-out;
+  height: 40px;
+  width: 40px;
+  ${flexRowCenter}
+  border-radius: 50%;
   &:hover {
     transform: scale(1.1);
   }
+  ${({ active, own }) => active === own 
+  ? "border: 1px solid #dfdfdf;" 
+  : ""}
 `;
 
 const NotifListItem = styled(ListItem)`

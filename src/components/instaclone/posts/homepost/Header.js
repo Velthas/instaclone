@@ -22,7 +22,6 @@ const Container = styled.div`
   ${flexRowBetween}
   height: 50px;
   width: 100%;
-  border-bottom: 1px solid #efefef;
   padding: 5px 5%;
 `;
 

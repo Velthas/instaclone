@@ -10,7 +10,7 @@ import Icons from "./Icons";
 import Stats from "./Stats";
 import Add from "./Add";
 
-const FullPost = () => {
+const FullPost = ({closeSidebar}) => {
   const { postid, username } = useParams();
   const postInfo = { id: postid, username };
   const [settings, setSettings] = useState(false);
@@ -19,7 +19,7 @@ const FullPost = () => {
   const [followed, updateFollowed] = useFollow(user ? user : null);
 
   return (
-    <Container>
+    <Container onClick={closeSidebar}>
       <PostWrapper>
         {post && (
           <PostSettings

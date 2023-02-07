@@ -1,18 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 import PostPreview from "../posts/PostPreview";
-import uniqid from 'uniqid'
 import ProfileHeader from "./ProfileHeader";
 import ProfileSections from "./ProfileSections";
 
-const Profile = ({user, posts}) => {
+const Profile = ({user, posts, closeSidebar}) => {
   return (
-    <Container>
+    <Container onClick={() => closeSidebar("profile")}>
         <ProfileHeader user={user} posts={posts} />
         <ProfileSections />
         <PostList>
           {posts.map(post => {
-            return <PostPreview key={uniqid()} post={post}/>
+            return <PostPreview key={post.id} post={post}/>
           })}
         </PostList>
     </Container>
@@ -20,7 +19,7 @@ const Profile = ({user, posts}) => {
 }
 
 const Container = styled.div`
-  padding: 30px 20px 0;
+  padding: 30px 5% 0;
   margin: 0 auto 30px;
   width: 100%;
 

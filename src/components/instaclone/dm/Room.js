@@ -55,7 +55,7 @@ const Room = ({active}) => {
         <MessagesContainer id={'message-box'}>
           {messages &&
             messages.map((message) => {
-                return <Message message={message} />
+                return <Message key={message.id} message={message} />
             })}
         </MessagesContainer>
         <InputContainer>

@@ -13,7 +13,7 @@ import ChatEntry from "./ChatEntry";
 import Room from "./Room";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
 
-const Direct = ({ user }) => {
+const Direct = ({ user, closeSidebar }) => {
   const currentUser = getCurrentUserUsername();
   const unsubscribe = useRef(null);
   const [modal, setModal] = useState(false);
@@ -58,7 +58,7 @@ const Direct = ({ user }) => {
 
   return (
     <IconContext.Provider value={{ style: { cursor: "pointer" }, size: 22 }}>
-      <Container>
+      <Container onClick={() => closeSidebar("message")}>
         {modal && <NewChatModal createRoom={createRoom} setModal={setModal} />}
         <MessagesContainer>
           <ChatlistContainer>

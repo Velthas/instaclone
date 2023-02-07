@@ -5,13 +5,13 @@ import FullPost from "../posts/fullpost/FullPost";
 import Home from "../home/Home";
 import Direct from "../dm/Direct";
 
-const Main = ({user}) => {
+const Main = ({user, closeSidebar}) => {
   return (
     <Routes>
-      <Route path="/" element={<Home user={user}/>} />
-      <Route path="profile/:username/*" element={<User />} />
-      <Route path="posts/:username/:postid" element={<FullPost />} />
-      <Route path="direct/*" element={<Direct user={user} />} />
+      <Route path="/" element={<Home closeSidebar={closeSidebar} user={user}/>} />
+      <Route path="profile/:username/*" element={<User closeSidebar={closeSidebar} />} />
+      <Route path="posts/:username/:postid" element={<FullPost closeSidebar={closeSidebar} />} />
+      <Route path="direct/*" element={<Direct user={user} closeSidebar={closeSidebar} />} />
     </Routes>
   )
 }

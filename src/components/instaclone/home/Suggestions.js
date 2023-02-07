@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { flexColumnCenter, flexRowBetween } from "../../../styles/style";
 import { useUser } from "../../../utils/hooks";
 import SuggestionCard from "./SuggestionCard";
-import uniqid from "uniqid";
 import { Link } from "react-router-dom";
 
 const Suggestions = ({ currentUser }) => {
@@ -25,10 +24,10 @@ const Suggestions = ({ currentUser }) => {
         <More>Show all</More>
       </Wrapper>
       <SuggestionsWrapper>
-        {userList.map((suggestion) => (
+        {userList.map((suggestion, index) => (
           <SuggestionCard
             currentUser={currentUser}
-            key={uniqid()}
+            key={index}
             suggestion={suggestion}
           />
         ))}

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
 import EditProfileForm from "../../forms/EditProfileForm";
 
-const EditProfile = ({info, loadInfo}) => {
+const EditProfile = ({info, loadInfo, closeSidebar}) => {
  const navigate = useNavigate()
   useEffect(() => {
     const currentUser = getCurrentUserUsername();
@@ -12,7 +12,7 @@ const EditProfile = ({info, loadInfo}) => {
   }, []);
 
   return (
-    <Backdrop>
+    <Backdrop onClick={closeSidebar}>
       <Container>
         <EditProfileForm
           info={info}
