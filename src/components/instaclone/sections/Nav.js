@@ -6,10 +6,10 @@ import styled from "styled-components";
 import * as BsIcons from "react-icons/bs";
 import { IoPaperPlaneOutline, IoPaperPlaneSharp } from "react-icons/io5";
 import { IconContext } from "react-icons";
-import { flexRowCenter } from "../../../styles/style";
+import { flexRowCenter, fadeIn } from "../../../styles/style";
 import Sidebar from "../sidebar/Sidebar";
 import NotifPopup from "../sidebar/notifications/NotifPopup";
-import { signOutCurrentUser } from "../../../firebase/authentication";
+import instalogo from "../../../assets/logo/instalogo.png"
 
 const Nav = ({ user, sidebar, setSidebar, active, setActive }) => {
   const [userdata, getUserData] = useUser(user ? user.displayName : null); // Is responsible for user data
@@ -44,7 +44,7 @@ const Nav = ({ user, sidebar, setSidebar, active, setActive }) => {
   return (
     <IconContext.Provider value={{ style: { cursor: "pointer" }, size: 24 }}>
       <Space sidebar={sidebar} active={active} />
-      <Navbar>
+      <Navbar sidebar={sidebar}>
         <Sidebar
           active={sidebar}
           content={active}
@@ -53,55 +53,65 @@ const Nav = ({ user, sidebar, setSidebar, active, setActive }) => {
         />
 
         <LogoContainer>
-          <BsIcons.BsInstagram title="instalogo" />
+          <MinifiedLogo sidebar={sidebar} title="instalogo" />
+          <ExtendedLogo src={instalogo} sidebar={sidebar} title="instalogo" />
         </LogoContainer>
 
         <Icons>
           <StyledLink to={"/"}>
-            <ListItem own={'home'} onClick={() => handleClick("home")}>
+            <ListItem sidebar={sidebar} own={'home'} onClick={() => handleClick("home")}>
               {active === "home" 
                 ? <BsIcons.BsHouseDoorFill title="home" />
                 : <BsIcons.BsHouseDoor title="home" />
               }
+              <Label sidebar={sidebar} active={active} own={"home"}>Home</Label>
             </ListItem>
           </StyledLink>
 
-          <ListItem active={active} own={"search"}>
-            <BsIcons.BsSearch title="search" onClick={() => toggleSidebar("search")} />
+          <ListItem sidebar={sidebar} active={active} own={"search"} onClick={() => toggleSidebar("search")}>
+            <BsIcons.BsSearch title="search" />
+            <Label sidebar={sidebar} active={active} own={"search"}>Search</Label>
           </ListItem>
 
-          <ListItem own={"message"} onClick={() => handleClick("message")}>
+          <ListItem sidebar={sidebar} own={"message"} onClick={() => handleClick("message")}>
             <StyledLink to={"/direct"}>
             {active === "message" 
               ? <IoPaperPlaneSharp title="direct messages" />
               : <IoPaperPlaneOutline title="direct messages" />
             }
+            <Label sidebar={sidebar} active={active} own={"message"}>Messages</Label>
             </StyledLink>
           </ListItem>
 
-          <ListItem active={active} own={'add'}>
+          <ListItem sidebar={sidebar} own={'add'} onClick={openPostForm}>
             {active === "add" 
               ? <BsIcons.BsPlusCircleFill title="add" />
-              : <BsIcons.BsPlusCircle title="add" onClick={openPostForm} />
+              : <BsIcons.BsPlusCircle title="add" />
             }
+            <Label sidebar={sidebar} active={active} own={"add"}>Create</Label>
           </ListItem>
 
-          <NotifListItem active={active} own="heart" notif={notifications} onClick={() => { markAllAsSeen(toggleSidebar) }}>
+          <NotifListItem sidebar={sidebar} active={active} own="heart" notif={notifications} onClick={() => { markAllAsSeen(toggleSidebar) }}>
             <NotifPopup notifications={notifications ? notifications : []} />
             {active === "heart" 
               ? <BsIcons.BsHeartFill title="heart" />
               : <BsIcons.BsHeart title="heart" />
             }
+            <Label sidebar={sidebar} active={active} own={"heart"}>Notifications</Label>
           </NotifListItem>
 
           <StyledLink to={user !== null ? "/profile/" + user.displayName : "/"}>
-            <ListItem own="profile" onClick={() => handleClick("profile")}>
+            <ListItem sidebar={sidebar} own="profile" onClick={() => handleClick("profile")}>
               <User active={active === "profile"} url={userdata ? userdata.pfp : ""} />
+              <Label sidebar={sidebar} active={active} own={"profile"}>Profile</Label>
             </ListItem>
           </StyledLink>
         </Icons>
 
-        <BsIcons.BsList title="burger" onClick={() => signOutCurrentUser()} />
+        <ListItem as="div" sidebar={sidebar} own={"burger"}>
+          <BsIcons.BsList title="burger" />
+          <Label sidebar={sidebar} active={active} own={"burger"}>More</Label>
+        </ListItem>
       </Navbar>
       {postForm && <PostForm closeForm={closePostForm} user={userdata} />}
     </IconContext.Provider>
@@ -112,8 +122,12 @@ const Nav = ({ user, sidebar, setSidebar, active, setActive }) => {
 // We need this to ensure things don't clip out of place.
 // and for better consistency when using padding-margin on main element.
 const Space = styled.div`
-  width: 80px;
   flex-shrink: 0;
+  width: ${({sidebar}) => sidebar ? '80px' : '220px'};
+
+  @media(max-width: 1100px) {
+    width: 80px;
+  }
 `;
 
 const Navbar = styled.nav`
@@ -125,20 +139,47 @@ const Navbar = styled.nav`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
+  align-items: ${({sidebar}) => sidebar ? 'center' : 'flex-start'};
 
-  width: 80px;
+  width: ${({sidebar}) => sidebar ? '80px' : '220px'};
   height: 100vh;
   padding: 12px 8px;
 
   background-color: white;
   border-right: 1px solid #dfdfdf;
+
+  @media(max-width: 1100px) {
+    width: 80px;
+    align-items: center;
+  }
+
+  transition: 0.3s ease-out;
 `;
 
 const LogoContainer = styled.div`
   ${flexRowCenter}
-  height: 20%;
+  height: 100px;
   width: 100%;
+  padding: 0 16px;
+  justify-content: flex-start;
+`;
+
+const ExtendedLogo = styled.img`
+  display: ${({sidebar}) => sidebar ? 'none' : 'block'};
+  height: 40px;
+  width: 110px;
+
+  @media(max-width: 1100px) {
+    display: none;
+  }
+`;
+
+const MinifiedLogo = styled(BsIcons.BsInstagram)`
+  display: ${({sidebar}) => sidebar ? 'block' : 'none'};
+
+  @media(max-width: 1100px) {
+    display: block;
+  }
 `;
 
 const User = styled.div`
@@ -164,11 +205,13 @@ const Icons = styled.ul`
 `;
 
 const ListItem = styled.li`
+  cursor: pointer;
   position: relative;
   transition: 0.15s ease-out;
-  height: 40px;
-  width: 40px;
+  min-height: 40px;
+  min-width: 40px;
   ${flexRowCenter}
+  justify-content: ${({sidebar}) => sidebar ? 'center' : 'flex-start'};
   border-radius: 50%;
   &:hover {
     transform: scale(1.1);
@@ -176,7 +219,29 @@ const ListItem = styled.li`
   ${({ active, own }) => active === own 
   ? "border: 1px solid #dfdfdf;" 
   : ""}
+  padding: ${({sidebar}) => sidebar ? '0' : '12px'};
+
+  @media(max-width: 1100px) {
+    justify-content: center;
+    padding: 0;
+  }
 `;
+
+const Label = styled.span`
+  margin-left: 16px;
+  font-size: 1rem;
+  ${({own, active}) => own === active ? 'font-weight: bold;' : ''}
+  ${({sidebar}) => sidebar ? 'display: none;' : 'display: inline;'}
+  animation-name: ${fadeIn};
+  animation-duration: 1s;
+  transition-timing-function: ease-out;
+  cursor: pointer;
+  
+
+  @media(max-width: 1100px) {
+    display: none;
+  }
+`
 
 const NotifListItem = styled(ListItem)`
   &::after {
@@ -195,6 +260,7 @@ const NotifListItem = styled(ListItem)`
 
 const StyledLink = styled(Link)`
   color: black;
+  text-decoration: none;
 `;
 
 export default Nav;

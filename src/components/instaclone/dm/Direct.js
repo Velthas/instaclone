@@ -104,7 +104,7 @@ const Direct = ({ user, closeSidebar }) => {
 };
 
 const Container = styled.div`
-  min-width: calc(100vw - 80px);
+  width: 100%;
   min-height: 100vh;
   padding: 5%;
 

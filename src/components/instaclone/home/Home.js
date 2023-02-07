@@ -29,7 +29,8 @@ const Home = ({ user, closeSidebar }) => {
 };
 
 const Container = styled.div`
-  width: calc(100vw - 80px);
+  background-color: #fafafa;
+  width: 100%;
   min-height: 100vh;
   display: flex;
   justify-content: center;
