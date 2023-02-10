@@ -21,7 +21,7 @@ const Icons = ({ liked, changeLiked }) => {
 
 const Container = styled.div`
   ${flexRowBetween}
-  padding: 10px 5%;
+  padding: 10px 0;
   width: 100%;
 `;
 

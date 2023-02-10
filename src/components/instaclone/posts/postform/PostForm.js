@@ -127,7 +127,7 @@ const Container = styled.div`
 const Image = styled.img`
   ${({ photo }) => (photo ? "display: block" : "display: none")};
   ${({ loading }) => (loading ? "display: none" : "")};
-  max-width: 600px;
+  max-width: 555px;
   height: 100%;
   object-fit: cover;
   border-bottom-left-radius: 10px;

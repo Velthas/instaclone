@@ -42,14 +42,12 @@ const StyledLink = styled(Link)`
 `;
 
 const Username = styled.p`
-  font-size: 1rem;
   font-weight: 500;
   display: inline-block;
   padding-right: 5px;
 `;
 
 const Comment = styled.p`
-  font-size: 0.9rem;
   color: black;
   display: inline;
   word-break: break-word;

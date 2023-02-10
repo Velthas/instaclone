@@ -38,9 +38,7 @@ const Container = styled.div`
 
 const PostContainer = styled.div`
   ${flexColumnCenter}
-  width: 50%;
-  height: min-height;
-  padding: 30px 5%;
+  padding: 30px 20px;
   gap: 10px;
 `;
 

@@ -35,6 +35,10 @@ const Instaclone = ({ user }) => {
 const Container = styled.div`
   display: flex;
   flex-direction: row;
+
+  @media(max-width: 750px) {
+    flex-direction: column-reverse;
+  }
 `;
 
 export default Instaclone;

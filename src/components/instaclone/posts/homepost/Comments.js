@@ -33,13 +33,12 @@ const Comments = ({ post, comments, liked }) => {
               <MinimalComment post={post} key={comment.id} comment={comment} />
             ))}
       </CommentsContainer>
-      <Date>{formatDateDiscursive(post.timestamp)}</Date>
     </CommentSection>
   );
 };
 
 const CommentSection = styled.div`
-  padding: 0px 5% 10px 5%;
+  padding: 0 0 10px 0;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -52,13 +51,11 @@ const StyledLink = styled(Link)`
 `;
 
 const ViewMoreCommentsPara = styled.p`
-  font-size: 0.9rem;
   color: #959595;
   cursor: pointer;
 `;
 
 const LikeCount = styled.p`
-  font-size: 1rem;
   color: #262626;
   font-weight: 500;
 `;
@@ -67,13 +64,6 @@ const CommentsContainer = styled.div`
   ${flexColumnCenter}
   align-items: flex-start;
   gap: 2px;
-`;
-
-const Date = styled.div`
-  color: #959595;
-  text-transform: uppercase;
-  font-size: 0.7rem;
-  margin: 5px 0;
 `;
 
 export default Comments;

@@ -10,7 +10,7 @@ import { createChatRoom } from "../../../firebase/firestore";
 
 import NewChatModal from "./NewChatModal";
 import ChatEntry from "./ChatEntry";
-import Room from "./Room";
+import Room from "./room/Room";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
 
 const Direct = ({ user, closeSidebar }) => {

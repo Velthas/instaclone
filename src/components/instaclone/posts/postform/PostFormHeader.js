@@ -24,6 +24,7 @@ const SharePost = styled.p`
 `;
 
 const FormTitle = styled.div`
+  transition: 1s ease-out;
   padding: 0 16px;
   ${({ photo }) => (photo ? flexRowBetween : flexRowCenter)};
   width: 100%;

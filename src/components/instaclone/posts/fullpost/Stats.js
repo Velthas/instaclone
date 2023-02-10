@@ -16,8 +16,7 @@ const Container = styled.div`
   flex-direction: column;
   gap: 5px;
   width: 100%;
-  padding: 10px 5%;
-  border-bottom: 1px solid #dfdfdf;
+  padding: 10px 0;
 `;
 
 const Likes = styled.p`

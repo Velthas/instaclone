@@ -10,25 +10,27 @@ const Notification = ({ notification, toggleSidebar }) => {
   const [user, updateUser] = useUser(notification.author);
   return (
     <Container>
-      <Link
-        to={`profile/${notification.author}`}
-        onClick={() => toggleSidebar("heart")}
-      >
-        <ProfilePicture url={user ? user.pfp : null} />
-      </Link>
-      <Body>
-        <Username
+      <FlexWrapper>
+        <Link
           to={`profile/${notification.author}`}
           onClick={() => toggleSidebar("heart")}
         >
-          {notification.author}
-        </Username>
-        {notification.type === "l" && " liked your post. "}
-        {notification.type === "f" && " followed you. "}
-        {notification.type === "c" && ` commented:\n "${notification.message}" `}
-        {notification.type === "cl" && " liked your comment. "}
-        <Date>{formatDateShort(notification.timestamp)}</Date>
-      </Body>
+          <ProfilePicture url={user ? user.pfp : null} />
+        </Link>
+        <Body>
+          <Username
+            to={`profile/${notification.author}`}
+            onClick={() => toggleSidebar("heart")}
+          >
+            {notification.author}
+          </Username>
+          {notification.type === "l" && " liked your post. "}
+          {notification.type === "f" && " followed you. "}
+          {notification.type === "c" && ` commented:\n "${notification.message}" `}
+          {notification.type === "cl" && " liked your comment. "}
+          <Date>{formatDateShort(notification.timestamp)}</Date>
+        </Body>
+      </FlexWrapper>
       {(notification.type === "c" ||
         notification.type === "l" ||
         notification.type === "cl") && (
@@ -69,6 +71,7 @@ const Body = styled.span`
   font-size: 0.9rem;
   white-space: pre-wrap;
   word-break: break-word;
+  width: 100%;
 `;
 
 const Username = styled(Link)`
@@ -82,6 +85,13 @@ const Date = styled.span`
   text-decoration: none;
   font-weight: 400;
   font-size: 0.9rem;
+`;
+
+const FlexWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 80%;
 `;
 
 export default Notification;

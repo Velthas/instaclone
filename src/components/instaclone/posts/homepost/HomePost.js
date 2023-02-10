@@ -19,7 +19,7 @@ const HomePost = ({ post }) => {
   return (
     <Container>
       <PostSettings settings={settings} setSettings={setSettings} post={post} />
-      <Header setSettings={setSettings} user={user} />
+      <Header setSettings={setSettings} user={user} timestamp={post.timestamp} />
       <Link to={`/posts/${post.username}/${post.id}`}>
         <Picture title="Post picture" url={!user ? "" : post.photo} />
       </Link>
@@ -35,6 +35,7 @@ const Container = styled.div`
   width: 470px;
   border-bottom: 1px solid #dbdbdb;
   position: relative;
+  font-size: 0.9rem;
 `;
 
 const Picture = styled.div`

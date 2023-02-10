@@ -59,7 +59,7 @@ const Nav = ({ user, sidebar, setSidebar, active, setActive }) => {
 
         <Icons>
           <StyledLink to={"/"}>
-            <ListItem sidebar={sidebar} own={'home'} onClick={() => handleClick("home")}>
+            <ListItem mobile={true} sidebar={sidebar} own={'home'} onClick={() => handleClick("home")}>
               {active === "home" 
                 ? <BsIcons.BsHouseDoorFill title="home" />
                 : <BsIcons.BsHouseDoor title="home" />
@@ -68,22 +68,12 @@ const Nav = ({ user, sidebar, setSidebar, active, setActive }) => {
             </ListItem>
           </StyledLink>
 
-          <ListItem sidebar={sidebar} active={active} own={"search"} onClick={() => toggleSidebar("search")}>
+          <ListItem mobile={true} sidebar={sidebar} active={active} own={"search"} onClick={() => toggleSidebar("search")}>
             <BsIcons.BsSearch title="search" />
             <Label sidebar={sidebar} active={active} own={"search"}>Search</Label>
           </ListItem>
 
-          <ListItem sidebar={sidebar} own={"message"} onClick={() => handleClick("message")}>
-            <StyledLink to={"/direct"}>
-            {active === "message" 
-              ? <IoPaperPlaneSharp title="direct messages" />
-              : <IoPaperPlaneOutline title="direct messages" />
-            }
-            <Label sidebar={sidebar} active={active} own={"message"}>Messages</Label>
-            </StyledLink>
-          </ListItem>
-
-          <ListItem sidebar={sidebar} own={'add'} onClick={openPostForm}>
+          <ListItem mobile={true} sidebar={sidebar} own={'add'} onClick={openPostForm}>
             {active === "add" 
               ? <BsIcons.BsPlusCircleFill title="add" />
               : <BsIcons.BsPlusCircle title="add" />
@@ -91,7 +81,7 @@ const Nav = ({ user, sidebar, setSidebar, active, setActive }) => {
             <Label sidebar={sidebar} active={active} own={"add"}>Create</Label>
           </ListItem>
 
-          <NotifListItem sidebar={sidebar} active={active} own="heart" notif={notifications} onClick={() => { markAllAsSeen(toggleSidebar) }}>
+          <NotifListItem mobile={false} sidebar={sidebar} active={active} own="heart" notif={notifications} onClick={() => { markAllAsSeen(toggleSidebar) }}>
             <NotifPopup notifications={notifications ? notifications : []} />
             {active === "heart" 
               ? <BsIcons.BsHeartFill title="heart" />
@@ -100,8 +90,18 @@ const Nav = ({ user, sidebar, setSidebar, active, setActive }) => {
             <Label sidebar={sidebar} active={active} own={"heart"}>Notifications</Label>
           </NotifListItem>
 
+          <StyledLink to={"/direct"}>
+            <ListItem mobile={true} sidebar={sidebar} own={"message"} onClick={() => handleClick("message")}>
+              {active === "message" 
+                ? <IoPaperPlaneSharp title="direct messages" />
+                : <IoPaperPlaneOutline title="direct messages" />
+              }
+              <Label sidebar={sidebar} active={active} own={"message"}>Messages</Label>
+            </ListItem>
+          </StyledLink>
+
           <StyledLink to={user !== null ? "/profile/" + user.displayName : "/"}>
-            <ListItem sidebar={sidebar} own="profile" onClick={() => handleClick("profile")}>
+            <ListItem mobile={true} sidebar={sidebar} own="profile" onClick={() => handleClick("profile")}>
               <User active={active === "profile"} url={userdata ? userdata.pfp : ""} />
               <Label sidebar={sidebar} active={active} own={"profile"}>Profile</Label>
             </ListItem>
@@ -128,6 +128,11 @@ const Space = styled.div`
   @media(max-width: 1100px) {
     width: 80px;
   }
+
+  @media(max-width: 750px) {
+    width: 100%;
+    height: 50px;
+  }
 `;
 
 const Navbar = styled.nav`
@@ -153,6 +158,21 @@ const Navbar = styled.nav`
     align-items: center;
   }
 
+  @media(max-width: 750px) {
+    height: 50px;
+    width: 100%;
+
+    flex-direction: row;
+    justify-content: space-around;
+
+    border-right: none;
+    border-top: 1px solid #dfdfdf;
+
+    bottom: 0;
+    top: auto;
+    left: auto;
+  }
+
   transition: 0.3s ease-out;
 `;
 
@@ -162,6 +182,10 @@ const LogoContainer = styled.div`
   width: 100%;
   padding: 0 16px;
   justify-content: flex-start;
+
+  @media(max-width: 750px) {
+    display: none;
+  }
 `;
 
 const ExtendedLogo = styled.img`
@@ -202,6 +226,13 @@ const Icons = styled.ul`
   flex-direction: column;
   gap: 25px;
   height: 70%;
+
+  @media(max-width: 750px) {
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 const ListItem = styled.li`
@@ -219,11 +250,15 @@ const ListItem = styled.li`
   ${({ active, own }) => active === own 
   ? "border: 1px solid #dfdfdf;" 
   : ""}
-  padding: ${({sidebar}) => sidebar ? '0' : '12px'};
+  padding: ${({sidebar}) => sidebar ? '0' : '0 12px'};
 
   @media(max-width: 1100px) {
     justify-content: center;
     padding: 0;
+  }
+
+  @media(max-width: 750px) {
+    display: ${({mobile}) => mobile ? 'flex' : 'none'};
   }
 `;
 

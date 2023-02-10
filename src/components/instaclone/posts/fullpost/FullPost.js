@@ -32,9 +32,11 @@ const FullPost = ({closeSidebar}) => {
         <Info>
           <Header user={user} setSettings={setSettings} followed={followed} updateFollowed={updateFollowed} />
           <Comments post={post} user={user} comments={comments} postInfo={postInfo} />
-          <Icons liked={liked} changeLiked={changeLiked} />
-          <Stats post={post} liked={liked} />
-          <Add postInfo={postInfo} insertComment={insertComment} />
+          <StatWrapper>
+            <Icons liked={liked} changeLiked={changeLiked} />
+            <Stats post={post} liked={liked} />
+          </StatWrapper>
+            <Add postInfo={postInfo} insertComment={insertComment} />
         </Info>
       </PostWrapper>
     </Container>
@@ -65,6 +67,12 @@ const Photo = styled.div`
   background-size: cover;
   height: 100%;
   width: 500px;
+`;
+
+const StatWrapper = styled.div`
+  padding: 0 5%;
+  border-bottom: 1px solid #dfdfdf;
+  width: 100%;
 `;
 
 const Info = styled.div`

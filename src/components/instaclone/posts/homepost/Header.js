@@ -3,14 +3,16 @@ import styled from "styled-components";
 import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
 import { BsThreeDots } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { formatDateShort } from "../../../../utils/formatting";
 
-const Header = ({ user, setSettings }) => {
+const Header = ({ user, timestamp, setSettings }) => {
   return (
     <Container>
       <StyledLink to={user ? `/profile/${user.username}` : ''}>
         <User>
           <UserPhoto title="author profile picture" url={user ? user.pfp : ""} />
           <Bold>{user ? user.username : ""}</Bold>
+          <Date>• {formatDateShort(timestamp)}</Date>
         </User>
       </StyledLink>
       <Dots title="settings" onClick={() => setSettings(true)} />
@@ -22,21 +24,28 @@ const Container = styled.div`
   ${flexRowBetween}
   height: 50px;
   width: 100%;
-  padding: 5px 5%;
+  padding: 5px 0;
 `;
 
 const StyledLink = styled(Link)`
   text-decoration: none;
+  height: 100%;
 `;
 
 const User = styled.div`
   ${flexRowCenter};
+  height: 100%;
   gap: 8px;
+  font-size: 0.9rem;
 `;
 
-const Bold = styled.p`
+const Bold = styled.span`
   font-weight: 500;
   color: #262626;
+`;
+
+const Date = styled.span`
+  color: #8e8e8e;
 `;
 
 const UserPhoto = styled.div`
