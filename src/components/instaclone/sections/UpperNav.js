@@ -41,7 +41,6 @@ const Container = styled.div`
 `;
 
 const InstaLogo = styled.img`
-  height: 35px;
   width: 110px;
 `;
 

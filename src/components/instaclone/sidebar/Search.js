@@ -37,6 +37,10 @@ const Container = styled.div`
 
 const Heading = styled.h1`
   padding-left: 10px;
+
+  @media (max-width: 750px) {
+    display: none;
+  }
 `;
 
 export default Search;
