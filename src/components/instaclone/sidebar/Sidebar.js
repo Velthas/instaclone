@@ -37,6 +37,18 @@ const Container = styled.div`
 
   z-index: -1;
   ${({ active }) => (active ? "transform: translateX(80px);" : "")}
+
+  @media(max-width: 750px) {
+    top: auto;
+    left: auto;
+    bottom: 0;
+    
+    border-right: none;
+    width: 100%;
+    height: calc(100vh - 50px);
+    transform: translateY(100%);
+    ${({ active }) => (active ? "transform: translateY(-50px);" : "")}
+  }
 `;
 
 export default Sidebar;

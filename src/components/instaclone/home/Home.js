@@ -34,12 +34,26 @@ const Container = styled.div`
   min-height: 100vh;
   display: flex;
   justify-content: center;
+
+  @media(max-width: 950px) {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
 `;
 
 const PostContainer = styled.div`
   ${flexColumnCenter}
   padding: 30px 20px;
   gap: 10px;
+
+  @media(max-width: 950px) {
+    padding: 30px 0 49px 0;
+  }
+
+  @media(max-width: 550px) {
+    width: 100%;
+    padding-top: 16px;
+  }
 `;
 
 export default Home;

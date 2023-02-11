@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useLiked, useComments, useUser } from "../../../../utils/hooks";
 import { flexColumnCenter } from "../../../../styles/style";
@@ -15,14 +15,13 @@ const HomePost = ({ post }) => {
   const [liked, changeLiked] = useLiked(post);
   const [comments, insertComment] = useComments(post, `#a${post.id}`); // Ensure it starts with a letter
   const [user, getUser] = useUser(post.username);
+  const navigate = useNavigate();
 
   return (
     <Container>
       <PostSettings settings={settings} setSettings={setSettings} post={post} />
       <Header setSettings={setSettings} user={user} timestamp={post.timestamp} />
-      <Link to={`/posts/${post.username}/${post.id}`}>
-        <Picture title="Post picture" url={!user ? "" : post.photo} />
-      </Link>
+      <Picture onClick={() => navigate(`/posts/${post.username}/${post.id}`)} title="Post picture" url={!user ? "" : post.photo} />
       <Icons liked={liked} changeLiked={changeLiked} />
       <Comments post={post} comments={comments} liked={liked} />
       <Add insertComment={insertComment} post={post} />
@@ -36,15 +35,24 @@ const Container = styled.div`
   border-bottom: 1px solid #dbdbdb;
   position: relative;
   font-size: 0.9rem;
+
+  @media(max-width: 550px) {
+    width: 95%;
+  }
 `;
 
 const Picture = styled.div`
   background-image: url(${({ url }) => (url ? url : "")});
   background-position: center;
   background-size: cover;
-  width: 469px;
-  height: 470px;
+  width: 100%;
+  aspect-ratio: 1/1;
   border-radius: 3px;
+
+  @media(max-width: 550px) {
+    width: 100%;
+    height: 400px;
+  }
 `;
 
 export default HomePost;

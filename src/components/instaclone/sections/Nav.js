@@ -9,6 +9,7 @@ import { IconContext } from "react-icons";
 import { flexRowCenter, fadeIn } from "../../../styles/style";
 import Sidebar from "../sidebar/Sidebar";
 import NotifPopup from "../sidebar/notifications/NotifPopup";
+import UpperNav from "./UpperNav";
 import instalogo from "../../../assets/logo/instalogo.png"
 
 const Nav = ({ user, sidebar, setSidebar, active, setActive }) => {
@@ -44,6 +45,7 @@ const Nav = ({ user, sidebar, setSidebar, active, setActive }) => {
   return (
     <IconContext.Provider value={{ style: { cursor: "pointer" }, size: 24 }}>
       <Space sidebar={sidebar} active={active} />
+      <UpperNav markAllAsSeen={markAllAsSeen} toggleSidebar={toggleSidebar} active={active} />
       <Navbar sidebar={sidebar}>
         <Sidebar
           active={sidebar}
@@ -131,7 +133,7 @@ const Space = styled.div`
 
   @media(max-width: 750px) {
     width: 100%;
-    height: 50px;
+    height: 60px;
   }
 `;
 
@@ -150,7 +152,7 @@ const Navbar = styled.nav`
   height: 100vh;
   padding: 12px 8px;
 
-  background-color: white;
+  background-color: #fff;
   border-right: 1px solid #dfdfdf;
 
   @media(max-width: 1100px) {
@@ -161,6 +163,7 @@ const Navbar = styled.nav`
   @media(max-width: 750px) {
     height: 50px;
     width: 100%;
+    padding: 0;
 
     flex-direction: row;
     justify-content: space-around;
@@ -226,6 +229,7 @@ const Icons = styled.ul`
   flex-direction: column;
   gap: 25px;
   height: 70%;
+  background-color: #fff;
 
   @media(max-width: 750px) {
     flex-direction: row;
@@ -255,10 +259,12 @@ const ListItem = styled.li`
   @media(max-width: 1100px) {
     justify-content: center;
     padding: 0;
+    border: none;
   }
 
   @media(max-width: 750px) {
     display: ${({mobile}) => mobile ? 'flex' : 'none'};
+    height: 100%;
   }
 `;
 

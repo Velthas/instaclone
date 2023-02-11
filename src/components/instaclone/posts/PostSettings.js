@@ -68,6 +68,10 @@ const SettingWrapper = styled.div`
   border-radius: 20px;
   width: 300px;
   overflow: hidden;
+
+  @media(max-width: 550px) {
+    width: 200px;
+  }
 `;
 
 const Bubble = styled.div`

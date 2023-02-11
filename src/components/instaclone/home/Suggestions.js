@@ -42,13 +42,24 @@ const Container = styled.div`
   min-height: 100vh;
   padding-top: 30px;
   gap: 8px;
+
+  
+  @media(max-width: 950px) {
+    height: min-content;
+    width: 470px;
+    min-height: auto;
+  }
+
+  @media(max-width: 550px) {
+    display: none;
+  }
 `;
 
 const StyledLink = styled(Link)`
   text-decoration: none;
   width: 100%;
   height: 56px;
-  padding: 16px 5%;
+  padding: 16px 0;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -85,7 +96,6 @@ const Name = styled.div`
 const Wrapper = styled.div`
   ${flexRowBetween};
   width: 100%;
-  padding: 0 5%;
 `;
 
 const ForYou = styled(Name)`

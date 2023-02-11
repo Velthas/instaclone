@@ -3,10 +3,12 @@ import styled from "styled-components";
 import { flexColumnCenter } from "../../../../styles/style";
 import { fadeIn } from "../../../../styles/style";
 import Notification from "./Notification";
+import MobileHeader from "../MobileHeader";
 
 const Notifications = ({ notifications, toggleSidebar }) => {
   return (
     <Container>
+      <MobileHeader toggleSidebar={toggleSidebar} section='notifications' icon='heart'/>
       <Heading>Notifications</Heading>
       <div>
         {notifications &&
@@ -34,11 +36,19 @@ const Container = styled.nav`
   animation-name: ${fadeIn};
   animation-duration: 1s;
   transition-timing-function: ease-out;
+
+  @media (max-width: 750px) {
+    padding: 0 0 24px 0;
+  }
 `;
 
 const Heading = styled.h1`
   font-size: 1.5rem;
   padding-left: 10px;
-`;
+  color: #262626;
 
+  @media (max-width: 750px) {
+    display: none;
+  }
+`;
 export default Notifications;

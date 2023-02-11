@@ -28,7 +28,7 @@ const SuggestionCard = ({ suggestion, currentUser }) => {
 const Container = styled.div`
   width: 100%;
   height: 48px;
-  padding: 4px 5%;
+  padding: 4px 0;
   ${flexRowBetween}
   gap: 5px;
 `;

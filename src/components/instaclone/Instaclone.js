@@ -37,7 +37,7 @@ const Container = styled.div`
   flex-direction: row;
 
   @media(max-width: 750px) {
-    flex-direction: column-reverse;
+    flex-direction: column;
   }
 `;
 
