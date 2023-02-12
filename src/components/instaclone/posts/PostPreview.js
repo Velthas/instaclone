@@ -37,6 +37,10 @@ const PostCard = styled.div`
 
   position: relative;
   aspect-ratio: 1/1;
+
+  @media (max-width: 750px) {
+    aspect-ratio: auto;
+  }
 `;
 
 const PostStats = styled.div`
@@ -51,6 +55,10 @@ const PostStats = styled.div`
   align-items: center;
   justify-content: center;
   gap: 20px;
+
+  @media (max-width: 550px) {
+    flex-direction: column;
+  }
 `;
 
 const StatContainer = styled.div`

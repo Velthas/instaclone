@@ -25,6 +25,11 @@ const Container = styled.div`
 
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 750px) {
+    padding: 30px 0 50px;
+    margin: 0;
+  }
 `;
 
 const PostList = styled.div`
@@ -33,6 +38,10 @@ const PostList = styled.div`
   gap: 28px;
   grid-template-columns: 1fr 1fr 1fr;
   width: 100%;
+
+  @media (max-width: 750px) {
+    gap: 2px;
+  }
 `;
 
 export default Profile;

@@ -1,10 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import { flexRowCenter, fadeIn } from "../../../styles/style";
-import { BsPersonPlus, BsThreeDots } from "react-icons/bs";
-import { getCurrentUserUsername, signOutCurrentUser } from "../../../firebase/authentication";
-import { useNavigate } from "react-router-dom";
+import { BsThreeDots } from "react-icons/bs";
+import { getCurrentUserUsername } from "../../../firebase/authentication";
 import { useFollow } from "../../../utils/hooks";
+
+import Stats from "./profileheader/Stats";
+import MobileStats from "./profileheader/MobileStats";
+import HeaderButtons from "./profileheader/HeaderButtons";
 
 const ProfileHeader = ({ user, posts }) => {
   const currentUser = getCurrentUserUsername();
@@ -13,58 +16,32 @@ const ProfileHeader = ({ user, posts }) => {
   if(user) followers = followed 
     ? user.followed.filter(usr => usr !== currentUser).length + 1
     : user.followed.filter(usr => usr !== currentUser).length
-  const navigate = useNavigate();
+
   return (
-    <Header>
-      <PicWrapper>
-        <ProfilePic url={user ? user.pfp : ""} />
-      </PicWrapper>
-      <InfoContainer>
-        <div>
+    <>
+      <Header>
+        <PicWrapper>
+          <ProfilePic url={user ? user.pfp : ""} />
+        </PicWrapper>
+        <InfoContainer>
           <FirstRow>
-            <div>
-              <Username>{user ? user.username : ""}</Username>
-            </div>
-            <ButtonContainer>
-              {user && currentUser !== user.username ?
-              <>
-                <Button blue onClick={() => updateFollowed(!followed)}>
-                  {followed ? 'Unfollow' : 'Follow'}
-                </Button>
-                <Button>Message</Button>
-                <IconButton>
-                  <BsPersonPlus size={15} />
-                </IconButton>
-              </>
-              :
-              <>
-                <Button onClick={() => navigate('settings')}>Edit Profile</Button>
-                <Button onClick={() => signOutCurrentUser() }>Log out</Button>
-              </>
-              }
-            </ButtonContainer>
-            <BsThreeDots size={20} />
+            <Username>{user ? user.username : ""}</Username>
+            <HeaderButtons user={user} followed={followed} updateFollowed={updateFollowed} />
+            <Dots />
           </FirstRow>
-          <StatsUl>
-            <li>
-              <StatEntry>{posts.length}</StatEntry> posts
-            </li>
-            <li>
-              <StatEntry>
-                {user ? followers : ""}
-              </StatEntry> followers
-            </li>
-            <li>
-              <StatEntry>{user ? user.follows.length : ""}</StatEntry> followed
-            </li>
-          </StatsUl>
-          <div>
+          <Stats followers={followers} user={user} length={posts ? posts.length : 0}/>
+          <UserInfo>
             <FullName>{user ? user.name : ""}</FullName>
             <Description>{user ? user.description : ""}</Description>
-          </div>
-        </div>
-      </InfoContainer>
-    </Header>
+          </UserInfo>
+        </InfoContainer>
+      </Header>
+      <UserInfoMobile>
+            <FullName>{user ? user.name : ""}</FullName>
+            <Description>{user ? user.description : ""}</Description>
+      </UserInfoMobile>
+      <MobileStats followers={followers} user={user} length={posts ? posts.length : 0} />
+    </>
   );
 };
 
@@ -73,6 +50,13 @@ const Header = styled.div`
   align-items: flex-start;
   justify-content: space-between;
   margin-bottom: 44px;
+
+  @media (max-width: 750px) {
+    margin-bottom: 20px;
+    justify-content: flex-start;
+    gap: 20px;
+    padding: 0 8px;
+  }
 `;
 
 const ProfilePic = styled.div`
@@ -87,6 +71,11 @@ const ProfilePic = styled.div`
   animation-name: ${fadeIn};
   animation-duration: 1s;
   transition-timing-function: ease-out;
+
+  @media (max-width: 750px) {
+    height: 85px;
+    width: 85px;
+  }
 `;
 
 const PicWrapper = styled.div`
@@ -96,6 +85,12 @@ const PicWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 750px) {
+    margin: 0;
+    justify-content: flex-start;
+    width: min-content;
+  }
 `;
 
 const FirstRow = styled.div`
@@ -103,6 +98,13 @@ const FirstRow = styled.div`
   justify-content: flex-start;
   height: 50px;
   gap: 10px;
+
+  @media (max-width: 750px) {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    height: 100%;
+  }
 `;
 
 const Username = styled.h2`
@@ -110,41 +112,31 @@ const Username = styled.h2`
   font-weight: 400;
 `;
 
-const StatEntry = styled.span`
-  font-weight: bold;
+const Dots = styled(BsThreeDots)`
+@media (max-width: 750px) {
+  display: none;
+}
+`
+
+const UserInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: 750px) {
+    display: none;
+  }
 `;
 
-const Button = styled.button`
-  cursor: pointer;
-  padding: 8px 16px;
-  margin-left: 5px;
-  border: none;
-  border-radius: 6px;
-  font-weight: 500;
-  font-size: 0.9rem;
-  color: ${props => props.blue ? '#fff' : '#000'};
-  background-color: ${ props => props.blue ? '#0095f6' : '#efefef' };
-  &:hover {
-    background-color: ${props => props.blue ? '#1877f2' : '#dbdbdb' };
+const UserInfoMobile = styled.div`
+  display: none;
+
+  @media (max-width: 750px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 0 8px;
   }
-`
-
-const IconButton = styled(Button)`
-  padding: 0;
-  height: 35px;
-  width: 32px;
-`
-
-const ButtonContainer = styled.div`
-  ${flexRowCenter}
-  justify-content: flex-start;
-`
-
-const StatsUl = styled.ul`
-  display: flex;
-  gap: 50px;
-  list-style: none;
-  margin: 20px 0;
 `
 
 const FullName = styled.span`
@@ -159,7 +151,8 @@ const Description = styled.p`
 
 const InfoContainer = styled.div`
   width: 70%;
-  ${flexRowCenter};
+  display: flex;
+  flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
   overflow-wrap: break-word;
