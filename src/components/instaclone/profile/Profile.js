@@ -3,10 +3,12 @@ import styled from "styled-components";
 import PostPreview from "../posts/PostPreview";
 import ProfileHeader from "./ProfileHeader";
 import ProfileSections from "./ProfileSections";
+import MobileTop from "./MobileTop";
 
 const Profile = ({user, posts, closeSidebar}) => {
   return (
     <Container onClick={() => closeSidebar("profile")}>
+        <MobileTop user={user} />
         <ProfileHeader user={user} posts={posts} />
         <ProfileSections />
         <PostList>
@@ -27,7 +29,7 @@ const Container = styled.div`
   flex-direction: column;
 
   @media (max-width: 750px) {
-    padding: 30px 0 50px;
+    padding: 0 0 50px;
     margin: 0;
   }
 `;

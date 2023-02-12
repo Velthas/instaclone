@@ -38,10 +38,7 @@ const EditProfileForm = ({ info, loadInfo }) => {
       case isDescrValid !== true:
         setError(isDescrValid);
         return;
-      default: // Updates user info on firebase.
-      // Updates the user info on the client side.
-        // Before updating we run final checks.
-        // Update the changed fields on the firestore db only if they changed
+      default:
         if (name.value !== info.name) payload.name = name.value;
         if (bio.value !== info.description) payload.description = bio.value;
         if (pfp.files.length !== 0)
@@ -49,8 +46,8 @@ const EditProfileForm = ({ info, loadInfo }) => {
             `users/${info.username}/pfp`,
             pfp.files[0]
           );
-        updateDocument(info.username, payload);
-        loadInfo();
+        updateDocument(info.username, payload); // Updates back end
+        loadInfo(); // Triggers a refetch for the front-end
         navigate(`/profile/${info.username}`); // Go back to the profile.
     }
   };
@@ -95,17 +92,32 @@ const Form = styled.form`
   align-items: center;
   justify-content: center;
   gap: 20px;
+
+  @media (max-width: 750px) {
+    align-items: flex-start;
+  }
 `;
 
 const ImageContainer = styled.div`
   height: min-content;
   display: flex;
+  justify-content: flex-end;
+  width: 100%;
+
+  @media (max-width: 750px) {
+    min-width: auto;
+    justify-content: flex-start;
+  }
 `;
 
 const UserInfo = styled.div`
   display: flex;
-  width: 330px;
+  width: min(100%, 330px);
   flex-direction: column;
+
+  @media (max-width: 750px) {
+    min-width: auto;
+  }
 `;
 
 const FileLabel = styled.label`

@@ -9,7 +9,7 @@ const Input = ({ id, type, placeholder, label, value, styling }) => {
   return (
     <Container>
       <Label htmlFor={id}>{label ? label : ""}</Label>
-      <div>
+      <InputWrapper>
         <TextBox
           type={type}
           placeholder={placeholder ? placeholder : ""}
@@ -19,7 +19,7 @@ const Input = ({ id, type, placeholder, label, value, styling }) => {
           styling={styling}
         />
         <Description></Description>
-      </div>
+      </InputWrapper>
     </Container>
   );
 };
@@ -36,12 +36,23 @@ Input.propTypes = {
 const Container = styled.div`
   height: min-content;
   display: flex;
+  width: 100%;
+
+  @media (max-width: 750px) {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
+`;
+
+const InputWrapper = styled.div`
+  width: 100%;
 `;
 
 const TextBox = styled.input`
   ${({ styling }) => styling}
   height: 32px;
-  width: 350px;
+  width: min(100%, 350px);
   border-radius: 4px;
   border: 1px solid #dfdfdf;
   padding: 5px;
@@ -62,6 +73,11 @@ const Label = styled.label`
   margin-top: 6px;
   margin-right: 20px;
   font-size: 1rem;
+
+  @media (max-width: 750px) {
+    min-width: auto;
+    text-align: left;
+  }
 `;
 
 export default Input;

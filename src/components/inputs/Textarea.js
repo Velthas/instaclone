@@ -26,6 +26,12 @@ const TextArea = ({ value, id, label }) => {
 const Container = styled.div`
   height: min-content;
   display: flex;
+
+  @media (max-width: 750px) {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
 `;
 
 const TextBox = styled.textarea`
@@ -37,6 +43,10 @@ const TextBox = styled.textarea`
 
   &:focus-visible {
     outline: 1px solid black;
+  }
+
+  @media (max-width: 750px) {
+    width: min(100%, 350px);
   }
 `;
 
@@ -52,6 +62,11 @@ const Label = styled.label`
   margin-top: 6px;
   margin-right: 20px;
   font-size: 1rem;
+
+  @media (max-width: 750px) {
+    min-width: auto;
+    text-align: left;
+  }
 `;
 
 export default TextArea;

@@ -56,5 +56,4 @@ const StatLabel = styled.span`
   color: #8e8e8e;
 `;
 
-
 export default MobileStats;

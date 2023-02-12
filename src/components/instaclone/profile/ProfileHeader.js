@@ -55,7 +55,7 @@ const Header = styled.div`
     margin-bottom: 20px;
     justify-content: flex-start;
     gap: 20px;
-    padding: 0 8px;
+    padding: 16px 16px 0 16px;
   }
 `;
 
@@ -135,7 +135,7 @@ const UserInfoMobile = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     width: 100%;
-    padding: 0 8px;
+    padding: 0 16px;
   }
 `
 
