@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getHomepageContent } from "../../../firebase/firestore";
 import { flexColumnCenter } from "../../../styles/style";
+
 import HomePost from "../posts/homepost/HomePost";
 import Suggestions from "./Suggestions";
 
@@ -39,6 +40,10 @@ const Container = styled.div`
     flex-direction: column-reverse;
     align-items: center;
   }
+
+  @media(max-width: 750px) {
+    margin-top: 60px;
+  }
 `;
 
 const PostContainer = styled.div`
@@ -47,7 +52,8 @@ const PostContainer = styled.div`
   gap: 10px;
 
   @media(max-width: 950px) {
-    padding: 30px 0 49px 0;
+    padding: 30px 0 0 0;
+    margin-bottom: 49px;
   }
 
   @media(max-width: 550px) {

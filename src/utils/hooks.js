@@ -223,11 +223,11 @@ const useNotifications = (username) => {
   }
 
   const markAllAsSeen = (toggleSidebar) => { 
-    setNotificationsSeen(username); // Marks all notifications as seen on the backend
-    toggleSidebar('heart'); // Opens the sidebar
+    if(notifications && notifications[0].seen === false) setNotificationsSeen(username);
+    toggleSidebar('heart'); // Opens or closes the sidebar
   }
   
-  return [notifications, increaseLimit, markAllAsSeen]
+  return [notifications, markAllAsSeen]
 }
 
 export { 

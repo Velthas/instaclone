@@ -4,19 +4,27 @@ import { IconContext } from "react-icons";
 
 import instalogo from "../../../assets/logo/instalogo.png"
 import { BsHeartFill, BsHeart } from "react-icons/bs";
+import { Route, Routes } from "react-router-dom";
 
-// This component only appears in mobile view
-const UpperNav = ({active, markAllAsSeen, toggleSidebar}) => {
+// This component only appears in mobile view on the homepage
+// Serves as an extension of the navbar (has notifications)
+const UpperNav = ({markAllAsSeen, toggleSidebar, active}) => {
   return (
-    <IconContext.Provider value={{ style: { cursor: "pointer" }, size: 24 }}>
-    <Container>
-      <InstaLogo src={instalogo} title="instalogo" />
-      { active === "heart" 
-        ? <BsHeartFill title="heart" />
-        : <BsHeart title="heart" onClick={() => markAllAsSeen(toggleSidebar)} />
-      }
-    </Container>
-    </IconContext.Provider>
+    <Routes>
+      <Route path="/" element=
+        {
+          <IconContext.Provider value={{ style: { cursor: "pointer" }, size: 24 }}>
+            <Container>
+              <InstaLogo src={instalogo} title="instalogo" />
+              { active === "heart" 
+                ? <BsHeartFill title="heart" onClick={() => toggleSidebar("heart")} />
+                : <BsHeart title="heart" onClick={() => markAllAsSeen(toggleSidebar)} />
+              }
+            </Container>
+          </IconContext.Provider>
+        } 
+      />
+    </Routes>
   );
 };
 

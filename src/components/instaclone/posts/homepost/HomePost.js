@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useLiked, useComments, useUser } from "../../../../utils/hooks";
 import { flexColumnCenter } from "../../../../styles/style";
@@ -48,6 +48,7 @@ const Picture = styled.div`
   width: 100%;
   aspect-ratio: 1/1;
   border-radius: 3px;
+  cursor: pointer;
 
   @media(max-width: 550px) {
     width: 100%;

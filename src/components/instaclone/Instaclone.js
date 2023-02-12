@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import Main from "./sections/Main";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+
 import Nav from "./sections/Nav";
+import Main from "./sections/Main";
 
 const Instaclone = ({ user }) => {
   const navigate = useNavigate();
   const [sidebar, setSidebar] = useState(false); // Regulates sidebar display
   const [active, setActive] = useState("home"); // Determines which nav icon is marked as active
 
-  const closeSidebar = (section) => { // This is used to close sidebar when click on main occurs
-    if(sidebar === true) setSidebar(false); // Closes the sidebar
-    if(section && section !== active) setActive(section) // Sets appropriate section as active if needed
+  const closeSidebar = (section) => { // Closes sidebar if any section other than nav is clicked
+    if (sidebar === true) setSidebar(false); // Closes the sidebar
+    if (section && section !== active) setActive(section); // Sets section active if needed
   };
 
   useEffect(() => {
@@ -34,9 +35,8 @@ const Instaclone = ({ user }) => {
 
 const Container = styled.div`
   display: flex;
-  flex-direction: row;
 
-  @media(max-width: 750px) {
+  @media (max-width: 750px) {
     flex-direction: column;
   }
 `;

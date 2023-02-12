@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNotifications, useUser } from "../../../utils/hooks";
+import { useUser, useNotifications } from "../../../utils/hooks";
 import { Link } from "react-router-dom";
 import PostForm from "../posts/postform/PostForm";
 import styled from "styled-components";
@@ -14,7 +14,7 @@ import instalogo from "../../../assets/logo/instalogo.png"
 
 const Nav = ({ user, sidebar, setSidebar, active, setActive }) => {
   const [userdata, getUserData] = useUser(user ? user.displayName : null); // Is responsible for user data
-  const [notifications, increaseLimit, markAllAsSeen] = useNotifications(user ? user.displayName : null);
+  const [notifications, markAllAsSeen] = useNotifications(user ? user.displayName : null);
   const [postForm, setPostForm] = useState(false); // Regulates new post form display
 
   const handleClick = (icon) => {
@@ -121,7 +121,7 @@ const Nav = ({ user, sidebar, setSidebar, active, setActive }) => {
 };
 
 // Since Navbar is removed from the flow of the document
-// We need this to ensure things don't clip out of place.
+// I needed this to ensure things don't clip out of place
 // and for better consistency when using padding-margin on main element.
 const Space = styled.div`
   flex-shrink: 0;
@@ -132,8 +132,7 @@ const Space = styled.div`
   }
 
   @media(max-width: 750px) {
-    width: 100%;
-    height: 60px;
+    display: none;
   }
 `;
 
