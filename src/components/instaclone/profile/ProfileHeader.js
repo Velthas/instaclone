@@ -56,6 +56,7 @@ const Header = styled.div`
     justify-content: flex-start;
     gap: 20px;
     padding: 16px 16px 0 16px;
+    margin-top: 16px;
   }
 `;
 

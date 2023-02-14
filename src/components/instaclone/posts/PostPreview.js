@@ -39,7 +39,7 @@ const PostCard = styled.div`
   aspect-ratio: 1/1;
 
   @media (max-width: 750px) {
-    aspect-ratio: auto;
+    margin-top: -4px;
   }
 `;
 

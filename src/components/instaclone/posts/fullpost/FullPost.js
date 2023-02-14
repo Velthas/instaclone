@@ -3,14 +3,17 @@ import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { usePost, useComments, useFollow } from "../../../../utils/hooks";
 import { flexColumnCenter, flexRowCenter} from "../../../../styles/style";
+
 import PostSettings from "../PostSettings";
 import Header from "./Header";
 import Comments from "./Comments";
 import Icons from "./Icons";
 import Stats from "./Stats";
 import Add from "./Add";
+import MobileHeader from "../../mobile/MobileHeader";
 
-const FullPost = ({closeSidebar}) => {
+
+const FullPost = ({ closeSidebar }) => {
   const { postid, username } = useParams();
   const postInfo = { id: postid, username };
   const [settings, setSettings] = useState(false);
@@ -20,13 +23,10 @@ const FullPost = ({closeSidebar}) => {
 
   return (
     <Container onClick={closeSidebar}>
+      <MobileHeader name='Post' />
       <PostWrapper>
         {post && (
-          <PostSettings
-            settings={settings}
-            setSettings={setSettings}
-            post={post}
-          />
+          <PostSettings settings={settings} setSettings={setSettings} post={post} />
         )}
         <Photo title='post picture' url={post ? post.photo : ""} />
         <Info>
@@ -46,8 +46,16 @@ const FullPost = ({closeSidebar}) => {
 const Container = styled.div`
   ${flexRowCenter}
   min-height: 100vh;
-  width: 100vw;
+  width: 100%;
   background-color: #fdfdfd;
+
+  @media (max-width: 750px) {
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 0.9rem;
+    flex-direction: column;
+  }
+
 `;
 
 const PostWrapper = styled.div`
@@ -59,6 +67,23 @@ const PostWrapper = styled.div`
 
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
+
+  @media (max-width: 1150px) {
+    transform: scale(0.75);
+  }
+
+  @media (max-width: 750px) {
+    flex-direction: column;
+    transform: scale(1);
+    width: 470px;
+    height: auto;
+    box-shadow: none;
+    margin-bottom: 50px;
+  }
+
+  @media (max-width: 550px) {
+    width: 95%;
+  }
 `;
 
 const Photo = styled.div`
@@ -67,18 +92,33 @@ const Photo = styled.div`
   background-size: cover;
   height: 100%;
   width: 500px;
+  border-radius: 3px;
+
+  @media (max-width: 750px) {
+    width: 100%;
+    height: 400px;
+  }
 `;
 
 const StatWrapper = styled.div`
   padding: 0 5%;
   border-bottom: 1px solid #dfdfdf;
   width: 100%;
+  
+  @media (max-width: 750px) {
+    padding: 0;
+  }
 `;
 
 const Info = styled.div`
   height: 100%;
   width: 400px;
   ${flexColumnCenter};
+
+  @media (max-width: 750px) {
+    width: 100%;
+    height: auto;
+  }
 `;
 
 export default FullPost;

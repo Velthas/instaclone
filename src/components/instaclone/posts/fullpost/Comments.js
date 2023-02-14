@@ -25,6 +25,12 @@ const Container = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+
+  @media (max-width: 750px) {
+    min-height: 250px;
+    height: auto;
+    max-height: 500px;
+  }
 `;
 
 export default Comments;

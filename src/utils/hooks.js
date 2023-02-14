@@ -17,9 +17,7 @@ import { Timestamp } from "firebase/firestore";
 import { getCurrentUserUsername } from "../firebase/authentication";
 import { formatNotification } from "./formatting";
 
-// Used in post components to provide user feedback about
-// liking posts, as well as updating things on the backend.
-// can be used independently when fed complete post info
+// Handles 'liked' status of a post, allowing for liking and unliking.
 const useLiked = (post) => {
   const currentUser = getCurrentUserUsername();
   const [liked, setLiked] = useState(post.likedby.indexOf(currentUser) !== -1);
@@ -36,8 +34,7 @@ const useLiked = (post) => {
   return [liked, changeLiked];
 };
 
-// Works the same as the one above, but for comments on posts.
-// Comment likes are only shown when the full post is opened.
+// Handles likes on comments, allowing liking and unliking posts.
 const useCommentsLiked = (comment, post) => {
   const currentUser = getCurrentUserUsername();
   const [liked, setLiked] = useState(comment.likedby.indexOf(currentUser) !== -1);
@@ -73,17 +70,17 @@ const useComments = (post, inputSelector) => {
     const input = document.querySelector(inputSelector)
     const content = input.value;
     if (content.length === 0 || content.length > 2200) return;
-    const commentRef = await getCommentDocReference(post); // This is getting a doc id early
+    const commentRef = await getCommentDocReference(post); // Need this to extract ID
+    const id = commentRef.id; // I store this ID in my payload.
     const timestamp = Timestamp.fromDate(new Date());
     const author = getCurrentUserUsername();
-    const id = commentRef.id; // I can store the doc's id as part of the comment
     const likedby = [];
     const comment = { content, author, timestamp, id, likedby };
     const commentNotification = formatNotification('c', post.id, post.username, content, id);
     if(post.username !== author) // Only send a notification if commenting other's posts
       addNotification(post.username, commentNotification);
     addComment(commentRef, comment); // Add doc to the db for permanent storage
-    setComments([comment].concat(comments)); // Make change apparent on front-end
+    setComments([comment].concat(comments)); // Updates the front-end
     input.value = ''; // Reset the text field
   };
 
@@ -159,7 +156,7 @@ const useFollow = (user) => {
 
 // This hook is used to handle search queries.
 // As of now, it will give back only profiles whose username's prefix matches the query
-// So if I search for 'te', and an account named 'test' exists, it will appear on screen.
+// so if I search for 'te', and an account named 'test' exists, it will appear on screen.
 // Just the same, if there is a profile named 'footest', it would not appear under the same query
 const useSearch = () => {
   const [query, setQuery] = useState(false);
@@ -198,33 +195,30 @@ const useProfile = (username) => {
 }
 
 // This hook handles notifications for the logged user.
-// As new notifications come in they get updated on the front-end
+// As new notifications come in they get updated on the front-end.
 // Notifications are sorted by timestamp so new ones will always be at the top of the list.
 const useNotifications = (username) => {
-  const [notifications, setNotifications] = useState([]); // We set data we get from the db in state.
-  const [limit, setLimit] = useState(80); // This is used to regulate how many notifications are shown.
-  const [killListener, setKillListener] = useState(null); // Store listener unsubscription
+  const [notifications, setNotifications] = useState([]); // Houses data fetched from backend
+  const [limit, setLimit] = useState(80); // Regulates how many notifications are shown
+  const listener = useState(null); // Store db listener unsubscription function
   useEffect(() => {
     const setup = () =>  setupNotifListener(username, setNotifications, limit);
-     
-    if(username) {
-      const unsubscribe = setup(); // Only set up the listener once we receive user username
-      setKillListener(() => unsubscribe); // Store listener unsubscribe function in state to preserve it
-    }
+    if(username) listener.current = setup(); // Creates the listener
   
-    return () => { if(username && killListener) killListener() } // Destroy listener when component unmounts
-  }, [username]); // When current user is loaded turn on listener
+    return () => { if(username && listener.current) listener.current() }
+  }, [username]);
 
+  // Increases the limit of notifications downloaded on db
   const increaseLimit = () => {
-    if(killListener) killListener();
-    const unsubscribe = setupNotifListener(username, setNotifications, limit + 5);
-    setKillListener(unsubscribe);
+    if(listener.current) listener.current();
+    listener.current = setupNotifListener(username, setNotifications, limit + 5);
     setLimit(limit + 5);
   }
 
+  // Makes a batched update to notifications, marking all as seen.
   const markAllAsSeen = (toggleSidebar) => { 
     if(notifications && notifications[0].seen === false) setNotificationsSeen(username);
-    toggleSidebar('heart'); // Opens or closes the sidebar
+    toggleSidebar('heart');
   }
   
   return [notifications, markAllAsSeen]

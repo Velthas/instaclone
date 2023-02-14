@@ -50,10 +50,6 @@ const Button = styled.button`
     margin: 0 5px 0 0;
     font-size: 0.8rem;
   }
-
-  @media (max-width: 550px) {
-    padding: 4px 8px;
-  }
 `;
 
 const IconButton = styled(Button)`

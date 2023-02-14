@@ -1,12 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { BsArrowLeft } from "react-icons/bs";
-import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
+import { BsArrowLeft, BsXLg } from "react-icons/bs";
+import { flexRowBetween } from "../../../../styles/style";
 
-const PostFormHeader = ({ photo, setPhoto, handleSubmit }) => {
+const PostFormHeader = ({ photo, setPhoto, handleSubmit, closeForm  }) => {
   return (
     <FormTitle photo={photo}>
-      {photo && <BsArrowLeft size={24} title="go back" onClick={() => setPhoto(false)} />}
+      <XIcon onClick={() => closeForm(false)} />
+      {photo && <LeftArrow title="go back" onClick={() => setPhoto(false)} />}
       <Heading>Create a new post</Heading>
       {photo && <SharePost onClick={(e) => handleSubmit(e)}>Share</SharePost>}
     </FormTitle>
@@ -26,10 +27,33 @@ const SharePost = styled.p`
 const FormTitle = styled.div`
   transition: 1s ease-out;
   padding: 0 16px;
-  ${({ photo }) => (photo ? flexRowBetween : flexRowCenter)};
+  ${({ photo }) => (photo ? flexRowBetween : 'display: flex; justify-content: flex-start; align-items: center;')};
   width: 100%;
   height: 45px;
   border-bottom: 1px solid #dfdfdf;
+`;
+
+const XIcon = styled(BsXLg)`
+  display: none;
+
+  @media (max-width: 550px) {
+    display: block;
+    color: #262626;
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+  }
+`;
+
+const LeftArrow = styled(BsArrowLeft)`
+  height: 24px;
+  width: 24px;
+  color: #262626;
+  cursor: pointer;
+
+  @media (max-width: 550px) {
+    display: none;
+  }
 `;
 
 const Heading = styled.h1`
@@ -37,6 +61,7 @@ const Heading = styled.h1`
   font-size: 1rem;
   font-weight: 500;
   color: #000;
+  ${({ photo }) => (photo ? 'width: auto;' : 'width: 90%; text-align: center;')};
 `;
 
 export default PostFormHeader;

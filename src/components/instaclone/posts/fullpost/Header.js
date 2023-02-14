@@ -17,11 +17,13 @@ const Header = ({ user, setSettings, followed, updateFollowed }) => {
         <StyledLink>
           <Username>{user ? user.username : ""}</Username>
         </StyledLink>
-        <span>•</span>
         {user && currentUser && user.username !== currentUser && (
-          <Button onClick={() => updateFollowed(!followed)}>
-            {followed ? "Unfollow" : "Follow"}
-          </Button>
+          <>
+            <span>•</span>
+            <Button onClick={() => updateFollowed(!followed)}>
+              {followed ? "Unfollow" : "Follow"}
+            </Button>
+          </>
         )}
       </User>
       <Dots title="settings" onClick={() => setSettings(true)} />
@@ -36,6 +38,11 @@ const Container = styled.div`
   height: 10%;
   border-bottom: 1px solid #efefef;
   padding: 0px 5%;
+
+  @media (max-width: 750px) {
+    padding: 10px 0;
+    height: 50px;
+  }
 `;
 
 const StyledLink = styled(Link)`

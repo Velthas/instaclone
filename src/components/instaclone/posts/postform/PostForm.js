@@ -64,14 +64,15 @@ const PostForm = ({ closeForm, user }) => {
 
   return (
     <Backdrop>
-      <CloseForm title="close form" onClick={() => closeForm(false)} />
+      <CloseForm photo={photo} title="close form" onClick={() => closeForm(false)} />
       <Container>
         <PostFormHeader
           photo={photo}
           setPhoto={setPhoto}
           handleSubmit={handleSubmit}
+          closeForm={closeForm}
         />
-        <Form id="post-form">
+        <Form photo={photo} id="post-form">
           <Loading loading={loading} />
           <ImageSelection
             photo={photo}
@@ -95,12 +96,25 @@ const Backdrop = styled.div`
   z-index: 4;
 
   width: 100vw;
-  height: 100vh;
-  background-color: #00000091;
+  min-height: 100vh;
+  max-height: 100%;
+  overflow-y: auto;
+  background-color: #000000c4;
 
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+
+  @media (max-width: 550px) {
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+  @media only screen and (max-height: 550px) and (orientation: landscape) {
+    align-items: flex-start;
+  }
 `;
 
 const CloseForm = styled(BsXLg)`
@@ -110,6 +124,10 @@ const CloseForm = styled(BsXLg)`
   position: absolute;
   top: 20px;
   right: 20px;
+
+  @media (max-width: 550px) {
+    display: none;
+  }
 `;
 
 const Container = styled.div`
@@ -122,6 +140,25 @@ const Container = styled.div`
   animation-name: ${fadeIn};
   animation-duration: 0.5s;
   transition-timing-function: ease-out;
+
+  @media (max-width: 950px) {
+    min-width: 450px;
+    height: 450px;
+  }
+
+  @media (max-width: 750px) {
+    height: auto;
+    min-width: 350px;
+    margin: 20px;
+  }
+
+  @media (max-width: 550px) {
+    height: 100%;
+    width: 100%;
+    min-width: initial;
+    border-radius: 0;
+    margin: 0;
+  }
 `;
 
 const Image = styled.img`
@@ -131,6 +168,17 @@ const Image = styled.img`
   height: 100%;
   object-fit: cover;
   border-bottom-left-radius: 10px;
+
+  @media (max-width: 950px) {
+    max-width: 400px;
+  }
+
+  @media (max-width: 750px) {
+    height: 250px;
+    width: 100%;
+    max-width: initial;
+    border-bottom-left-radius: 0;
+  }
 `;
 
 const Form = styled.form`
@@ -139,6 +187,11 @@ const Form = styled.form`
   align-items: center;
   justify-content: center;
   height: calc(100% - 45px);
+
+  @media (max-width: 750px) {
+    flex-direction: column;
+    ${({ photo }) => (photo ? "height: auto;" : "height: 300px;")};
+  }
 `;
 
 export default PostForm;

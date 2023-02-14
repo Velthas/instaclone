@@ -42,6 +42,10 @@ const Comment = styled.div`
   padding: 0 5%;
   align-items: flex-start;
   margin: 15px 0;
+
+  @media (max-width: 750px) {
+    padding: 0;
+  }
 `;
 
 const Main = styled.div`
