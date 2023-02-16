@@ -13,8 +13,8 @@ const ChatEntry = ({ room, active, openChat }) => {
         <Username>{room.username}</Username>
         <LastMessage>
           {room.lastMessage &&
-            room.lastMessage.content +
-            " · " +
+            room.lastMessage.content.slice(0, 5) + "..." 
+            + " · " +
             formatDateShort(room.lastMessage.timestamp)}
         </LastMessage>
       </Info>

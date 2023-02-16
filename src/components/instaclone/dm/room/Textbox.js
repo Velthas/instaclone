@@ -9,6 +9,7 @@ const Textbox = ({ sendMessage }) => {
       <InputWrapper>
         <BsEmojiSmile />
         <Input
+          autoComplete="off"
           maxLength={2200}
           type="text"
           id="add-message"
@@ -35,6 +36,12 @@ const Input = styled.input`
   padding: 8px 16px;
   width: 80%;
   height: 30px;
+
+  @media (max-width: 550px) {
+    &::placeholder {
+      font-size: 0.7rem;
+    }
+  }
 `;
 
 const InputWrapper = styled.div`

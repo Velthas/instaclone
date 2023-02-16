@@ -45,6 +45,14 @@ const FormWrapper = styled.div`
   margin-top: 36px;
   border: 1px solid #dbdbdb;
   ${flexColumnCenter}
+
+  @media (max-width: 550px) {
+    width: 80%;
+  }
+
+  @media (max-width: 350px) {
+    width: 90%;
+  }
 `;
 
 const Logo = styled.img`

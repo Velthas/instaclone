@@ -21,6 +21,15 @@ const Container = styled.div`
   margin: 15px 0;
   border: 1px solid #dbdbdb;
   font-size: 1rem;
+
+  @media (max-width: 550px) {
+    width: 80%;
+  }
+
+  @media (max-width: 350px) {
+    flex-direction: column;
+    width: 90%;
+  }
 `;
 
 const StyledLink = styled(Link)`

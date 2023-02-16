@@ -43,6 +43,10 @@ const PhoneContainer = styled.div`
 
   ${flexRowCenter};
   flex-shrink: 0;
+
+  @media (max-width: 750px) {
+    display: none;
+  }
 `;
 
 const appear = keyframes`

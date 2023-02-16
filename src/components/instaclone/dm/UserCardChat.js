@@ -47,6 +47,7 @@ const Picture = styled.div`
   width: 44px;
   border-radius: 100%;
   border: 1px solid #dfdfdf;
+  flex-shrink: 0;
 `;
 
 const Username = styled.div`

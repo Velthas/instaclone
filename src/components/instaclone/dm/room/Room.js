@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { IconContext } from "react-icons";
 import { getCurrentUserUsername } from "../../../../firebase/authentication";
@@ -10,10 +10,11 @@ import Message from "../Message";
 import RoomHeader from "./RoomHeader";
 import Textbox from "./Textbox";
 
-const Room = ({active}) => {
+const Room = ({active, setActive}) => {
   const user = getCurrentUserUsername();
-  const unsubscribe = useRef(null); // DB listener unsubscribe function will be stored here
-  const { id } = useParams();
+  const unsubscribe = useRef(null); // Db listener unsubscribe function will be stored here
+  const navigate = useNavigate();
+  const { id } = useParams(); // This is the ID the chat is stored with on the db
   const [messages, setMessages] = useState(null);
 
   useEffect(() => {
@@ -38,14 +39,19 @@ const Room = ({active}) => {
     messageBox.value = '';
   }
 
+  const backToChatSelection = () => {
+    navigate(-1);
+    setActive(null);
+  }
+
   return (
     <IconContext.Provider value={{ style: { cursor: "pointer" }, size: 24 }}>
       <Container>
-        <RoomHeader active={active} />
+        <RoomHeader backToChatSelection={backToChatSelection} active={active} />
         <MessagesContainer id={'message-box'}>
           {messages &&
             messages.map((message) => {
-                return <Message key={message.id} message={message} />
+                return <Message key={message.id} message={message} user={user}/>
             })}
         </MessagesContainer>
         <Textbox sendMessage={sendMessage}/>
@@ -55,14 +61,14 @@ const Room = ({active}) => {
 };
 
 const Container = styled.div`
-  max-height: 700px;
+  height: 100%;
   width: 100%;
   ${flexColumnCenter}
 `;
 
 const MessagesContainer = styled.div`
   width: 100%;
-  height: calc(100% - 90px);
+  height: -webkit-fill-available;
   padding: 8px 20px;
 
   overflow-y: scroll;

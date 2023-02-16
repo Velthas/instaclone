@@ -16,7 +16,7 @@ const Login = () => {
   return (
     <Container>
       <Phone />
-      <div>
+      <MainWrapper>
         <FormContainer>
           <Logo src={instalogo} alt="Instagram Logo" />
           <LoginForm displayError={displayError} />
@@ -26,17 +26,25 @@ const Login = () => {
         </FormContainer>
         <Register />
         <TestLogin />
-      </div>
+      </MainWrapper>
     </Container>
   );
 };
 
 const Container = styled.div`
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
 
   ${flexRowCenter};
   gap: 20px;
+
+  @media (max-width: 750px) {
+    flex-direction: column;
+  }
+
+  @media (max-width: 350px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const Logo = styled.img`
@@ -51,7 +59,23 @@ const FormContainer = styled.div`
   padding: 36px;
   border: 1px solid #dbdbdb;
   ${flexColumnCenter}
+
+  @media (max-width: 550px) {
+    width: 80%;
+  }
+
+  @media (max-width: 350px) {
+    width: 90%;
+  }
 `;
+
+const MainWrapper = styled.div`
+  ${flexColumnCenter}
+
+  @media (max-width: 550px) {
+    width: 100%;
+  }
+`
 
 const ForgotPass = styled.p`
   margin-top: 12px;

@@ -61,7 +61,7 @@ const Direct = ({ user, closeSidebar }) => {
       <Container onClick={() => closeSidebar("message")}>
         {modal && <NewChatModal createRoom={createRoom} setModal={setModal} />}
         <MessagesContainer>
-          <ChatlistContainer>
+          <ChatlistContainer active={active}>
             <Header>
               <Username>
                 {user ? user.displayName : ""}
@@ -85,7 +85,7 @@ const Direct = ({ user, closeSidebar }) => {
                   .sort((a, b) => b.lastMessage.timestamp - a.lastMessage.timestamp)
                   .map((room) => (
                   <ChatEntry
-                    key={room.username}
+                    key={room.chatId}
                     room={room}
                     active={active}
                     openChat={openChatRoom}
@@ -94,8 +94,8 @@ const Direct = ({ user, closeSidebar }) => {
             </Chatlist>
           </ChatlistContainer>
           <Routes>
-            <Route path={"/"} element={<div></div>} />
-            <Route path={":id"} element={<Room active={active} />} />
+            <Route path={"/"} element={<EmptyChatroom></EmptyChatroom>} />
+            <Route path={":id"} element={<Room setActive={setActive} active={active} />} />
           </Routes>
         </MessagesContainer>
       </Container>
@@ -105,10 +105,15 @@ const Direct = ({ user, closeSidebar }) => {
 
 const Container = styled.div`
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   padding: 5%;
 
   ${flexRowCenter}
+  
+  @media (max-width: 750px) {
+    height: calc(100vh - 50px);
+    margin-bottom: 50px;
+  }
 `;
 
 const MessagesContainer = styled.div`
@@ -130,6 +135,7 @@ const Header = styled.div`
   border-right: 1px solid #dfdfdf;
 
   ${flexRowCenter};
+  flex-shrink: 0;
   justify-content: flex-end;
 `;
 
@@ -138,6 +144,12 @@ const ChatlistContainer = styled.div`
   height: 100%;
 
   ${flexColumnCenter};
+
+  @media (max-width: 750px) {
+    width: 100%;
+    display: ${({active}) => active ? 'none' : 'flex'};
+    border: none;
+  }
 `;
 
 const Chatlist = styled.div`
@@ -146,6 +158,16 @@ const Chatlist = styled.div`
   border-right: 1px solid #dfdfdf;
 
   ${flexColumnCenter};
+  overflow: auto;
+`;
+
+const EmptyChatroom = styled.div`
+  width: 60%;
+  height: 100%;
+
+  @media (max-width: 750px) {
+    width: 0%;
+  }
 `;
 
 const Username = styled.div`

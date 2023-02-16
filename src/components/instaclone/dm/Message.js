@@ -1,9 +1,7 @@
 import React from "react"
 import styled from "styled-components"
-import { getCurrentUserUsername } from "../../../firebase/authentication"
 
-const Message = ({message}) => {
-  const user = getCurrentUserUsername();
+const Message = ({message, user}) => {
   return <Container isOwn={user === message.author}>{message.content}</Container>
 }
 

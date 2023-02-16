@@ -1,12 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
-import { BsTelephone, BsCameraVideo, BsInfoCircle } from "react-icons/bs";
+import { BsTelephone, BsCameraVideo, BsInfoCircle, BsChevronLeft } from "react-icons/bs";
 
-const RoomHeader = ({active}) => {
+const RoomHeader = ({active, backToChatSelection}) => {
   return (
     <Header>
-      <Username>{active.username}</Username>
+      <BackIcon onClick={backToChatSelection} />
+      <Username>{active ? active.username : ''}</Username>
       <Icons>
         <BsTelephone />
         <BsCameraVideo />
@@ -21,6 +22,7 @@ export default RoomHeader;
 const Header = styled.div`
   width: 100%;
   height: 60px;
+  flex-shrink: 0;
   padding: 0 5%;
   border-bottom: 1px solid #dfdfdf;
 
@@ -35,4 +37,12 @@ const Username = styled.span`
 const Icons = styled.div`
   ${flexRowCenter};
   gap: 10px;
+`;
+
+const BackIcon = styled(BsChevronLeft)`
+  display: none;
+
+  @media (max-width: 750px) {
+    display: block;
+  }
 `;

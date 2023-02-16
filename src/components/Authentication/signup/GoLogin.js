@@ -22,6 +22,16 @@ const Container = styled.div`
   border: 1px solid #dbdbdb;
   font-size: 1rem;
   margin-bottom: 36px;
+
+  @media (max-width: 550px) {
+    width: 80%;
+  }
+
+  @media (max-width: 350px) {
+    width: 90%;
+    flex-direction: column;
+    font-size: 0.8rem;
+  }
 `;
 
 const StyledLink = styled(Link)`
