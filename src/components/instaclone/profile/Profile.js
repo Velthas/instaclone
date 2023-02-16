@@ -42,6 +42,7 @@ const PostList = styled.div`
   width: 100%;
 
   @media (max-width: 750px) {
+    overflow: hidden;
     gap: 2px;
   }
 `;

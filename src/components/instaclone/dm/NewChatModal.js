@@ -76,11 +76,25 @@ const Container = styled.div`
   width: 440px;
   ${flexColumnCenter}
   background-color: #fff;
+
+  @media (max-width: 550px) {
+    width: 90%;
+  }
+
+  @media (max-height: 600px) {
+    width: 90%;
+    height: 330px;
+  }
+
+  @media only screen and (max-height: 600px) and (orientation: landscape) {
+    height: 100%;
+    width: 100%;
+  }
 `;
 
 const Header = styled.div`
   width: 100%;
-  height: 7%;
+  height: max(50px, 7%);
   border-bottom: 1px solid #dfdfdf;
   padding: 0 5%;
 
@@ -108,7 +122,7 @@ const Continue = styled.button`
 
 const Search = styled.div`
   width: 100%;
-  height: 10%;
+  height: max(10%, 50px);
   ${flexRowCenter};
   justify-content: flex-start;
   border-bottom: 1px solid #dfdfdf;
@@ -119,10 +133,11 @@ const Searchbar = styled.input`
   margin-left: 15px;
   padding: 4px 12px;
   border: none;
-  width: 300px;
+  width: min(80%, 300px);
   height: 30px;
   outline: none;
   color: #262626;
+  background-color: transparent;
 
   &::placeholder {
     color: #dfdfdf;

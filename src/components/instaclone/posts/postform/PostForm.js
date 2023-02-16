@@ -8,6 +8,7 @@ import { createPost, getPostDocReference } from "../../../../firebase/firestore"
 import { uploadPhoto } from "../../../../firebase/storage";
 import { Timestamp } from "firebase/firestore";
 import { fadeIn } from "../../../../styles/style";
+
 import PostFormHeader from "./PostFormHeader";
 import ImageSelection from "./ImageSelection";
 import PostInfo from "./PostInfo";
