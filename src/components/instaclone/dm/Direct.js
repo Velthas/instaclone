@@ -95,7 +95,7 @@ const Direct = ({ user, closeSidebar }) => {
           </ChatlistContainer>
           <Routes>
             <Route path={"/"} element={<EmptyChatroom></EmptyChatroom>} />
-            <Route path={":id"} element={<Room setActive={setActive} active={active} />} />
+            <Route path={":id"} element={<Room rooms={rooms} setActive={setActive} active={active} />} />
           </Routes>
         </MessagesContainer>
       </Container>
@@ -159,6 +159,10 @@ const Chatlist = styled.div`
 
   ${flexColumnCenter};
   overflow: auto;
+
+  @media (max-width: 750px) {
+    border-right: none;
+  }
 `;
 
 const EmptyChatroom = styled.div`

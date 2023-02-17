@@ -5,10 +5,20 @@ import { getCurrentUserUsername } from "../../../../firebase/authentication";
 import { signOutCurrentUser } from "../../../../firebase/authentication";
 import { flexRowCenter } from "../../../../styles/style";
 import { BsPersonPlus } from "react-icons/bs";
+import { createChatRoom, doesChatExist } from "../../../../firebase/firestore";
 
 const HeaderButtons = ({ user, updateFollowed, followed }) => {
   const currentUser = getCurrentUserUsername();
   const navigate = useNavigate();
+
+  // Handles opening dms from profile.
+  const openChat = async () => {
+    const chat = await doesChatExist(currentUser, user.username);
+    if(!chat){
+      const newChatId = await createChatRoom(currentUser, user.username);
+      navigate(`/direct/${newChatId}`);
+    } else navigate(`/direct/${chat.chatId}`);
+  }
 
   return (
     <ButtonContainer>
@@ -17,7 +27,7 @@ const HeaderButtons = ({ user, updateFollowed, followed }) => {
           <Button blue onClick={() => updateFollowed(!followed)}>
             {followed ? "Unfollow" : "Follow"}
           </Button>
-          <Button>Message</Button>
+          <Button onClick={openChat}>Message</Button>
           <IconButton>
             <BsPersonPlus size={15} />
           </IconButton>

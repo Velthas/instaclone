@@ -116,8 +116,7 @@ const updateFollow = async (followee, followed) => {
   if (followed) {
     updateDoc(followerRef, { follows: arrayUnion(followee) });
     updateDoc(followeeRef, { followed: arrayUnion(follower) });
-  } else {
-    // Both follower and followee profiles have to be updated
+  } else { // Both follower and followee profiles have to be updated
     updateDoc(followerRef, { follows: arrayRemove(followee) });
     updateDoc(followeeRef, { followed: arrayRemove(follower) });
   }
@@ -139,7 +138,7 @@ const searchForProfiles = async (userQuery) => {
 };
 
 // Used to get posts for the homepage.
-// Load at each person followed by a user and draw 3 most recent posts.
+// Look at each person followed by a user and draw 3 most recent posts.
 // It's okay for now, but will need improvement in the future
 const getHomepageContent = async (username) => {
   const userInfo = await getUserInfo(username);
@@ -215,20 +214,29 @@ const setupAllChatsListener = (username, setRooms) => {
 // This creates a listener for a specific chat room's messages.
 const setupMessagesListener = (id, setMessages) => {
   const q = query(
-    collection(db, "Chats", id, "Messages"), // Look into messages for that user
-    orderBy("timestamp", "asc")
-  ); // Order them by timestamp
+    collection(db, "Chats", id, "Messages"), // Look into chatroom
+    orderBy("timestamp", "asc") // Order messages by timestamp
+  ); 
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
     const data = querySnapshot.docs.map((doc) => doc.data());
-    setMessages(data);
+    setMessages(data); // Sets the messages in state in the chat room component
   });
-  return unsubscribe; // Will be used to unsubscribe to the listener
+  return unsubscribe; // Call this later to kill the listener
 };
+
+// Used when user tries to open chat from profile
+// Checks if chat already exists, if it doesn't one is created before switching to dms
+const doesChatExist = async (currentUser, receiver) => {
+  const chatRef = doc(db, "Users", currentUser, "Dm", receiver);
+  const chatDoc = await getDoc(chatRef);
+  if(chatDoc.exists()) return chatDoc.data();
+  return false;
+}
 
 // Will use this function to create chat bucket & info on both profiles
 const createChatRoom = async (author, receiver) => {
   const newChat = doc(collection(db, "Chats")); // Creates a unique doc ref to extract id from for chat
-  await setDoc(newChat, { exists: true }); // Adds the chat to the chats collection. Exists prop prevents auto-deletion
+  await setDoc(newChat, { exists: true }); // Exists prop prevents autodeletion for empty chats
 
   // We create a bucket in each user's dms docs
   // It will store chat id and last message to provide notifications
@@ -289,6 +297,7 @@ export {
   searchForProfiles,
   getHomepageContent,
   setNotificationsSeen,
+  doesChatExist,
   createChatRoom,
   setupAllChatsListener,
   setupMessagesListener,

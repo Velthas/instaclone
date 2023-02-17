@@ -10,13 +10,14 @@ import Message from "../Message";
 import RoomHeader from "./RoomHeader";
 import Textbox from "./Textbox";
 
-const Room = ({active, setActive}) => {
+const Room = ({active, setActive, rooms}) => {
   const user = getCurrentUserUsername();
   const unsubscribe = useRef(null); // Db listener unsubscribe function will be stored here
   const navigate = useNavigate();
   const { id } = useParams(); // This is the ID the chat is stored with on the db
   const [messages, setMessages] = useState(null);
 
+  // Handles subscribing to db for messages updates
   useEffect(() => {
     if (unsubscribe.current) unsubscribe.current();
     unsubscribe.current = setupMessagesListener(id, setMessages); // Storing the unsubscribe function here
@@ -25,10 +26,22 @@ const Room = ({active, setActive}) => {
     };
   }, [id]); // Only setup and kill listeners when the chatroom changes
 
+  // Handles scrolling to bottom of chat when messages are loaded
   useEffect(() => {
-    var objDiv = document.getElementById("message-box"); // Scrolls to end of chatbox
-    objDiv.scrollTop = objDiv.scrollHeight; // That way users can resume where they left off
+    var objDiv = document.getElementById("message-box");
+    objDiv.scrollTop = objDiv.scrollHeight; 
   }, [messages]);
+
+  // Handles setting correct chat as active when ID changes
+  useEffect(() => {
+    // If current id matches active chat, do nothing
+    if (rooms && active && rooms.some((room) => room.chatId === id && room.chatId === active.id)) return;
+    else if(rooms) { // If not, set the appropriate chat as active
+      const activeRoom = rooms.filter((room) => room.chatId === id)[0];
+      const payload = {username: activeRoom.username, id: activeRoom.chatId}
+      setActive(payload);
+    }
+  }, [rooms, id])
 
   const sendMessage = () => {
     const messageBox = document.querySelector('#add-message');
