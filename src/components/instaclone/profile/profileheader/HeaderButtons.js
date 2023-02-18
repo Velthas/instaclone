@@ -7,7 +7,7 @@ import { flexRowCenter } from "../../../../styles/style";
 import { BsPersonPlus } from "react-icons/bs";
 import { createChatRoom, doesChatExist } from "../../../../firebase/firestore";
 
-const HeaderButtons = ({ user, updateFollowed, followed }) => {
+const HeaderButtons = ({ user, updateFollowed, followed}) => {
   const currentUser = getCurrentUserUsername();
   const navigate = useNavigate();
 

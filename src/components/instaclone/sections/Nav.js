@@ -235,6 +235,7 @@ const Icons = styled.ul`
     justify-content: space-around;
     width: 100%;
     height: 100%;
+    gap: 0;
   }
 `;
 

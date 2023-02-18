@@ -37,6 +37,7 @@ const PostCard = styled.div`
 
   position: relative;
   aspect-ratio: 1/1;
+  cursor: pointer;
 
   @media (max-width: 750px) {
     margin-top: -4px;

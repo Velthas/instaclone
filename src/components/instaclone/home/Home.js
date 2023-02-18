@@ -5,6 +5,7 @@ import { flexColumnCenter } from "../../../styles/style";
 
 import HomePost from "../posts/homepost/HomePost";
 import Suggestions from "./Suggestions";
+import LoadingPost from "../posts/LoadingPost";
 
 const Home = ({ user, closeSidebar }) => {
   const [content, setContent] = useState([]);
@@ -21,6 +22,7 @@ const Home = ({ user, closeSidebar }) => {
   return (
     <Container onClick={() => closeSidebar("home")}>
       <PostContainer>
+        {content.length === 0 && <LoadingPost />}
         {content.length !== 0 &&
           content.map((post) => <HomePost key={post.id} post={post} />)}
       </PostContainer>

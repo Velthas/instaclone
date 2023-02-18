@@ -1,13 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import { getCurrentUserUsername } from "../../../firebase/authentication";
+import { useParams } from "react-router-dom";
+
 import PostPreview from "../posts/PostPreview";
 import ProfileHeader from "./ProfileHeader";
 import ProfileSections from "./ProfileSections";
 import MobileTop from "./MobileTop";
 
 const Profile = ({user, posts, closeSidebar}) => {
+  const {username} = useParams();
+  const isOwnProfile = getCurrentUserUsername() === username;
+
+  // Sets profile icon as active on mount if visiting own profile
+  useEffect(() => {
+    if(isOwnProfile) closeSidebar("profile");
+    else closeSidebar(" "); 
+  }, [])
+
   return (
-    <Container onClick={() => closeSidebar("profile")}>
+    <Container onClick={ isOwnProfile ? () => closeSidebar("profile") : () => closeSidebar(" ")}>
         <MobileTop user={user} />
         <ProfileHeader user={user} posts={posts} />
         <ProfileSections />

@@ -22,6 +22,11 @@ const Direct = ({ user, closeSidebar }) => {
   const [active, setActive] = useState(null);
   const navigate = useNavigate();
 
+  // Sets correct icon on nav as active on mount
+  useEffect(() => {
+    closeSidebar("message")
+  }, [])
+
   useEffect(() => {
     if (unsubscribe.current) unsubscribe.current();
     unsubscribe.current = setupAllChatsListener(user.displayName, setRooms);
