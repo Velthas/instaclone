@@ -55,23 +55,14 @@ const EditProfileForm = ({ info, loadInfo }) => {
   return (
     <Form id="edit-profile">
       <ImageContainer>
-        <FileImg
-          id="pfp"
-          url={info ? info.pfp : ""}
-          alt="profile picture"
-          imgStyle={ImageStyle}
-        />
+        <FileImg id="pfp" url={info ? info.pfp : ""} alt="profile picture" imgStyle={ImageStyle} />
         <UserInfo>
           <span>{info.username}</span>
           <FileLabel htmlFor="pfp">Change profile picture</FileLabel>
         </UserInfo>
       </ImageContainer>
       <Input id="name" type="text" label="Name" value={info ? info.name : ""} />
-      <TextArea
-        id="bio"
-        label="Biography"
-        value={info ? info.description : ""}
-      />
+      <TextArea id="bio" label="Biography" value={info ? info.description : ""} />
       {error && <Error>{error}</Error>}
       <Button blue onClick={(e) => handleSubmit(e)}>
         Save

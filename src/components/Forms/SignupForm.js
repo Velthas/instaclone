@@ -7,12 +7,14 @@ import { createUser } from "../../firebase/authentication";
 import { createUserBucket, doesUserExist } from "../../firebase/firestore";
 import { flexRowCenter } from "../../styles/style";
 
-const SignupForm = ({displayError, setUser}) => {
+const SignupForm = ({ displayError, setUser }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     displayError(null);
 
-    const allInputs = Array.from(document.querySelectorAll('#signup input')).map(input => input.value);
+    const allInputs = Array.from(
+      document.querySelectorAll("#signup input")
+    ).map((input) => input.value);
     const [mail, fullname, usname, psw] = allInputs;
     const isMailValid = validateMail(mail);
     const isPswValid = validatePsw(psw);
@@ -20,7 +22,7 @@ const SignupForm = ({displayError, setUser}) => {
     const isUsernameTaken = await doesUserExist(usname);
     const isNameValid = validateName(fullname);
 
-    switch(true) {
+    switch (true) {
       case isMailValid !== true:
         displayError(isMailValid);
         return;
@@ -34,28 +36,36 @@ const SignupForm = ({displayError, setUser}) => {
         displayError(isUsernameValid);
         return;
       case isUsernameTaken !== false:
-        displayError('Username already taken');
-        return
-      default: 
+        displayError("Username already taken");
+        return;
+      default:
         createUser(mail, psw, usname, setUser);
         createUserBucket(fullname, usname);
-    };
+    }
   };
 
   return (
     <Form id="signup">
-      <InterInput id='mailreg' type='text' label='Email' checkValid={validateMail} />
-      <InterInput id='fullname' type='text' label='Full name' checkValid={validateName} />
-      <InterInput id='username' type='text' label='Username' checkValid={validateUsername} />
-      <InterInput id='passreg' type='password' label='Password' checkValid={validatePsw} />
-      <Para>Hi! My name is Damiano, my coding alias is Velthas, and this is my clone of Instagram. </Para>
-      <Para>This project was made for educational purposes, not the real thing. Even though firebase's authentication is safe, please do not put any relevant information in here, nor use your real-life passwords. Thank you and enjoy!  </Para>
+      <InterInput id="mailreg" type="text" label="Email" checkValid={validateMail} />
+      <InterInput id="fullname" type="text" label="Full name" checkValid={validateName} />
+      <InterInput id="username" type="text" label="Username" checkValid={validateUsername} />
+      <InterInput id="passreg" type="password" label="Password" checkValid={validatePsw} />
+      <Para>
+        Hi! My name is Damiano, my coding alias is Velthas, and this is my clone
+        of Instagram.{" "}
+      </Para>
+      <Para>
+        This project was made for educational purposes, not the real thing. Even
+        though firebase's authentication is safe, please do not put any relevant
+        information in here, nor use your real-life passwords. Thank you and
+        enjoy!{" "}
+      </Para>
       <Button type="submit" onClick={(e) => handleSubmit(e)}>
         Sign up
       </Button>
     </Form>
-  )
-}
+  );
+};
 
 SignupForm.propTypes = {
   displayError: PropTypes.func.isRequired,
@@ -65,7 +75,6 @@ SignupForm.propTypes = {
 const Form = styled.form`
   width: 100%;
 `;
-
 
 const Para = styled.p`
   font-size: 0.7rem;

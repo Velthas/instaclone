@@ -1,19 +1,21 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-
 import { IoMdClose } from "react-icons/io";
 import { flexColumnCenter, flexRowBetween, flexRowCenter } from "../../../styles/style";
 import { useSearch } from "../../../utils/hooks";
+import { getCurrentUserUsername } from "../../../firebase/authentication";
+
 import UserCardChat from "./UserCardChat";
 
 const NewChatModal = ({ setModal, createRoom }) => {
+  const currentUser = getCurrentUserUsername();
   const [profiles, setQuery] = useSearch(); // Handles search queries to the backend
   const [selected, setSelected] = useState(null); // Use this to store username of selected user
 
   const toggleSelected = (username) => {
-    if(selected === username) setSelected(null);
+    if (selected === username) setSelected(null);
     else setSelected(username);
-  }
+  };
 
   return (
     <Backdrop>
@@ -34,20 +36,23 @@ const NewChatModal = ({ setModal, createRoom }) => {
             type="text"
             id="search-chat"
             placeholder="Search..."
+            autoComplete="off"
           />
         </Search>
         <Profiles>
           {profiles &&
-            profiles.map((profile) => {
-              return (
-                <UserCardChat
-                  key={profile.id}
-                  user={profile}
-                  selected={selected}
-                  toggleSelected={toggleSelected}
-                />
-              );
-            })}
+            profiles
+              .filter((profile) => profile.username !== currentUser)
+              .map((profile) => {
+                return (
+                  <UserCardChat
+                    key={profile.id}
+                    user={profile}
+                    selected={selected}
+                    toggleSelected={toggleSelected}
+                  />
+                );
+              })}
         </Profiles>
       </Container>
     </Backdrop>
@@ -149,7 +154,7 @@ const To = styled.h4`
   font-size: 1rem;
   font-weight: 500;
   color: #262626;
-`
+`;
 
 const Profiles = styled.div`
   width: 100%;

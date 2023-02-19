@@ -20,6 +20,7 @@ const Add = ({ post, insertComment }) => {
         type="text"
         id={`a${post.id}`}
         value={value}
+        autoComplete='off'
       />
       <Send value={value} onClick={sendComment}>Publish</Send>
       <Icon />

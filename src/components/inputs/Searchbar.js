@@ -1,28 +1,38 @@
-import React, {useState} from 'react';
-import styled from 'styled-components';
-import { BsSearch, BsXCircleFill } from 'react-icons/bs';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { BsSearch, BsXCircleFill } from "react-icons/bs";
 
-const Searchbar = ({setQuery, id}) => {
+const Searchbar = ({ setQuery, id }) => {
   const [focused, setFocused] = useState(false);
 
   return (
     <>
-    { !focused &&
-      <Container onClick={() => setFocused(true)}>
-        <BsSearch size="20px" color='#c7c7c7'/>
-        <Text>Search</Text>
-      </Container>
-    }
-    {
-      focused &&
-      <InputContainer>
-        <Input autoFocus="true" type={'text'} id={id} placeholder='Search' onChange={(e) => setQuery(e.target.value)} />
-        <CloseIcon color='#c7c7c7' size="13" onClick={() => setFocused(false)}/>
-      </InputContainer>
-    }
+      {!focused && (
+        <Container onClick={() => setFocused(true)}>
+          <BsSearch size="20px" color="#c7c7c7" />
+          <Text>Search</Text>
+        </Container>
+      )}
+      {focused && (
+        <InputContainer>
+          <Input
+            autoFocus="true"
+            type={"text"}
+            id={id}
+            placeholder="Search"
+            onChange={(e) => setQuery(e.target.value)}
+            autoComplete="off"
+          />
+          <CloseIcon
+            color="#c7c7c7"
+            size="13"
+            onClick={() => setFocused(false)}
+          />
+        </InputContainer>
+      )}
     </>
-  )
-}
+  );
+};
 
 const Container = styled.div`
   height: 35px;
