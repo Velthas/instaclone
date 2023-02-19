@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import styled from "styled-components";
 import { getHomepageContent } from "../../../firebase/firestore";
 import { flexColumnCenter } from "../../../styles/style";
@@ -9,22 +9,50 @@ import LoadingPost from "../posts/LoadingPost";
 
 const Home = ({ user, closeSidebar }) => {
   const [content, setContent] = useState([]);
-  const [display, setDisplay] = useState(2);
+  const [display, setDisplay] = useState(1);
+  const [loading, setLoading] = useState(true);
+
+  // Makes call to db to load homepage content.
   useEffect(() => {
     const loadContent = async () => {
       let posts = [];
       if (user) posts = await getHomepageContent(user.displayName);
       setContent(posts);
+      setLoading(false);
     };
     loadContent();
   }, [user]);
 
+  // Implementation of infinite scrolling
+  const observer = useRef(); // Preserves intersection observer reference
+  const lastElementRef = useCallback(node => { // Gets called every time element carrying it renders
+    if(loading) return; // Don't try to load more posts when already loading more
+    if(observer.current) observer.current.disconnect(); // Disconnect previous observer
+    observer.current = new IntersectionObserver(entries => {
+      // Show more posts when last post scrolls into view && there are more posts to show
+      if(entries[0].isIntersecting && display !== content.length - 1) {
+        setLoading(true); // Will make loading placeholder post appear
+        setTimeout(() => { // Gives the illusion of loading more posts, for now.
+          setDisplay(prevState => {
+            return (content.length - 1) < (prevState + 2) ? content.length - 1 : prevState + 2;
+          })
+          setLoading(false); // Takes away the loading placeholder
+        }, 1500);
+      }
+    });
+    if(node) observer.current.observe(node); // Makes the observer watch last div
+  });
+
   return (
     <Container onClick={() => closeSidebar("home")}>
       <PostContainer>
-        {content.length === 0 && <LoadingPost />}
         {content.length !== 0 &&
-          content.map((post) => <HomePost key={post.id} post={post} />)}
+          content.map((post, index) => {
+          if (index < display ) return <HomePost key={post.id} post={post} />
+          else if (index === display) return <HomePost innerRef={lastElementRef} key={post.id} post={post} />
+        }
+        )}
+        {loading && <LoadingPost />}
       </PostContainer>
       <Suggestions currentUser={user} />
     </Container>

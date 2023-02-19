@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { useUser, useNotifications } from "../../../utils/hooks";
 import { Link } from "react-router-dom";
-import PostForm from "../posts/postform/PostForm";
 import styled from "styled-components";
 import * as BsIcons from "react-icons/bs";
 import { IoPaperPlaneOutline, IoPaperPlaneSharp } from "react-icons/io5";
 import { IconContext } from "react-icons";
 import { flexRowCenter, fadeIn } from "../../../styles/style";
+
 import Sidebar from "../sidebar/Sidebar";
 import NotifPopup from "../sidebar/notifications/NotifPopup";
 import UpperNav from "./UpperNav";
+import PostForm from "../posts/postform/PostForm";
 import instalogo from "../../../assets/logo/instalogo.png"
 
 const Nav = ({ user, sidebar, setSidebar, active, setActive }) => {

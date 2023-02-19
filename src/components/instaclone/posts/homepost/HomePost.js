@@ -10,7 +10,7 @@ import Header from "./Header";
 import Comments from "./Comments";
 import Add from "./Add";
 
-const HomePost = ({ post }) => {
+const HomePost = ({ post, innerRef }) => {
   const [settings, setSettings] = useState(false);
   const [liked, changeLiked] = useLiked(post);
   const [comments, insertComment] = useComments(post, `#a${post.id}`); // Ensure it starts with a letter
@@ -18,7 +18,7 @@ const HomePost = ({ post }) => {
   const navigate = useNavigate();
 
   return (
-    <Container>
+    <Container ref={innerRef}>
       <PostSettings settings={settings} setSettings={setSettings} post={post} />
       <Header setSettings={setSettings} user={user} timestamp={post.timestamp} />
       <Picture onClick={() => navigate(`/posts/${post.username}/${post.id}`)} title="Post picture" url={!user ? "" : post.photo} />

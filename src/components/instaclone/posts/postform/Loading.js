@@ -3,9 +3,11 @@ import styled from "styled-components";
 import loadingImage from "../../../../assets/icons/instaload.gif";
 
 const Loading = ({ loading }) => {
-  <Container loading={loading}>
-    <LoadingGif src={loadingImage} />
-  </Container>;
+  return (
+    <Container loading={loading}>
+      <LoadingGif src={loadingImage} />
+    </Container>
+  );
 };
 
 const Container = styled.div`
@@ -14,6 +16,11 @@ const Container = styled.div`
   justify-content: center;
   height: 100%;
   width: 100%;
+
+  @media (max-width: 750px) {
+    height: 400px;
+    width: 100%;
+  }
 `;
 
 const LoadingGif = styled.img`
