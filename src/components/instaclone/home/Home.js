@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { getHomepageContent } from "../../../firebase/firestore";
 import { flexColumnCenter } from "../../../styles/style";
 
@@ -25,38 +26,47 @@ const Home = ({ user, closeSidebar }) => {
 
   // Implementation of infinite scrolling
   const observer = useRef(); // Preserves intersection observer reference
-  const lastElementRef = useCallback(node => { // Gets called every time element carrying it renders
-    if(loading) return; // Don't try to load more posts when already loading more
-    if(observer.current) observer.current.disconnect(); // Disconnect previous observer
-    observer.current = new IntersectionObserver(entries => {
+  const lastElementRef = useCallback((node) => { // Is called every time last post gets created
+    if (loading) return; // Don't try to load more posts when already loading more
+    if (observer.current) observer.current.disconnect(); // Disconnect previous observer
+    observer.current = new IntersectionObserver((entries) => {
       // Show more posts when last post scrolls into view && there are more posts to show
-      if(entries[0].isIntersecting && display !== content.length - 1) {
+      if (entries[0].isIntersecting && display !== content.length - 1) {
         setLoading(true); // Will make loading placeholder post appear
         setTimeout(() => { // Gives the illusion of loading more posts, for now.
-          setDisplay(prevState => {
-            return (content.length - 1) < (prevState + 2) ? content.length - 1 : prevState + 2;
-          })
+          setDisplay((prevState) => {
+            return content.length - 1 < prevState + 2
+              ? content.length - 1
+              : prevState + 2;
+          });
           setLoading(false); // Takes away the loading placeholder
         }, 1500);
       }
     });
-    if(node) observer.current.observe(node); // Makes the observer watch last div
-  });
+    if (node) observer.current.observe(node); // Makes the observer watch last div
+  }, [loading, display, content]);
 
   return (
     <Container onClick={() => closeSidebar("home")}>
       <PostContainer>
         {content.length !== 0 &&
           content.map((post, index) => {
-          if (index < display ) return <HomePost key={post.id} post={post} />
-          else if (index === display) return <HomePost innerRef={lastElementRef} key={post.id} post={post} />
-        }
-        )}
+            if (index < display) return <HomePost key={post.id} post={post} />;
+            else if (index === display)
+              return (
+                <HomePost innerRef={lastElementRef} key={post.id} post={post} />
+              );
+          })}
         {loading && <LoadingPost />}
       </PostContainer>
       <Suggestions currentUser={user} />
     </Container>
   );
+};
+
+Home.propTypes = {
+  user: PropTypes.any,
+  closeSidebar: PropTypes.func.isRequired
 };
 
 const Container = styled.div`
@@ -66,12 +76,12 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
 
-  @media(max-width: 950px) {
+  @media (max-width: 950px) {
     flex-direction: column-reverse;
     align-items: center;
   }
 
-  @media(max-width: 750px) {
+  @media (max-width: 750px) {
     margin-top: 60px;
   }
 `;
@@ -81,12 +91,12 @@ const PostContainer = styled.div`
   padding: 30px 20px;
   gap: 10px;
 
-  @media(max-width: 950px) {
+  @media (max-width: 950px) {
     padding: 30px 0 0 0;
     margin-bottom: 49px;
   }
 
-  @media(max-width: 550px) {
+  @media (max-width: 550px) {
     width: 100%;
     padding-top: 16px;
   }

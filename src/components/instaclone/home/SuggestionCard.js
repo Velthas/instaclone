@@ -1,12 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { flexRowBetween, flexRowCenter } from "../../../styles/style";
 import { useFollow, useUser } from "../../../utils/hooks";
+import { Link } from "react-router-dom";
 
 const SuggestionCard = ({ suggestion, currentUser }) => {
-  const [user, updateUser] = useUser(suggestion);
-  const [followed, updateFollowed] = useFollow(user ? user : null);
+  const [user, updateUser] = useUser(suggestion); // Houses all information on user
+  const [followed, updateFollowed] = useFollow(user ? user : null); // Oversees follow status
   return (
     <Container>
       <InfoWrapper to={user ? `/profile/${user.username}` : ""}>
@@ -16,13 +17,18 @@ const SuggestionCard = ({ suggestion, currentUser }) => {
           <Name>Popular</Name>
         </div>
       </InfoWrapper>
-      {(currentUser && user) && user.username !== currentUser.displayName && (
+      {currentUser && user && user.username !== currentUser.displayName && (
         <FollowButton onClick={() => updateFollowed(!followed)}>
           {followed ? "Unfollow" : "Follow"}
         </FollowButton>
       )}
     </Container>
   );
+};
+
+SuggestionCard.propTypes = {
+  suggestion: PropTypes.string.isRequired,
+  currentUser: PropTypes.any,
 };
 
 const Container = styled.div`

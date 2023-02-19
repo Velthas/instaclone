@@ -1,5 +1,5 @@
-import styled, { keyframes } from 'styled-components';
-import React, {useState, useEffect} from 'react';
+import styled, { keyframes } from "styled-components";
+import React, { useState, useEffect } from "react";
 import { flexRowCenter } from '../../../styles/style';
 
 import loginbackground from "../../../assets/images/login.png";

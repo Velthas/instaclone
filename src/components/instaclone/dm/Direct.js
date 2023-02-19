@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { setupAllChatsListener } from "../../../firebase/firestore";
 import { IconContext } from "react-icons";
@@ -7,26 +8,27 @@ import { flexColumnCenter, flexRowCenter } from "../../../styles/style";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { BsChevronDown } from "react-icons/bs";
 import { createChatRoom } from "../../../firebase/firestore";
+import { getCurrentUserUsername } from "../../../firebase/authentication";
 
 import NewChatModal from "./NewChatModal";
 import ChatEntry from "./ChatEntry";
 import Room from "./room/Room";
-import { getCurrentUserUsername } from "../../../firebase/authentication";
 
 const Direct = ({ user, closeSidebar }) => {
   const currentUser = getCurrentUserUsername();
-  const unsubscribe = useRef(null);
-  const [modal, setModal] = useState(false);
-  const [rooms, setRooms] = useState(null);
-  const [newRoom, setNewRoom] = useState(null); // Will be used when user tries to open a new chatroom
-  const [active, setActive] = useState(null);
+  const unsubscribe = useRef(null); // Will hold unsubscribe database listener function
+  const [modal, setModal] = useState(false); // Regulates 'new chat' modal appearance.
+  const [rooms, setRooms] = useState(null); // Array of chatroom objects
+  const [newRoom, setNewRoom] = useState(null); // Stores empty empty/new chatrooms
+  const [active, setActive] = useState(null); // Causes selected chat to be highlighted
   const navigate = useNavigate();
 
-  // Sets correct icon on nav as active on mount
+  // Sets message section as active on navbar
   useEffect(() => {
-    closeSidebar("message")
-  }, [])
+    closeSidebar("message");
+  }, []);
 
+  // Attaches listener to listen for chat updates
   useEffect(() => {
     if (unsubscribe.current) unsubscribe.current();
     unsubscribe.current = setupAllChatsListener(user.displayName, setRooms);
@@ -35,30 +37,30 @@ const Direct = ({ user, closeSidebar }) => {
     };
   }, [user]);
 
+  // Handles creation of a new room when selected via the modal
+  // If the room exist and has at least one message, simply open it
+  // Else if the room exists but has no messages, set it as NewRoom to make it appear
+  // Otherwise, if room does not exist at all, create one, then open it.
   const createRoom = async (username) => {
-    // Used to tell if rooms exists but has no messages.
-    const [room] = rooms ? rooms.filter((room) => room.username === username) : [null]
+    const [room] = rooms ? rooms.filter((room) => room.username === username) : [null];
 
-    if (room && room.lastMessage)
-      //If the room exists and is displayed, click on the div and do nothing else
+    if (room && room.lastMessage) {
       document.querySelector(`#${room.chatId}`).click();
-    else if (room && !room.lastMessage) {
-      // If the room exists but is not displayed (no messages), make it appear and open the room
-      openChatRoom(room.chatId, room.username); // If there is a chat room with no messages, open it
-      setNewRoom(room); // The NewRoom will be displayed even if there are no messages.
+    } else if (room && !room.lastMessage) {
+      openChatRoom(room.chatId, room.username);
+      setNewRoom(room); // NewRoom is displayed unconditionally
     } else {
-      // If the room doesn't exist we must create it
-      const chatId = await createChatRoom(currentUser, username); // Will create buckets on both users and chat room
-      const newChat = { username, chatId }; // We add this manually to our front-end state.
-      setNewRoom(newChat); // This will make the new room appear on the page
-      openChatRoom(chatId, username); // Sets the room as active and sends user to the appropriate route
+      const chatId = await createChatRoom(currentUser, username); 
+      const newChat = { username, chatId }; 
+      setNewRoom(newChat); 
+      openChatRoom(chatId, username); 
     }
     setModal(false); // Close the modal
   };
 
   const openChatRoom = (id, username) => {
-    setActive({id, username}); // Will make it so the chat is highlighted
-    navigate(`${id}`); // Redirects to the appropriate route
+    setActive({id, username});
+    navigate(`${id}`); // Will make the chatroom component appear, loading messages
   };
 
   return (
@@ -106,6 +108,11 @@ const Direct = ({ user, closeSidebar }) => {
       </Container>
     </IconContext.Provider>
   );
+};
+
+Direct.propTypes = {
+  user: PropTypes.object,
+  closeSidebar: PropTypes.func.isRequired,
 };
 
 const Container = styled.div`

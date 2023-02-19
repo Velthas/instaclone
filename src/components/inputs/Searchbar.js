@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { BsSearch, BsXCircleFill } from "react-icons/bs";
 
 const Searchbar = ({ setQuery, id }) => {
@@ -23,15 +24,16 @@ const Searchbar = ({ setQuery, id }) => {
             onChange={(e) => setQuery(e.target.value)}
             autoComplete="off"
           />
-          <CloseIcon
-            color="#c7c7c7"
-            size="13"
-            onClick={() => setFocused(false)}
-          />
+          <CloseIcon color="#c7c7c7" size="13" onClick={() => setFocused(false)} />
         </InputContainer>
       )}
     </>
   );
+};
+
+Searchbar.propTypes = {
+  id: PropTypes.string.isRequired,
+  setQuery: PropTypes.func.isRequired,
 };
 
 const Container = styled.div`

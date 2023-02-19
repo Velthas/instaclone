@@ -1,6 +1,6 @@
 import React from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { validateMail, validatePsw } from "../../utils/validation";
 import { flexRowCenter } from "../../styles/style";
 import { loginUser } from "../../firebase/authentication";
@@ -8,18 +8,17 @@ import { redirect } from "react-router-dom";
 
 import InterInput from "../inputs/InterInput";
 
-
-const LoginForm = ({displayError}) => {
+const LoginForm = ({ displayError }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
-    displayError('');
-    const mail = document.querySelector('#mail').value;
-    const psw = document.querySelector('#pass').value;
+    displayError("");
+    const mail = document.querySelector("#mail").value;
+    const psw = document.querySelector("#pass").value;
 
     const isMailValid = validateMail(mail);
     const isPswValid = validatePsw(psw);
 
-    switch(true) {
+    switch (true) {
       case isMailValid !== true:
         displayError(isMailValid);
         return;
@@ -28,20 +27,20 @@ const LoginForm = ({displayError}) => {
         return;
       default:
         loginUser(mail, psw);
-        redirect('/');
-    };
+        redirect("/");
+    }
   };
 
   return (
     <Form id="login">
-      <InterInput id='mail' type='text' label='Email' checkValid={validateMail} />
+      <InterInput id="mail" type="text" label="Email" checkValid={validateMail} />
       <InterInput id="pass" type="password" label="Password" checkValid={validatePsw} />
       <Button type="submit" onClick={(e) => handleSubmit(e)}>
         Log in
       </Button>
     </Form>
-  )
-}
+  );
+};
 
 LoginForm.propTypes = {
   displayError: PropTypes.func.isRequired,

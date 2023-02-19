@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-
+import PropTypes from "prop-types";
 import { BsCircle, BsCheckCircleFill } from "react-icons/bs";
 import { flexRowBetween, flexRowCenter } from "../../../styles/style";
 
@@ -17,6 +17,12 @@ const UserCardChat = ({ user, toggleSelected, selected }) => {
       {selected === user.username ? <Checked /> : <BsCircle />}
     </Container>
   );
+};
+
+UserCardChat.propTypes = {
+  user: PropTypes.object.isRequired,
+  toggleSelected: PropTypes.func.isRequired,
+  selected: PropTypes.any,
 };
 
 const Container = styled.div`
@@ -37,7 +43,6 @@ const CardInfo = styled.div`
   justify-content: flex-start;
   gap: 10px;
 `;
-
 
 const Picture = styled.div`
   background-image: url(${({ url }) => url});
@@ -62,6 +67,6 @@ const Name = styled.div`
 
 const Checked = styled(BsCheckCircleFill)`
   color: #0095f6;
-`
+`;
 
 export default UserCardChat;

@@ -75,7 +75,7 @@ const MainWrapper = styled.div`
   @media (max-width: 550px) {
     width: 100%;
   }
-`
+`;
 
 const ForgotPass = styled.p`
   margin-top: 12px;

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { IoMdClose } from "react-icons/io";
 import { flexColumnCenter, flexRowBetween, flexRowCenter } from "../../../styles/style";
 import { useSearch } from "../../../utils/hooks";
@@ -10,8 +11,9 @@ import UserCardChat from "./UserCardChat";
 const NewChatModal = ({ setModal, createRoom }) => {
   const currentUser = getCurrentUserUsername();
   const [profiles, setQuery] = useSearch(); // Handles search queries to the backend
-  const [selected, setSelected] = useState(null); // Use this to store username of selected user
+  const [selected, setSelected] = useState(null); // Used to highlight selected user
 
+  // Makes a check appear next to the selected profile
   const toggleSelected = (username) => {
     if (selected === username) setSelected(null);
     else setSelected(username);
@@ -21,11 +23,7 @@ const NewChatModal = ({ setModal, createRoom }) => {
     <Backdrop>
       <Container>
         <Header>
-          <IoMdClose
-            onClick={() => setModal(false)}
-            size={24}
-            title="close form"
-          />
+          <IoMdClose onClick={() => setModal(false)} size={24} title="close form" />
           <Heading>New Message</Heading>
           <Continue onClick={() => createRoom(selected)}>Continue</Continue>
         </Header>
@@ -46,7 +44,7 @@ const NewChatModal = ({ setModal, createRoom }) => {
               .map((profile) => {
                 return (
                   <UserCardChat
-                    key={profile.id}
+                    key={profile.username}
                     user={profile}
                     selected={selected}
                     toggleSelected={toggleSelected}
@@ -58,6 +56,11 @@ const NewChatModal = ({ setModal, createRoom }) => {
     </Backdrop>
   );
 };
+
+NewChatModal.propTypes = {
+  setModal: PropTypes.func.isRequired,
+  createRoom: PropTypes.func.isRequired,
+}
 
 const Backdrop = styled.div`
   position: fixed;

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
 import { BsEmojiSmile } from "react-icons/bs";
 
@@ -21,7 +22,9 @@ const Textbox = ({ sendMessage }) => {
   );
 };
 
-export default Textbox;
+Textbox.propTypes = {
+  sendMessage: PropTypes.func.isRequired
+};
 
 const InputContainer = styled.div`
   padding: 20px;
@@ -63,3 +66,5 @@ const Send = styled.button`
     color: #00376b;
   }
 `;
+
+export default Textbox;

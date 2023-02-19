@@ -18,7 +18,6 @@ const Input = ({ id, type, placeholder, label, value, styling }) => {
           value={input}
           styling={styling}
         />
-        <Description></Description>
       </InputWrapper>
     </Container>
   );
@@ -60,10 +59,6 @@ const TextBox = styled.input`
   &:focus-visible {
     outline: 1px solid black;
   }
-`;
-
-const Description = styled.p`
-  margin-top: 16px;
 `;
 
 const Label = styled.label`

@@ -1,15 +1,16 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
 import { useCommentsLiked, useUser } from "../../../../utils/hooks";
 import { likeDiscursiveFormat, formatDateShort } from "../../../../utils/formatting";
-import heart from "../../../../assets/icons/heart.svg";
-import fillheart from "../../../../assets/icons/fillheart.svg";
+import { BsHeart, BsHeartFill } from "react-icons/bs";
 
 const ExtendedComment = ({ comment, post }) => {
   const [user, getUser] = useUser(comment.author);
   const [liked, changeLiked] = useCommentsLiked(comment, post);
+
   return (
     <Comment>
       <Main>
@@ -28,20 +29,23 @@ const ExtendedComment = ({ comment, post }) => {
               {formatDateShort(comment.timestamp)}
             </Undercomment>
             <Underimportant>
-              {comment.likedby.length === 0 ? '' : likeDiscursiveFormat(comment.likedby, liked)}
+              {comment.likedby.length === 0 ? "" : likeDiscursiveFormat(comment.likedby, liked)}
             </Underimportant>
             <Underimportant>Reply</Underimportant>
           </Extra>
         </Wrapper>
       </Main>
-      <LikeIcon
-        liked={liked}
-        onClick={() => changeLiked(liked)}
-        src={liked ? fillheart : heart}
-        alt="like comment"
-      />
+      {liked
+        ? <LikedHeart title="Unlike comment" onClick={() => changeLiked(liked)} />
+        : <EmptyHeart title="Like comment" onClick={() => changeLiked(liked)} />
+      }
     </Comment>
   );
+};
+
+ExtendedComment.propTypes = {
+  comment: PropTypes.object.isRequired,
+  post: PropTypes.object.isRequired,
 };
 
 const Comment = styled.div`
@@ -82,7 +86,7 @@ const Wrapper = styled.div`
 
 const StyledLink = styled(Link)`
   color: #262626;
-`
+`;
 
 const Username = styled.div`
   font-weight: 500;
@@ -109,18 +113,23 @@ const Undercomment = styled.div`
 
 const Underimportant = styled(Undercomment)`
   font-weight: 500;
-`
+`;
 
-const LikeIcon = styled.img`
+const Icon = `
   cursor: pointer;
   width: 12px;
   height: 12px;
   align-self: center;
-  ${({ liked }) => {
-    return liked
-      ? "filter: invert(50%) sepia(87%) saturate(5070%) hue-rotate(332deg) brightness(99%) contrast(85%)"
-      : "";
-  }};
+`;
+
+const EmptyHeart = styled(BsHeart)` 
+  ${Icon}
+  color: #262626;
+`;
+
+const LikedHeart = styled(BsHeartFill)`
+  ${Icon}  
+  color: crimson;
 `;
 
 export default ExtendedComment;

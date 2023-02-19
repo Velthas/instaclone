@@ -1,15 +1,16 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { flexColumnCenter, flexRowBetween } from "../../../styles/style";
 import { useUser } from "../../../utils/hooks";
-import SuggestionCard from "./SuggestionCard";
 import { Link } from "react-router-dom";
 
+import SuggestionCard from "./SuggestionCard";
+
 const Suggestions = ({ currentUser }) => {
-  const [user, updateUser] = useUser(
-    currentUser ? currentUser.displayName : null
-  );
+  const [user, updateUser] = useUser(currentUser ? currentUser.displayName : null);
   const userList = ["test", "panampalmer"];
+
   return (
     <Container>
       <StyledLink to={user ? `/profile/${user.username}` : ""}>
@@ -36,6 +37,10 @@ const Suggestions = ({ currentUser }) => {
   );
 };
 
+Suggestions.propTypes = {
+  currentUser: PropTypes.any,
+};
+
 const Container = styled.div`
   ${flexColumnCenter};
   width: 350px;
@@ -43,14 +48,13 @@ const Container = styled.div`
   padding-top: 30px;
   gap: 8px;
 
-  
-  @media(max-width: 950px) {
+  @media (max-width: 950px) {
     height: min-content;
     width: 470px;
     min-height: auto;
   }
 
-  @media(max-width: 550px) {
+  @media (max-width: 550px) {
     display: none;
   }
 `;
@@ -101,13 +105,14 @@ const Wrapper = styled.div`
 const ForYou = styled(Name)`
   font-weight: 500;
   font-size: 0.9rem;
-`
+`;
+
 const More = styled(Username)`
   cursor: pointer;
   font-size: 0.8rem;
-  &:hover{
+  &:hover {
     color: #8e8e8e;
   }
-`
+`;
 
 export default Suggestions;

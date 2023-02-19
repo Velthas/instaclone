@@ -1,14 +1,14 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { useCommentsLiked } from "../../../../utils/hooks";
 import { flexRowBetween } from "../../../../styles/style";
 import { Link } from "react-router-dom";
-
-import heart from "../../../../assets/icons/heart.svg";
-import fillheart from "../../../../assets/icons/fillheart.svg";
+import { BsHeart, BsHeartFill } from "react-icons/bs";
 
 const MinimalComment = ({ comment, post }) => {
   const [liked, changeLiked] = useCommentsLiked(comment, post);
+
   return (
     <Container>
       <div>
@@ -21,14 +21,17 @@ const MinimalComment = ({ comment, post }) => {
             : comment.content}
         </Comment>
       </div>
-      <LikeIcon
-        liked={liked}
-        onClick={() => changeLiked(liked)}
-        src={liked ? fillheart : heart}
-        alt="like comment"
-      />
+      {liked 
+        ? <LikedHeart title="Unlike comment" onClick={() => changeLiked(liked)} />
+        : <EmptyHeart title="Like comment" onClick={() => changeLiked(liked)} />
+      }
     </Container>
   );
+};
+
+MinimalComment.propTypes = {
+  comment: PropTypes.object.isRequired,
+  post: PropTypes.object.isRequired,
 };
 
 const Container = styled.div`
@@ -53,16 +56,21 @@ const Comment = styled.p`
   word-break: break-word;
 `;
 
-const LikeIcon = styled.img`
+const Icon = `
+  cursor: pointer;
   width: 12px;
   height: 12px;
   align-self: center;
-  cursor: pointer;
-  ${({ liked }) => {
-    return liked
-      ? "filter: invert(50%) sepia(87%) saturate(5070%) hue-rotate(332deg) brightness(99%) contrast(85%)"
-      : "";
-  }};
+`;
+
+const EmptyHeart = styled(BsHeart)`
+  ${Icon}
+  color: #262626;
+`;
+
+const LikedHeart = styled(BsHeartFill)`
+  ${Icon}
+  color: crimson;
 `;
 
 export default MinimalComment;

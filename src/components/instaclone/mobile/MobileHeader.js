@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { BsChevronLeft } from "react-icons/bs";
 
-// This component is used to provide the 'slip' on top on mobile view
+// Appears only in mobile view on top of page
 const MobileHeader = ({ name }) => {
   const navigate = useNavigate();
 
@@ -13,6 +14,10 @@ const MobileHeader = ({ name }) => {
       <Heading>{name}</Heading>
     </Container>
   );
+};
+
+MobileHeader.propTypes = {
+  name: PropTypes.string.isRequired,
 };
 
 const Container = styled.div`

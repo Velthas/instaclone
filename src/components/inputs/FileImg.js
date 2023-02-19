@@ -5,6 +5,7 @@ import { isFileImage } from "../../utils/validation";
 
 const FileImg = ({ id, url, imgStyle }) => {
   const [photo, setPhoto] = useState(url);
+
   const handleChange = (e) => {
     const [file] = e.target.files;
     let urlpic = URL.createObjectURL(file);
@@ -31,7 +32,7 @@ const FileImg = ({ id, url, imgStyle }) => {
 FileImg.propTypes = {
   id: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
-  alt: PropTypes.string,
+  imgStyle: PropTypes.string,
 };
 
 const Input = styled.input`

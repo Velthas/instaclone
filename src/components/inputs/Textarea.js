@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const TextArea = ({ value, id, label }) => {
   const [input, setInput] = useState(value ? value : "");
@@ -21,6 +22,12 @@ const TextArea = ({ value, id, label }) => {
       </div>
     </Container>
   );
+};
+
+TextArea.propTypes = {
+  value: PropTypes.string,
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string
 };
 
 const Container = styled.div`

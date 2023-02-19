@@ -7,12 +7,12 @@ import { redirect } from "react-router-dom";
 const TestLogin = () => {
   const handleClick = () => {
     loginTestUser();
-    redirect('/');
-  }
+    redirect("/");
+  };
 
   return (
     <Container>
-      Want to poke around? 
+      Want to poke around?
       <Url onClick={handleClick}>Use a test account</Url>
     </Container>
   );

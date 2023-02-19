@@ -44,16 +44,16 @@ const FacebookWrapper = styled.div`
   color: #385185;
   cursor: pointer;
   ${flexRowCenter}
-`
+`;
 
 const FacebookIcon = styled(GrFacebook)`
   margin-right: 10px;
   height: 24px;
   width: 24px;
-`
+`;
 
 const FacebookSpan = styled.span`
   font-weight: 500;
-`
+`;
 
 export default Facebook;

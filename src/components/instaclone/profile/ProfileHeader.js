@@ -62,7 +62,7 @@ const Header = styled.div`
 
 const ProfilePic = styled.div`
   position: relative;
-  background-image: url(${({ url }) => (url ? url : '')};);
+  background-image: url(${({ url }) => (url ? url : '')});
   background-position: center;
   background-size: cover;
   height: 150px;

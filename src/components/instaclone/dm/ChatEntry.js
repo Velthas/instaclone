@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { flexRowCenter } from "../../../styles/style";
 import { formatDateShort } from "../../../utils/formatting";
 import { useUser } from "../../../utils/hooks";
@@ -7,19 +8,30 @@ import { useUser } from "../../../utils/hooks";
 const ChatEntry = ({ room, active, openChat }) => {
   const [user, updateUser] = useUser(room.username);
   return (
-    <Container onClick={() => openChat(room.chatId, room.username)} active={ active ? active.id === room.chatId : false} id={room.chatId}>
+    <Container
+      onClick={() => openChat(room.chatId, room.username)}
+      active={active ? active.id === room.chatId : false}
+      id={room.chatId}
+    >
       <Image url={user ? user.pfp : ""} />
       <Info>
         <Username>{room.username}</Username>
         <LastMessage>
           {room.lastMessage &&
-            room.lastMessage.content.slice(0, 5) + "..." 
-            + " · " +
-            formatDateShort(room.lastMessage.timestamp)}
+            room.lastMessage.content.slice(0, 5) +
+              "..." +
+              " · " +
+              formatDateShort(room.lastMessage.timestamp)}
         </LastMessage>
       </Info>
     </Container>
   );
+};
+
+ChatEntry.propTypes = {
+  room: PropTypes.object.isRequired,
+  active: PropTypes.object,
+  openChat: PropTypes.func.isRequired,
 };
 
 const Container = styled.div`
@@ -29,7 +41,7 @@ const Container = styled.div`
   width: 100%;
   padding: 8px 20px;
   cursor: pointer;
-  background-color: ${({active}) => active ? '#efefef' : '#fff' };
+  background-color: ${({ active }) => (active ? "#efefef" : "#fff")};
 `;
 
 const Image = styled.div`
@@ -48,7 +60,7 @@ const Info = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-`
+`;
 
 const Username = styled.span`
   font-weight: 400;

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { BsXCircle, BsCheckCircle } from "react-icons/bs";
 import { flexRowCenter } from "../../styles/style";
 import { IconContext } from "react-icons";
@@ -11,7 +12,7 @@ const InterInput = ({ label, type, id, checkValid }) => {
   const handleChange = (e) => {
     setValid(true);
     const valueIsValid = checkValid(e.target.value);
-    if(valueIsValid !== true) setValid(false);
+    if (valueIsValid !== true) setValid(false);
     setValue(e.target.value);
   };
 
@@ -35,6 +36,13 @@ const InterInput = ({ label, type, id, checkValid }) => {
       </Container>
     </IconContext.Provider>
   );
+};
+
+InterInput.propTypes = {
+  label: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  checkValid: PropTypes.func.isRequired,
 };
 
 const Container = styled.div`
