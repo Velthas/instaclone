@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { BsEmojiSmile, BsGeoAlt, BsChevronDown } from "react-icons/bs";
 import { flexRowBetween } from "../../../../styles/style";
 
 const PostInfo = ({ user, loading, photo }) => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
   const handleChange = (e) => setValue(e.target.value);
   return (
     <Container loading={loading} photo={photo}>
@@ -41,6 +42,12 @@ const PostInfo = ({ user, loading, photo }) => {
   );
 };
 
+PostInfo.propTypes = {
+  user: PropTypes.object,
+  loading: PropTypes.bool.isRequired,
+  photo: PropTypes.any
+};
+
 const Container = styled.div`
   flex-shrink: 0;
   height: 100%;
@@ -48,7 +55,8 @@ const Container = styled.div`
   height: 0%;
   transition: 0.3s ease-out;
   border-left: 1px solid #dfdfdf;
-  ${({ photo }) => (photo ? "width: 300px; opacity: 1; height: 100%;" : "opacity: 0;")};
+  ${({ photo }) =>
+    photo ? "width: 300px; opacity: 1; height: 100%;" : "opacity: 0;"};
   ${({ loading }) => (loading ? "display: none" : "")};
   background-color: #fff;
 
@@ -78,6 +86,10 @@ const UserInfo = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
+
+  @media (max-width: 750px) {
+    padding: 8px 16px;
+  }
 `;
 
 const TextArea = styled.textarea`

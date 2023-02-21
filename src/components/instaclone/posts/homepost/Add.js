@@ -1,16 +1,17 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { BsEmojiSmile } from "react-icons/bs";
 import { flexRowBetween } from "../../../../styles/style";
 
 const Add = ({ post, insertComment }) => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
 
   const handleChange = (e) => setValue(e.target.value);
   const sendComment = () => {
     insertComment();
-    setValue('');
-  }
+    setValue("");
+  };
 
   return (
     <AddComment>
@@ -20,12 +21,19 @@ const Add = ({ post, insertComment }) => {
         type="text"
         id={`a${post.id}`}
         value={value}
-        autoComplete='off'
+        autoComplete="off"
       />
-      <Send value={value} onClick={sendComment}>Publish</Send>
+      <Send value={value} onClick={sendComment}>
+        Publish
+      </Send>
       <Icon />
     </AddComment>
   );
+};
+
+Add.propTypes = {
+  post: PropTypes.object.isRequired,
+  insertComment: PropTypes.func.isRequired,
 };
 
 const AddComment = styled.div`
@@ -61,7 +69,7 @@ const Input = styled.input`
 `;
 
 const Send = styled.button`
-  display: ${({value}) => value.length > 0 ? 'block' : 'none'};
+  display: ${({ value }) => (value.length > 0 ? "block" : "none")};
   font-weight: 500;
   color: #3897f0;
   border: none;

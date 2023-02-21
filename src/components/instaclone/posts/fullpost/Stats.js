@@ -1,14 +1,20 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { likeDiscursiveFormat, formatDateLong } from "../../../../utils/formatting";
 
 const Stats = ({ post, liked }) => {
   return (
-  <Container>
-    <Likes>{post ? likeDiscursiveFormat(post.likedby, liked) : ""}</Likes>
-    <Date>{post ? formatDateLong(post.timestamp) : ""}</Date>
-  </Container>
+    <Container>
+      <Likes>{post ? likeDiscursiveFormat(post.likedby, liked) : ""}</Likes>
+      <Date>{post ? formatDateLong(post.timestamp) : ""}</Date>
+    </Container>
   );
+};
+
+Stats.propTypes = {
+  post: PropTypes.object,
+  liked: PropTypes.bool,
 };
 
 const Container = styled.div`

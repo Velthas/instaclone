@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 import { usePost, useComments, useFollow } from "../../../../utils/hooks";
-import { flexColumnCenter, flexRowCenter} from "../../../../styles/style";
+import { flexColumnCenter, flexRowCenter } from "../../../../styles/style";
 
 import PostSettings from "../PostSettings";
 import Header from "./Header";
@@ -12,35 +13,52 @@ import Stats from "./Stats";
 import Add from "./Add";
 import MobileHeader from "../../mobile/MobileHeader";
 
-
 const FullPost = ({ closeSidebar }) => {
   const { postid, username } = useParams();
-  const postInfo = { id: postid, username };
-  const [settings, setSettings] = useState(false);
+  const postInfo = { id: postid, username }; // Used to fetch information about the post
+  const [settings, setSettings] = useState(false); // Regulates display of post settings
   const [post, user, liked, changeLiked] = usePost(username, postid);
   const [comments, insertComment] = useComments(postInfo, `#a${postInfo.id}`);
   const [followed, updateFollowed] = useFollow(user ? user : null);
 
   return (
     <Container onClick={closeSidebar}>
-      <MobileHeader name='Post' />
+      <MobileHeader name="Post" />
       <PostWrapper>
         {post && (
-          <PostSettings settings={settings} setSettings={setSettings} post={post} />
+          <PostSettings
+            settings={settings}
+            setSettings={setSettings}
+            post={post}
+          />
         )}
-        <Photo title='post picture' url={post ? post.photo : ""} />
+        <Photo title="post picture" url={post ? post.photo : ""} />
         <Info>
-          <Header user={user} setSettings={setSettings} followed={followed} updateFollowed={updateFollowed} />
-          <Comments post={post} user={user} comments={comments} postInfo={postInfo} />
+          <Header
+            user={user}
+            setSettings={setSettings}
+            followed={followed}
+            updateFollowed={updateFollowed}
+          />
+          <Comments
+            post={post}
+            user={user}
+            comments={comments}
+            postInfo={postInfo}
+          />
           <StatWrapper>
             <Icons liked={liked} changeLiked={changeLiked} />
             <Stats post={post} liked={liked} />
           </StatWrapper>
-            <Add postInfo={postInfo} insertComment={insertComment} />
+          <Add postInfo={postInfo} insertComment={insertComment} />
         </Info>
       </PostWrapper>
     </Container>
   );
+};
+
+FullPost.propTypes = {
+  closeSidebar: PropTypes.func.isRequired,
 };
 
 const Container = styled.div`
@@ -55,7 +73,6 @@ const Container = styled.div`
     font-size: 0.9rem;
     flex-direction: column;
   }
-
 `;
 
 const PostWrapper = styled.div`
@@ -104,7 +121,7 @@ const StatWrapper = styled.div`
   padding: 0 5%;
   border-bottom: 1px solid #dfdfdf;
   width: 100%;
-  
+
   @media (max-width: 750px) {
     padding: 0;
   }

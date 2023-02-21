@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
 import { BsThreeDots } from "react-icons/bs";
 import { Link } from "react-router-dom";
@@ -29,6 +30,13 @@ const Header = ({ user, setSettings, followed, updateFollowed }) => {
       <Dots title="settings" onClick={() => setSettings(true)} />
     </Container>
   );
+};
+
+Header.propTypes = {
+  user: PropTypes.object,
+  setSettings: PropTypes.func.isRequired,
+  followed: PropTypes.bool.isRequired,
+  updateFollowed: PropTypes.func.isRequired,
 };
 
 const Container = styled.div`

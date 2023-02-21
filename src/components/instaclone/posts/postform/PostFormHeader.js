@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { BsArrowLeft, BsXLg } from "react-icons/bs";
 import { flexRowBetween } from "../../../../styles/style";
 
-const PostFormHeader = ({ photo, setPhoto, handleSubmit, closeForm  }) => {
+const PostFormHeader = ({ photo, setPhoto, handleSubmit, closeForm }) => {
   return (
     <FormTitle photo={photo}>
       <XIcon onClick={() => closeForm(false)} />
@@ -12,6 +13,13 @@ const PostFormHeader = ({ photo, setPhoto, handleSubmit, closeForm  }) => {
       {photo && <SharePost onClick={(e) => handleSubmit(e)}>Share</SharePost>}
     </FormTitle>
   );
+};
+
+PostFormHeader.propTypes = {
+  photo: PropTypes.any,
+  setPhoto: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  closeForm: PropTypes.func.isRequired,
 };
 
 const SharePost = styled.p`
@@ -27,7 +35,10 @@ const SharePost = styled.p`
 const FormTitle = styled.div`
   transition: 1s ease-out;
   padding: 0 16px;
-  ${({ photo }) => (photo ? flexRowBetween : 'display: flex; justify-content: flex-start; align-items: center;')};
+  ${({ photo }) =>
+    photo
+      ? flexRowBetween
+      : "display: flex; justify-content: flex-start; align-items: center;"};
   width: 100%;
   height: 45px;
   border-bottom: 1px solid #dfdfdf;
@@ -61,7 +72,8 @@ const Heading = styled.h1`
   font-size: 1rem;
   font-weight: 500;
   color: #000;
-  ${({ photo }) => (photo ? 'width: auto;' : 'width: 90%; text-align: center;')};
+  ${({ photo }) =>
+    photo ? "width: auto;" : "width: 90%; text-align: center;"};
 `;
 
 export default PostFormHeader;

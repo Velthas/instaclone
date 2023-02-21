@@ -14,15 +14,17 @@ import PostForm from "../posts/postform/PostForm";
 import instalogo from "../../../assets/logo/instalogo.png"
 
 const Nav = ({ user, sidebar, setSidebar, active, setActive }) => {
-  const [userdata, getUserData] = useUser(user ? user.displayName : null); // Is responsible for user data
+  const [userdata, getUserData] = useUser(user ? user.displayName : null);
   const [notifications, markAllAsSeen] = useNotifications(user ? user.displayName : null);
   const [postForm, setPostForm] = useState(false); // Regulates new post form display
 
+  // Click handler for icons that don't open the sidebar
   const handleClick = (icon) => {
     if (sidebar) setSidebar(false);  // Close the sidebar if it's open
     setActive(icon); // Marks the 'icon' as active
   };
 
+  // Click handler for icons that open the sidebar
   const toggleSidebar = (icon) => {
     if (icon === active && sidebar === true) {
       setSidebar(false); // Close sidebar on same icon click
@@ -46,7 +48,13 @@ const Nav = ({ user, sidebar, setSidebar, active, setActive }) => {
   return (
     <IconContext.Provider value={{ style: { cursor: "pointer" }, size: 24 }}>
       <Space sidebar={sidebar} active={active} />
-      <UpperNav markAllAsSeen={markAllAsSeen} toggleSidebar={toggleSidebar} active={active} />
+      <UpperNav 
+        notifications={notifications} 
+        markAllAsSeen={markAllAsSeen} 
+        toggleSidebar={toggleSidebar} 
+        active={active} 
+      />
+
       <Navbar sidebar={sidebar}>
         <Sidebar
           active={sidebar}
@@ -283,20 +291,27 @@ const Label = styled.span`
   @media(max-width: 1100px) {
     display: none;
   }
-`
+`;
 
 const NotifListItem = styled(ListItem)`
   &::after {
     ${({ notif }) => (notif.length > 0 && !notif[0].seen ? "content: '';" : "")}
     position: absolute;
-    top: -3px;
-    right: -4px;
+    top: 6px;
+    left: ${({ sidebar }) => (sidebar ? "24px" : "28px")};
     border: 2px solid #fff;
     border-radius: 100%;
     height: 10px;
     width: 10px;
 
     background-color: #fe004b;
+  }
+
+  @media(max-width: 1100px) {
+    &::after {
+      top: 6px;
+      left: 24px;
+    }
   }
 `;
 

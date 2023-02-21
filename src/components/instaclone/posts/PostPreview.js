@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import styled from "styled-components";
+import PropTypes from "prop-types";
 import { useComments } from "../../../utils/hooks";
 import { useNavigate } from "react-router-dom";
 import { fadeIn } from "../../../styles/style";
-import styled from "styled-components";
 import { IoHeart, IoChatbubbleSharp } from "react-icons/io5";
 
 const PostPreview = ({ post }) => {
@@ -29,6 +30,10 @@ const PostPreview = ({ post }) => {
       <PreviewImg src={post.photo} />
     </PostCard>
   );
+};
+
+PostPreview.propTypes = {
+  post: PropTypes.object.isRequired,
 };
 
 const PostCard = styled.div`

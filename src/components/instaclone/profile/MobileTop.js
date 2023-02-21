@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { BsChevronLeft } from "react-icons/bs";
 import { BsGearWide } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +19,10 @@ const MobileTop = ({ user }) => {
       <Heading>{user ? user.username : ""}</Heading>
     </Container>
   );
+};
+
+MobileTop.propTypes = {
+  user: PropTypes.object
 };
 
 const Container = styled.div`

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
 import { BsThreeDots } from "react-icons/bs";
 import { Link } from "react-router-dom";
@@ -8,9 +9,9 @@ import { formatDateShort } from "../../../../utils/formatting";
 const Header = ({ user, timestamp, setSettings }) => {
   return (
     <Container>
-      <StyledLink to={user ? `/profile/${user.username}` : ''}>
+      <StyledLink to={user ? `/profile/${user.username}` : ""}>
         <User>
-          <UserPhoto title="author profile picture" url={user ? user.pfp : ""} />
+          <UserPhoto title="author profile picture" url={user ? user.pfp : ""}/>
           <Bold>{user ? user.username : ""}</Bold>
           <Date>• {formatDateShort(timestamp)}</Date>
         </User>
@@ -19,6 +20,12 @@ const Header = ({ user, timestamp, setSettings }) => {
     </Container>
   );
 };
+
+Header.propTypes = {
+  user: PropTypes.object,
+  timestamp: PropTypes.object,
+  setSettings: PropTypes.func.isRequired,
+}
 
 const Container = styled.div`
   ${flexRowBetween}

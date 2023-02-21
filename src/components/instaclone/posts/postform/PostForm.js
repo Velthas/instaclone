@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import styled from "styled-components";
+import PropTypes from "prop-types";
 import { BsXLg } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 import { validateDescription, isFileImage } from "../../../../utils/validation";
 import { getCurrentUserUsername } from "../../../../firebase/authentication";
 import { createPost, getPostDocReference } from "../../../../firebase/firestore";
@@ -53,13 +54,13 @@ const PostForm = ({ closeForm, user }) => {
         payload.id = docRef.id;
         payload.description = descr.value;
         payload.username = username;
-        payload.timestamp = Timestamp.fromDate(new Date());
+        payload.timestamp = Timestamp.now();
         payload.likedby = [];
 
         await createPost(docRef, payload); // Wait until process is done
         setLoading(false); // Stop displaying the loading gif
         closeForm(false); // Close the form
-        navigate(`/posts/${user.username}/${docRef.id}`) // Redirect user to the full post interface
+        navigate(`/posts/${user.username}/${docRef.id}`) // Redirect user to post
     }
   };
 
@@ -87,6 +88,11 @@ const PostForm = ({ closeForm, user }) => {
       </Container>
     </Backdrop>
   );
+};
+
+PostForm.propTypes = {
+  user: PropTypes.object,
+  closeForm: PropTypes.func.isRequired,
 };
 
 const Backdrop = styled.div`

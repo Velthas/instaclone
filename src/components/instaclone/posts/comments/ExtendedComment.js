@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
 import { useCommentsLiked, useUser } from "../../../../utils/hooks";
 import { likeDiscursiveFormat, formatDateShort } from "../../../../utils/formatting";
-import { BsHeart, BsHeartFill } from "react-icons/bs";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
 
 const ExtendedComment = ({ comment, post }) => {
   const [user, getUser] = useUser(comment.author);
@@ -97,6 +97,7 @@ const Username = styled.div`
 const Message = styled.div`
   font-size: 1rem;
   display: inline;
+  word-break: break-word;
 `;
 
 const Extra = styled.div`
@@ -122,12 +123,12 @@ const Icon = `
   align-self: center;
 `;
 
-const EmptyHeart = styled(BsHeart)` 
+const EmptyHeart = styled(FaRegHeart)` 
   ${Icon}
   color: #262626;
 `;
 
-const LikedHeart = styled(BsHeartFill)`
+const LikedHeart = styled(FaHeart)`
   ${Icon}  
   color: crimson;
 `;

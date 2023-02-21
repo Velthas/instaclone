@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { flexRowBetween } from "../../../../styles/style";
 import { BsEmojiSmile } from "react-icons/bs";
 
 const Add = ({ postInfo, insertComment }) => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
   const handleChange = (e) => setValue(e.target.value);
 
   return (
@@ -19,9 +20,16 @@ const Add = ({ postInfo, insertComment }) => {
         maxLength={150}
         placeholder="Add your comment..."
       />
-      <Button value={value} onClick={() => insertComment()}>Publish</Button>
+      <Button value={value} onClick={() => insertComment()}>
+        Publish
+      </Button>
     </Container>
   );
+};
+
+Add.propTypes = {
+  postInfo: PropTypes.object.isRequired,
+  insertComment: PropTypes.func.isRequired
 };
 
 const Container = styled.div`
@@ -37,14 +45,14 @@ const Container = styled.div`
 `;
 
 const Button = styled.button`
-  display: ${(props) => props.value.length > 0 ? 'block' : 'none'};
+  display: ${(props) => (props.value.length > 0 ? "block" : "none")};
   font-weight: bold;
   color: #3897f0;
   border: none;
   border-radius: 3px;
   background-color: transparent;
   cursor: pointer;
-    &:hover{
+  &:hover {
     color: #00376b;
   }
 `;

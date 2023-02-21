@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
 import { useParams } from "react-router-dom";
 
@@ -8,15 +9,15 @@ import ProfileHeader from "./ProfileHeader";
 import ProfileSections from "./ProfileSections";
 import MobileTop from "./MobileTop";
 
-const Profile = ({user, posts, closeSidebar}) => {
-  const {username} = useParams();
+const Profile = ({ user, posts, closeSidebar }) => {
+  const { username } = useParams();
   const isOwnProfile = getCurrentUserUsername() === username;
 
-  // Sets profile icon as active on mount if visiting own profile
+  // Sets profile icon as activeì if visiting own profile
   useEffect(() => {
-    if(isOwnProfile) closeSidebar("profile");
+    if (isOwnProfile) closeSidebar("profile");
     else closeSidebar(" "); 
-  }, [])
+  }, []);
 
   return (
     <Container onClick={ isOwnProfile ? () => closeSidebar("profile") : () => closeSidebar(" ")}>
@@ -25,12 +26,18 @@ const Profile = ({user, posts, closeSidebar}) => {
         <ProfileSections />
         <PostList>
           {posts.map(post => {
-            return <PostPreview key={post.id} post={post}/>
+            return <PostPreview key={post.id} post={post}/>;
           })}
         </PostList>
     </Container>
-  )
-}
+  );
+};
+
+Profile.propTypes = {
+  user: PropTypes.object,
+  posts: PropTypes.array,
+  closeSidebar: PropTypes.func.isRequired,
+};
 
 const Container = styled.div`
   padding: 30px 5% 0;

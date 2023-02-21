@@ -1,8 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { flexRowCenter } from "../../../../styles/style";
 import { formatDateShort } from "../../../../utils/formatting";
+import { Link } from "react-router-dom";
 
 const Description = ({ user, post }) => {
   return (
@@ -33,6 +34,11 @@ const Description = ({ user, post }) => {
       )}
     </>
   );
+};
+
+Description.propTypes = {
+  user: PropTypes.object,
+  post: PropTypes.object
 };
 
 const Comment = styled.div`

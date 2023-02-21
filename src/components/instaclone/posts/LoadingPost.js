@@ -22,6 +22,7 @@ const Container = styled.div`
   width: 470px;
   position: relative;
   font-size: 0.9rem;
+  margin-bottom: 20px;
 
   @media (max-width: 550px) {
     width: 95%;

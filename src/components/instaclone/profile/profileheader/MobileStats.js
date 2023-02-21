@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const MobileStats = ({ length, user, followers }) => {
   return (
@@ -18,6 +19,12 @@ const MobileStats = ({ length, user, followers }) => {
       </StatsLi>
     </StatsUl>
   );
+};
+
+MobileStats.propTypes = {
+  length: PropTypes.number,
+  user: PropTypes.object,
+  followers: PropTypes.number,
 };
 
 const StatsUl = styled.ul`

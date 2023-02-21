@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { BsGrid3X3 } from "react-icons/bs"
+import { BsGrid3X3 } from "react-icons/bs";
 import { CgPlayButtonR } from "react-icons/cg";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { flexRowCenter } from "../../../styles/style";
@@ -20,13 +20,13 @@ const ProfileSections = () => {
         <Text>Tagged posts</Text>
       </Section>
     </Container>
-  )
-} 
+  );
+};
 
 const Container = styled.div`
   margin: 10px 0;
   ${flexRowCenter}
-  gap: 60px; 
+  gap: 60px;
   border-top: 1px solid #dfdfdf;
 
   @media (max-width: 750px) {
@@ -37,8 +37,10 @@ const Container = styled.div`
 
 const Section = styled.div`
   padding: 10px 0 10px 0;
-  ${({active}) => active 
-  ? 'border-top: 1px solid black; color: #000; font-weight: 500; margin-top: -1px; ' : 'color: gray;'}
+  ${({ active }) =>
+    active
+      ? "border-top: 1px solid black; color: #000; font-weight: 500; margin-top: -1px; "
+      : "color: gray;"}
   cursor: pointer;
 
   @media (max-width: 750px) {
@@ -68,23 +70,23 @@ const Icons = `
     height: 24px;
     width: 24px;
   }
-`
+`;
 
 const Grid = styled(BsGrid3X3)`
   ${Icons}
-  color: ${({active}) => active ? 'black' : 'gray'};
+  color: ${({ active }) => (active ? "black" : "gray")};
 
   @media (max-width: 550px) {
-    color: ${({active}) => active ? '#0095f6' : 'gray'};
+    color: ${({ active }) => (active ? "#0095f6" : "gray")};
   }
-`
+`;
 
 const Bookmark = styled(IoBookmarkOutline)`
   ${Icons}
-`
+`;
 
 const PlayButton = styled(CgPlayButtonR)`
   ${Icons}
-`
+`;
 
 export default ProfileSections;

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { flexRowCenter, fadeIn } from "../../../styles/style";
 import { BsThreeDots } from "react-icons/bs";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
@@ -13,9 +14,10 @@ const ProfileHeader = ({ user, posts }) => {
   const currentUser = getCurrentUserUsername();
   const [followed, updateFollowed] = useFollow(user ? user : null);
   let followers;
-  if(user) followers = followed 
-    ? user.followed.filter(usr => usr !== currentUser).length + 1
-    : user.followed.filter(usr => usr !== currentUser).length
+  if (user)
+    followers = followed
+      ? user.followed.filter((usr) => usr !== currentUser).length + 1
+      : user.followed.filter((usr) => usr !== currentUser).length;
 
   return (
     <>
@@ -29,7 +31,7 @@ const ProfileHeader = ({ user, posts }) => {
             <HeaderButtons user={user} followed={followed} updateFollowed={updateFollowed} />
             <Dots />
           </FirstRow>
-          <Stats followers={followers} user={user} length={posts ? posts.length : 0}/>
+          <Stats followers={followers} user={user} length={posts ? posts.length : 0} />
           <UserInfo>
             <FullName>{user ? user.name : ""}</FullName>
             <Description>{user ? user.description : ""}</Description>
@@ -37,12 +39,17 @@ const ProfileHeader = ({ user, posts }) => {
         </InfoContainer>
       </Header>
       <UserInfoMobile>
-            <FullName>{user ? user.name : ""}</FullName>
-            <Description>{user ? user.description : ""}</Description>
+        <FullName>{user ? user.name : ""}</FullName>
+        <Description>{user ? user.description : ""}</Description>
       </UserInfoMobile>
       <MobileStats followers={followers} user={user} length={posts ? posts.length : 0} />
     </>
   );
+};
+
+ProfileHeader.propTypes = {
+  user: PropTypes.object,
+  posts: PropTypes.array,
 };
 
 const Header = styled.div`
@@ -62,7 +69,7 @@ const Header = styled.div`
 
 const ProfilePic = styled.div`
   position: relative;
-  background-image: url(${({ url }) => (url ? url : '')});
+  background-image: url(${({ url }) => (url ? url : "")});
   background-position: center;
   background-size: cover;
   height: 150px;
@@ -114,10 +121,10 @@ const Username = styled.h2`
 `;
 
 const Dots = styled(BsThreeDots)`
-@media (max-width: 750px) {
-  display: none;
-}
-`
+  @media (max-width: 750px) {
+    display: none;
+  }
+`;
 
 const UserInfo = styled.div`
   display: flex;
@@ -138,17 +145,17 @@ const UserInfoMobile = styled.div`
     width: 100%;
     padding: 0 16px;
   }
-`
+`;
 
 const FullName = styled.span`
   font-weight: 500;
   font-size: 0.9rem;
-`
+`;
 
 const Description = styled.p`
   line-height: 1.3;
   white-space: pre-wrap;
-`
+`;
 
 const InfoContainer = styled.div`
   width: 70%;
@@ -159,5 +166,4 @@ const InfoContainer = styled.div`
   overflow-wrap: break-word;
 `;
 
-
-export default ProfileHeader
+export default ProfileHeader;

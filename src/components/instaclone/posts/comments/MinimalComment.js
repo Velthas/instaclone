@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { useCommentsLiked } from "../../../../utils/hooks";
 import { flexRowBetween } from "../../../../styles/style";
 import { Link } from "react-router-dom";
-import { BsHeart, BsHeartFill } from "react-icons/bs";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
 
 const MinimalComment = ({ comment, post }) => {
   const [liked, changeLiked] = useCommentsLiked(comment, post);
@@ -63,12 +63,12 @@ const Icon = `
   align-self: center;
 `;
 
-const EmptyHeart = styled(BsHeart)`
+const EmptyHeart = styled(FaRegHeart)`
   ${Icon}
   color: #262626;
 `;
 
-const LikedHeart = styled(BsHeartFill)`
+const LikedHeart = styled(FaHeart)`
   ${Icon}
   color: crimson;
 `;

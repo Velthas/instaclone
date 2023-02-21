@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
 import * as io from "react-icons/io5";
 
@@ -17,6 +18,11 @@ const Icons = ({ liked, changeLiked }) => {
       <Bookmark title="share with device" />
     </Container>
   );
+};
+
+Icons.propTypes = {
+  liked: PropTypes.bool.isRequired,
+  changeLiked: PropTypes.func.isRequired
 };
 
 const Container = styled.div`
@@ -46,9 +52,10 @@ const Heart = styled(io.IoHeartOutline)`
 
 const HeartFull = styled(io.IoHeart)`
   ${Icon}
-  color: ${({ liked }) => (liked ? "red" : "#262626")};
+  color: red;
+
   &:hover {
-    color: ${({ liked }) => (liked ? "crimson" : "gray")};
+    color: crimson;
   }
 `;
 

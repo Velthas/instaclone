@@ -49,8 +49,8 @@ export default NotifPopup;
 
 const Container = styled.div`
   position: absolute;
-  left: 40px;
-  top: -8px;
+  right: -125px;
+  top: 0;
   background-color: #fe004b;
   color: #fff;
 
@@ -72,7 +72,20 @@ const Container = styled.div`
     background-color: #fe004b;
     height: 24px;
     width: 24px;
-    z-index: -1;
+    z-index: 1;
+  }
+
+  @media(max-width: 750px) {
+    width: min-content;
+    top: 55px;
+    left: -90px;
+
+    &::after {
+      transform: rotate(90deg);
+      top: -10px;
+      right: 0px;
+      left: auto;
+    }
   }
 `;
 

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { flexColumnCenter } from "../../../styles/style";
 import { deletePost } from "../../../firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -9,13 +10,14 @@ import { deletePostPhoto } from "../../../firebase/storage";
 import { fadeIn } from "../../../styles/style";
 
 const PostSettings = ({ settings, setSettings, post }) => {
-  const isOwn = post.username === getCurrentUserUsername(); // Determine if delete button can be displayed.
+  const isOwn = post.username === getCurrentUserUsername(); // Display delete button when is own post
   const navigate = useNavigate();
 
+  // Handles deletion from database and cloud storage
   const handleDelete = async (post) => {
-    await deletePostPhoto(post.username, post.id); // Deletes picture from storage
-    await deletePost(post); // Once a post is deleted, bring the user back to their profile.
-    navigate(`/profile/${post.username}`); // The profile component mount will trigger a data fetch.
+    await deletePostPhoto(post.username, post.id); // Storage
+    await deletePost(post); // Db
+    navigate(`/profile/${post.username}`); // Redirect to user profile
   };
 
   return (
@@ -32,12 +34,16 @@ const PostSettings = ({ settings, setSettings, post }) => {
         <Bubble onClick={() => openNativeShare(post.username, post.id)}>
           Share
         </Bubble>
-        <Bubble onClick={() => setSettings(false)}>
-          Close
-        </Bubble>
+        <Bubble onClick={() => setSettings(false)}>Close</Bubble>
       </SettingWrapper>
     </Settings>
   );
+};
+
+PostSettings.propTypes = {
+  settings: PropTypes.bool.isRequired,
+  setSettings: PropTypes.func.isRequired,
+  post: PropTypes.object,
 };
 
 const Settings = styled.div`
@@ -69,7 +75,7 @@ const SettingWrapper = styled.div`
   width: 300px;
   overflow: hidden;
 
-  @media(max-width: 550px) {
+  @media (max-width: 550px) {
     width: 200px;
   }
 `;

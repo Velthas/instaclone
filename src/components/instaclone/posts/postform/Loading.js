@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import loadingImage from "../../../../assets/icons/instaload.gif";
 
 const Loading = ({ loading }) => {
@@ -8,6 +9,10 @@ const Loading = ({ loading }) => {
       <LoadingGif src={loadingImage} />
     </Container>
   );
+};
+
+Loading.propTypes = {
+  loading: PropTypes.bool.isRequired,
 };
 
 const Container = styled.div`

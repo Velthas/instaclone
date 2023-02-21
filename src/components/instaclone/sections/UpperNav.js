@@ -2,27 +2,30 @@ import React from "react";
 import styled from "styled-components";
 import { IconContext } from "react-icons";
 
-import instalogo from "../../../assets/logo/instalogo.png"
+import instalogo from "../../../assets/logo/instalogo.png";
 import { BsHeartFill, BsHeart } from "react-icons/bs";
 import { Route, Routes } from "react-router-dom";
+import NotifPopup from "../sidebar/notifications/NotifPopup";
+import { flexRowCenter } from "../../../styles/style";
 
 // This component only appears in mobile view on the homepage
 // Serves as an extension of the navbar (has notifications)
-const UpperNav = ({markAllAsSeen, toggleSidebar, active}) => {
+const UpperNav = ({ markAllAsSeen, toggleSidebar, active, notifications }) => {
   return (
     <Routes>
-      <Route path="/" element=
-        {
-          <IconContext.Provider value={{ style: { cursor: "pointer" }, size: 24 }}>
-            <Container>
-              <InstaLogo src={instalogo} title="instalogo" />
-              { active === "heart" 
+      <Route path="/" element={
+        <IconContext.Provider value={{ style: { cursor: "pointer" }, size: 24 }}>
+          <Container>
+            <InstaLogo src={instalogo} title="instalogo" />
+            <HeartContainer notif={notifications}>
+              <NotifPopup notifications={notifications} />
+              {active === "heart" 
                 ? <BsHeartFill title="heart" onClick={() => toggleSidebar("heart")} />
-                : <BsHeart title="heart" onClick={() => markAllAsSeen(toggleSidebar)} />
-              }
-            </Container>
-          </IconContext.Provider>
-        } 
+                : <Heart title="heart" onClick={() => markAllAsSeen(toggleSidebar)} />}
+            </HeartContainer>
+          </Container>
+        </IconContext.Provider>
+        }
       />
     </Routes>
   );
@@ -52,4 +55,26 @@ const InstaLogo = styled.img`
   width: 110px;
 `;
 
-export default UpperNav
+const HeartContainer = styled.div`
+  position: relative;
+  ${flexRowCenter}
+
+  &::after {
+    ${({ notif }) => (notif.length > 0 && !notif[0].seen ? "content: '';" : "")}
+    position: absolute;
+    top: -2px;
+    right: -5px;
+    border: 2px solid #fff;
+    border-radius: 100%;
+    height: 10px;
+    width: 10px;
+
+    background-color: #fe004b;
+  }
+`;
+
+const Heart = styled(BsHeart)`
+
+`;
+
+export default UpperNav;

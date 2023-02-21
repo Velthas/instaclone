@@ -1,24 +1,32 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
-const UserCard = ({user, toggleSidebar}) => {
+const UserCard = ({ user, toggleSidebar }) => {
   const navigate = useNavigate();
+
+  // Closes the sidebar when card is clicked
   const handleClick = () => {
-    navigate('./profile/' + user.username)
-    toggleSidebar('search');
-  }
+    navigate("./profile/" + user.username);
+    toggleSidebar("search");
+  };
 
   return (
     <Container onClick={handleClick}>
-      <Picture url={user.pfp}/>
+      <Picture url={user.pfp} />
       <div>
         <Username>{user.username}</Username>
         <Name>{user.name}</Name>
       </div>
     </Container>
-  )
-}
+  );
+};
+
+UserCard.propTypes = {
+  user: PropTypes.object.isRequired,
+  toggleSidebar: PropTypes.func.isRequired,
+};
 
 const Container = styled.div`
   width: 100%;
@@ -36,7 +44,7 @@ const Container = styled.div`
 `;
 
 const Picture = styled.div`
-  background-image: url(${({url}) => url});
+  background-image: url(${({ url }) => url});
   background-position: center;
   background-size: cover;
   height: 44px;

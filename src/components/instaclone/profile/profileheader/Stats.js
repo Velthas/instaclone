@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const Stats = ({ length, user, followers }) => {
   return (
@@ -19,6 +20,12 @@ const Stats = ({ length, user, followers }) => {
     </StatsUl>
   );
 };
+
+Stats.propTypes = {
+  length: PropTypes.number,
+  user: PropTypes.object,
+  followers: PropTypes.number,
+}
 
 const StatsUl = styled.ul`
   display: flex;

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
 
 import EditProfileForm from "../../forms/EditProfileForm";
@@ -8,10 +9,11 @@ import MobileHeader from "../mobile/MobileHeader";
 
 const EditProfile = ({ info, loadInfo, closeSidebar }) => {
   const navigate = useNavigate();
+  // Redirects user to own settings if they try to access another user's
   useEffect(() => {
     const currentUser = getCurrentUserUsername();
-    if (info && info.username !== currentUser) // If user tries to access another profile settings
-      navigate(`/users/${currentUser}/settings`); // they get redirected to their own page
+    if (info && info.username !== currentUser)
+      navigate(`/users/${currentUser}/settings`);
   }, []);
 
   return (
@@ -22,6 +24,12 @@ const EditProfile = ({ info, loadInfo, closeSidebar }) => {
       </Container>
     </Backdrop>
   );
+};
+
+EditProfile.propTypes = {
+  info: PropTypes.object,
+  loadInfo: PropTypes.func,
+  closeSidebar: PropTypes.func.isRequired,
 };
 
 const Backdrop = styled.div`

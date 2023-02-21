@@ -1,11 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { flexColumnCenter } from "../../../../styles/style";
-import {
-  likeDiscursiveFormat,
-  formatDateDiscursive,
-} from "../../../../utils/formatting";
+import { likeDiscursiveFormat } from "../../../../utils/formatting";
 import { Link } from "react-router-dom";
+
 import MinimalComment from "../comments/MinimalComment";
 import Description from "./Description";
 
@@ -35,6 +34,12 @@ const Comments = ({ post, comments, liked }) => {
       </CommentsContainer>
     </CommentSection>
   );
+};
+
+Comments.propTypes = {
+  post: PropTypes.object.isRequired,
+  comments: PropTypes.array,
+  liked: PropTypes.bool,
 };
 
 const CommentSection = styled.div`
