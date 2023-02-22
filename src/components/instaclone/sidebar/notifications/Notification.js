@@ -1,8 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import { useUser } from "../../../../utils/hooks";
 import { formatDateShort } from "../../../../utils/formatting";
+
 import NotifPreview from "./NotifPreview";
 import NotifFollow from "./NotifFollow";
 
@@ -43,6 +45,11 @@ const Notification = ({ notification, toggleSidebar }) => {
       {notification.type === "f" && <NotifFollow user={user ? user : null} />}
     </Container>
   );
+};
+
+Notification.propTypes = {
+  notification: PropTypes.object.isRequired,
+  toggleSidebar: PropTypes.func.isRequired,
 };
 
 const Container = styled.div`

@@ -1,7 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { flexColumnCenter } from "../../../../styles/style";
 import { fadeIn } from "../../../../styles/style";
+
 import Notification from "./Notification";
 import MobileHeader from "../MobileHeader";
 
@@ -14,16 +16,17 @@ const Notifications = ({ notifications, toggleSidebar }) => {
         {notifications &&
           notifications.map((notif) => {
             return (
-              <Notification
-                key={notif.id}
-                toggleSidebar={toggleSidebar}
-                notification={notif}
-              />
+              <Notification key={notif.id} toggleSidebar={toggleSidebar} notification={notif} />
             );
           })}
       </div>
     </Container>
   );
+};
+
+Notifications.propTypes = {
+  notifications: PropTypes.array,
+  toggleSidebar: PropTypes.func.isRequired,
 };
 
 const Container = styled.nav`
@@ -51,4 +54,5 @@ const Heading = styled.h1`
     display: none;
   }
 `;
+
 export default Notifications;

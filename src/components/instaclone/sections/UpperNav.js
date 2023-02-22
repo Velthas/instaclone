@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { IconContext } from "react-icons";
 
@@ -21,7 +22,7 @@ const UpperNav = ({ markAllAsSeen, toggleSidebar, active, notifications }) => {
               <NotifPopup notifications={notifications} />
               {active === "heart" 
                 ? <BsHeartFill title="heart" onClick={() => toggleSidebar("heart")} />
-                : <Heart title="heart" onClick={() => markAllAsSeen(toggleSidebar)} />}
+                : <BsHeart title="heart" onClick={() => markAllAsSeen(toggleSidebar)} />}
             </HeartContainer>
           </Container>
         </IconContext.Provider>
@@ -29,6 +30,13 @@ const UpperNav = ({ markAllAsSeen, toggleSidebar, active, notifications }) => {
       />
     </Routes>
   );
+};
+
+UpperNav.propTypes = {
+  markAllAsSeen: PropTypes.func.isRequired,
+  toggleSidebar: PropTypes.func.isRequired,
+  active: PropTypes.string,
+  notifications: PropTypes.array,
 };
 
 const Container = styled.div`
@@ -71,10 +79,6 @@ const HeartContainer = styled.div`
 
     background-color: #fe004b;
   }
-`;
-
-const Heart = styled(BsHeart)`
-
 `;
 
 export default UpperNav;

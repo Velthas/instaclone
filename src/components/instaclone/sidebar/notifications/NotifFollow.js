@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { useFollow } from "../../../../utils/hooks";
 
 const NotifFollow = ({ user }) => {
@@ -9,6 +10,10 @@ const NotifFollow = ({ user }) => {
       {followed ? "Unfollow" : "Follow"}
     </Button>
   );
+};
+
+NotifFollow.propTypes = {
+  user: PropTypes.object,
 };
 
 const Button = styled.button`

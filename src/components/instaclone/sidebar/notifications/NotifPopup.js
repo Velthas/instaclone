@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { BsPersonFill, BsHeartFill } from "react-icons/bs";
 import { IoChatbubble } from "react-icons/io5";
 
 const NotifPopup = ({ notifications }) => {
+  const interval = useRef(); // Stores timeout ref
+  const [display, setDisplay] = useState(false);
+
+  // Makes popup appear for 3 seconds when new notifications arrive.
+  useEffect(() => {
+    if (interval.current) clearTimeout(interval.current);
+    if (display === false && areNewNotifications()) setDisplay(true);
+    interval.current = setTimeout(() => {
+      setDisplay(false);
+    }, 3000);
+  }, [notifications]);
+
   const getUnseenByType = (notitype) =>
     notifications.filter(
       (notif) => notif.type === notitype && notif.seen === false
@@ -13,13 +26,12 @@ const NotifPopup = ({ notifications }) => {
   const follows = getUnseenByType("f"); // Unseen follow notifications
   const comments = getUnseenByType("c"); // Unseen comments notifications
 
-  // This functions returns true if there is at least 1 new notification
-  // Used to determine wether or not this popup should be displayed
+  // Function returns true if there is at least 1 new notification
   const areNewNotifications = () => likes + follows + comments > 0;
 
   return (
     <>
-      {areNewNotifications() && (
+      {display && (
         <Container>
           {comments > 0 && (
             <Section>
@@ -62,7 +74,6 @@ const Container = styled.div`
   gap: 8px;
   cursor: pointer;
 
-
   &::after {
     position: absolute;
     left: -9px;
@@ -78,7 +89,7 @@ const Container = styled.div`
   @media(max-width: 750px) {
     width: min-content;
     top: 55px;
-    left: -90px;
+    right: 0;
 
     &::after {
       transform: rotate(90deg);
