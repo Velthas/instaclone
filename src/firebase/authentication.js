@@ -1,45 +1,37 @@
 import { auth } from "./firebase-config";
-import {
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signOut,
-  updateProfile,
-} from "firebase/auth";
+import * as authFunc from "firebase/auth";
 
 const createUser = async (mail, password, username, setUser) => {
-  const response = await createUserWithEmailAndPassword(auth, mail, password);
+  const response = await authFunc.createUserWithEmailAndPassword(auth, mail, password);
   const user = response.user;
-  await updateProfile(user, { displayName: username });
-  setUser({ ...auth.currentUser }); // bypasses problem: when the user is signed up
-  // they are logged in by default, and their info stored before displayName change takes place
-  // this means their profile cannot be displayed on first login.
+  await authFunc.updateProfile(user, { displayName: username });
+  setUser({ ...auth.currentUser }); // Bypasses problem:
+  // When user registers, they are logged in automatically
+  // and their info stored before displayName is changed.
 };
 
-// Paired with login form, logs in users.
+// Function paired with log in form.
 const loginUser = async (email, password) => {
-  await signInWithEmailAndPassword(auth, email, password);
+  await authFunc.signInWithEmailAndPassword(auth, email, password);
 };
 
 // Used to provide a 'free user' for project exploration
 const loginTestUser = async () => {
-  await signInWithEmailAndPassword(auth, "test@mail.com", "Thisisatest1");
+  await authFunc.signInWithEmailAndPassword(auth, "test@mail.com", "Thisisatest1");
 };
 
-// I have this listener on the App component.
-// Prevents signed users from going into the auth section
-// and unsigned from accessing the app.
+// Used to prevent unsigned users from accessing main app
+// Redirects to home when logged user attempts accessing auth
 const authenticationListener = (setUser) => {
-  const unsub = onAuthStateChanged(auth, (user) => {
+  const unsub = authFunc.onAuthStateChanged(auth, (user) => {
     setUser(user);
   });
   return unsub;
 };
 
-const signOutCurrentUser = () => signOut(auth);
+const signOutCurrentUser = () => authFunc.signOut(auth);
 
-// Used for a variety of checks, mostly to see if the user viewing a post/comment
-// is not the user who made it. This way we can decide when to display follow and other things.
+// Simply get the displayName of current user.
 const getCurrentUserUsername = () =>
   auth.currentUser ? auth.currentUser.displayName : null;
 

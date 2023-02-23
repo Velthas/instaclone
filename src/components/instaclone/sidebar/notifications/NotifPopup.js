@@ -57,7 +57,9 @@ const NotifPopup = ({ notifications }) => {
   );
 };
 
-export default NotifPopup;
+NotifPopup.propTypes = {
+  notifications: PropTypes.array,
+};
 
 const Container = styled.div`
   position: absolute;
@@ -107,7 +109,6 @@ const Section = styled.div`
   gap: 3px;
 `;
 
-
 const NotificationIcon = `
   height: 17px;
   width: 17px;
@@ -127,3 +128,5 @@ const FollowIcon = styled(BsPersonFill)`
 const ChatIcon = styled(IoChatbubble)`
   ${NotificationIcon}
 `;
+
+export default NotifPopup;

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import Search from "./Search";
 import Notifications from "./notifications/Notifications";
 
@@ -15,6 +16,13 @@ const Sidebar = ({ active, content, toggleSidebar, notifications }) => {
       )}
     </Container>
   );
+};
+
+Sidebar.propTypes = {
+  active: PropTypes.string,
+  content: PropTypes.string,
+  toggleSidebar: PropTypes.func.isRequired,
+  notifications: PropTypes.array,
 };
 
 const Container = styled.div`
@@ -42,7 +50,7 @@ const Container = styled.div`
     top: auto;
     left: auto;
     bottom: 0;
-    
+
     border-right: none;
     width: 100%;
     height: calc(100vh - 50px);

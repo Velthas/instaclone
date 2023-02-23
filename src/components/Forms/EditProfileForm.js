@@ -3,7 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { isFileImage } from "../../utils/validation";
 import { uploadPhoto } from "../../firebase/storage";
-import { updateDocument } from "../../firebase/firestore";
+import { updateProfile } from "../../firebase/firestore";
 import { validateName, validateDescription } from "../../utils/validation";
 import { useNavigate } from "react-router-dom";
 import Input from "../inputs/Input";
@@ -46,7 +46,7 @@ const EditProfileForm = ({ info, loadInfo }) => {
             `users/${info.username}/pfp`,
             pfp.files[0]
           );
-        updateDocument(info.username, payload); // Updates back end
+        updateProfile(info.username, payload); // Updates back end
         loadInfo(); // Triggers a refetch for the front-end
         navigate(`/profile/${info.username}`); // Go back to the profile.
     }

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { BsChevronLeft } from "react-icons/bs";
 
 const MobileHeader = ({ toggleSidebar, section, icon }) => {
@@ -9,6 +10,12 @@ const MobileHeader = ({ toggleSidebar, section, icon }) => {
       <MobileHeading>{section}</MobileHeading>
     </MobileContainer>
   );
+};
+
+MobileHeader.propTypes = {
+  toggleSidebar: PropTypes.func.isRequired,
+  section: PropTypes.string,
+  icon: PropTypes.string,
 };
 
 const MobileContainer = styled.div`

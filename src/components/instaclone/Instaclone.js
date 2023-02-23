@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 import Nav from "./sections/Nav";
 import Main from "./sections/Main";
@@ -10,14 +11,16 @@ const Instaclone = ({ user }) => {
   const [sidebar, setSidebar] = useState(false); // Regulates sidebar display
   const [active, setActive] = useState("home"); // Determines which nav icon is marked as active
 
-  const closeSidebar = (section) => { // Closes sidebar if any section other than nav is clicked
-    if (sidebar === true) setSidebar(false); // Closes the sidebar
-    if (section && section !== active) setActive(section); // Sets section active if needed
-  };
-
+  // Brings the user to authentication if not logged in
   useEffect(() => {
-    if (!user) navigate("/auth"); // Brings the user to authentication if not logged in
+    if (!user) navigate("/auth");
   }, [user]);
+
+  // Used when click occurs on any place that isn't nav
+  const closeSidebar = (section) => {
+    if (sidebar === true) setSidebar(false);
+    if (section && section !== active) setActive(section);
+  };
 
   return (
     <Container>
@@ -31,6 +34,10 @@ const Instaclone = ({ user }) => {
       <Main closeSidebar={closeSidebar} user={user} />
     </Container>
   );
+};
+
+Instaclone.propTypes = {
+  user: PropTypes.object,
 };
 
 const Container = styled.div`
