@@ -111,7 +111,7 @@ const likeDiscursiveFormat = (likedby, liked) => {
 // Depending on what type of notification it is, format and return appropriate payload
 // Payload will then be sent over to the db and inserted as a new document.
 const formatNotification = (type, postid, poster, message, commentid) => {
-  const timestamp = Timestamp.fromDate(new Date()) // Get a timestamp for each notification
+  const timestamp = Timestamp.now() // Get a timestamp for each notification
   const seen = false; // All notifications are unseen by default
   const author = getCurrentUserUsername(); // Author of notifications is always the user
   switch (true) {
@@ -132,7 +132,7 @@ const formatNotification = (type, postid, poster, message, commentid) => {
 
 // Packages up a message before shipping to backend
 const formatMessage = (message) => {
-  const timestamp = Timestamp.fromDate(new Date());
+  const timestamp = Timestamp.now();
   const author = getCurrentUserUsername();
   const content = message;
   return {content, author, timestamp} // Is only missing id assigned in firestore function.

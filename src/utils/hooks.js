@@ -72,7 +72,7 @@ const useComments = (post, inputSelector) => {
     if (content.length === 0 || content.length > 2200) return;
     const commentRef = await getCommentDocReference(post); // Need this to extract ID
     const id = commentRef.id; // I store this ID in my payload.
-    const timestamp = Timestamp.fromDate(new Date());
+    const timestamp = Timestamp.now();
     const author = getCurrentUserUsername();
     const likedby = [];
     const comment = { content, author, timestamp, id, likedby };
