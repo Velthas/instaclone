@@ -19,7 +19,7 @@ function App() {
         <Route path="/auth/*" element={<Authentication user={user} setUser={setUser} />} />
       </Routes>
     </BrowserRouter>
-  )
-}
+  );
+};
 
 export default App;

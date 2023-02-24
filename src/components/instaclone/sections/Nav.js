@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUser, useNotifications } from "../../../utils/hooks";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -17,6 +17,10 @@ const Nav = ({ user, sidebar, setSidebar, active, setActive }) => {
   const [userdata, getUserData] = useUser(user ? user.displayName : null);
   const [notifications, markAllAsSeen] = useNotifications(user ? user.displayName : null);
   const [postForm, setPostForm] = useState(false); // Regulates new post form display
+
+  useEffect(() => {
+    if (user !== null) getUserData(user.displayName);
+  }, [user])
 
   // Click handler for icons that don't open the sidebar
   const handleClick = (icon) => {

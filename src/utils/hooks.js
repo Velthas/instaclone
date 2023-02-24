@@ -123,10 +123,10 @@ const usePost = (username, postId) => {
 const useUser = (username) => {
   const [user, setUser] = useState(null);
   useEffect(() => {
-    if(username) getUser();
+    if(username) getUser(username);
   }, []);
 
-  const getUser = async () => {
+  const getUser = async (username) => {
     const userData = await getUserInfo(username);
     setUser(userData);
   };
@@ -217,7 +217,7 @@ const useNotifications = (username) => {
 
   // Makes a batched update to notifications, marking all as seen.
   const markAllAsSeen = (toggleSidebar) => { 
-    if(notifications && notifications[0].seen === false) setNotificationsSeen(username);
+    if(notifications.length > 0 && notifications[0].seen === false) setNotificationsSeen(username);
     toggleSidebar('heart');
   }
   

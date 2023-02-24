@@ -5,6 +5,7 @@ const createUser = async (mail, password, username, setUser) => {
   const response = await authFunc.createUserWithEmailAndPassword(auth, mail, password);
   const user = response.user;
   await authFunc.updateProfile(user, { displayName: username });
+  await auth.currentUser.reload();
   setUser({ ...auth.currentUser }); // Bypasses problem:
   // When user registers, they are logged in automatically
   // and their info stored before displayName is changed.
