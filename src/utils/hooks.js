@@ -118,7 +118,7 @@ const usePost = (username, postId) => {
   return [post, user, liked, changeLiked];
 };
 
-// Using this hook to fetch user information and update it when needed using updateUser.
+// Fetch user information and update it when needed using updateUser.
 // Using it in comments/notifications/search when only pfp and username is needed.
 const useUser = (username) => {
   const [user, setUser] = useState(null);
@@ -154,7 +154,7 @@ const useFollow = (user) => {
   return [followed, updateFollowed]
 };
 
-// This hook is used to handle search queries.
+// Used to handle search queries.
 // As of now, it will give back only profiles whose username's prefix matches the query
 // so if I search for 'te', and an account named 'test' exists, it will appear on screen.
 // Just the same, if there is a profile named 'footest', it would not appear under the same query
@@ -173,7 +173,7 @@ const useSearch = () => {
   return [profiles, setQuery];
 }
 
-// This hook is used inside of profiles where we need user info and posts.
+// Used inside of profiles where we need user info and posts.
 const useProfile = (username) => {
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
