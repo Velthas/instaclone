@@ -6,9 +6,10 @@ import { MemoryRouter } from "react-router-dom";
 
 describe("Post Form", () => {
   it("renders initial page correctly", () => {
+    const closeFormMock = jest.fn();
     render(
       <MemoryRouter>
-        <PostForm closeForm={""} />
+        <PostForm closeForm={closeFormMock} />
       </MemoryRouter>
     );
 

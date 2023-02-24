@@ -15,7 +15,7 @@ const Icons = ({ liked, changeLiked }) => {
         <Chat title="speech bubble" />
         <Share title="go-to" />
       </IconContainer>
-      <Bookmark title="share with device" />
+      <Bookmark title="bookmark" />
     </Container>
   );
 };

@@ -20,7 +20,7 @@ describe("Home Post", () => {
       likedby: ["test"],
       id: "hi",
       timestamp: { seconds: 10000 },
-      description: "",
+      description: "I am a description",
     };
     hooks.useLiked = jest.fn().mockReturnValue([true, jest.fn()]);
     hooks.useComments = jest.fn().mockReturnValue([[], jest.fn()]);
@@ -32,29 +32,27 @@ describe("Home Post", () => {
       </MemoryRouter>
     );
 
-    const [username, description] = await screen.findAllByText(/test/i);
+    const [username] = await screen.findAllByText(/test/i);
+    const description = screen.getByText(/i am a description/i)
     const userPfp = screen.getByTitle(/author profile picture/i);
     const postPicture = screen.getByTitle(/post picture/i);
-    const likesIcon = screen.getByAltText(/heart/i);
-    const commentIcon = screen.getByAltText(/speech bubble/i);
-    const goToIcon = screen.getByAltText(/go-to/i);
-    const shareIcon = screen.getByAltText(/share with device/i);
+    const likesIcon = screen.getByTitle(/heart/i);
+    const commentIcon = screen.getByTitle(/speech bubble/i);
+    const goToIcon = screen.getByTitle(/go-to/i);
+    const bookmarkIcon = screen.getByTitle(/bookmark/i);
     const likesAmount = await screen.findByText(/liked by 2 people/i);
     const sendText = screen.getByText(/publish/i);
-    const allContent = [
-      username,
-      description,
-      userPfp,
-      postPicture,
-      likesIcon,
-      commentIcon,
-      goToIcon,
-      shareIcon,
-      likesAmount,
-      sendText,
-    ];
 
-    allContent.forEach((node) => expect(node).toBeInTheDocument());
+    expect(username).toBeInTheDocument();
+    expect(description).toBeInTheDocument();
+    expect(userPfp).toBeInTheDocument();
+    expect(postPicture).toBeInTheDocument();
+    expect(likesIcon).toBeInTheDocument();
+    expect(commentIcon).toBeInTheDocument();
+    expect(goToIcon).toBeInTheDocument();
+    expect(bookmarkIcon).toBeInTheDocument();
+    expect(likesAmount).toBeInTheDocument();
+    expect(sendText).toBeInTheDocument();
   });
 
   it("shows 'view all comments' when post has more than two", async () => {
@@ -241,12 +239,12 @@ describe("Home Post", () => {
     const dotIcon = screen.getByTitle("settings");
     userEvent.click(dotIcon);
 
-    const shareIcon = screen.getByAltText("url");
-    const urlIcon = screen.getByAltText("post share");
-    const deleteIcon = screen.getByAltText("delete");
+    const share = screen.getByText("Copy Link");
+    const url = screen.getByText("Share");
+    const deleteText = screen.getByText("Delete");
 
-    expect(shareIcon).toBeInTheDocument();
-    expect(urlIcon).toBeInTheDocument();
-    expect(deleteIcon).toBeInTheDocument();
+    expect(share).toBeInTheDocument();
+    expect(url).toBeInTheDocument();
+    expect(deleteText).toBeInTheDocument();
   });
 });

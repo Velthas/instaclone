@@ -28,10 +28,11 @@ describe("Full Post", () => {
       .fn()
       .mockReturnValue([fakePost, fakeUser, true, jest.fn()]);
     hooks.useFollow = jest.fn().mockReturnValue([true, jest.fn()]);
+    const closeSidebar = jest.fn();
     render(
       <MemoryRouter initialEntries={["/test/hi"]}>
         <Routes>
-          <Route path=":username/:postid" element={<FullPost />} />
+          <Route path=":username/:postid" element={<FullPost closeSidebar={closeSidebar} />} />
         </Routes>
       </MemoryRouter>
     );
@@ -40,10 +41,10 @@ describe("Full Post", () => {
     const userPfp = screen.getByTitle(/profile picture/i);
     const postPicture = screen.getByTitle(/post picture/i);
     const postDescription = screen.getByText(/hi, i'm a description!/i);
-    const likesIcon = screen.getByAltText(/heart/i);
-    const commentIcon = screen.getByAltText(/speech bubble/i);
-    const goToIcon = screen.getByAltText(/go-to/i);
-    const shareIcon = screen.getByAltText(/share with device/i);
+    const likesIcon = screen.getByTitle(/heart/i);
+    const commentIcon = screen.getByTitle(/speech bubble/i);
+    const goToIcon = screen.getByTitle(/go-to/i);
+    const bookmarkIcon = screen.getByTitle(/bookmark/i);
     const likesAmount = await screen.findByText(/liked by 2 people/i);
     const sendText = screen.getByText(/publish/i);
     const date = screen.getByText(/january 1, 1970/i);
@@ -56,7 +57,7 @@ describe("Full Post", () => {
       likesIcon,
       commentIcon,
       goToIcon,
-      shareIcon,
+      bookmarkIcon,
       likesAmount,
       sendText,
       date,
@@ -85,12 +86,14 @@ describe("Full Post", () => {
         content: "hi",
         timestamp: { seconds: 10000 },
         likedby: ["test"],
+        id: 1,
       },
       {
         author: "vincentgonk",
         content: "hey",
         timestamp: { seconds: 10000 },
         likedby: [],
+        id: 3,
       },
     ];
     hooks.useComments = jest.fn().mockReturnValue([fakeComments, jest.fn()]);
@@ -99,10 +102,11 @@ describe("Full Post", () => {
       .mockReturnValue([fakePost, fakeUser, true, jest.fn()]);
     hooks.useFollow = jest.fn().mockReturnValue([true, jest.fn()]);
     hooks.useUser = jest.fn().mockReturnValue([{ pfp: "" }, jest.fn()]);
+    const closeSidebar = jest.fn();
     render(
       <MemoryRouter initialEntries={["/test/hi"]}>
         <Routes>
-          <Route path=":username/:postid" element={<FullPost />} />
+          <Route path=":username/:postid" element={<FullPost closeSidebar={closeSidebar} />} />
         </Routes>
       </MemoryRouter>
     );
@@ -139,17 +143,18 @@ describe("Full Post", () => {
     hooks.useComments = jest.fn().mockReturnValue([[], sendComment]);
     hooks.usePost = jest.fn().mockReturnValue([fakePost, fakeUser, true, jest.fn()]);
     hooks.useFollow = jest.fn().mockReturnValue([true, jest.fn()]);
+    const closeSidebar = jest.fn();
     render(
       <MemoryRouter initialEntries={["/test/hi"]}>
         <Routes>
-          <Route path=":username/:postid" element={<FullPost />} />
+          <Route path=":username/:postid" element={<FullPost closeSidebar={closeSidebar} />} />
         </Routes>
       </MemoryRouter>
     );
 
     const textbox = screen.getByRole('textbox');
-    const publish = screen.getByRole('button', {name: 'Publish'});
     userEvent.type(textbox, 'Hi, i am a comment');
+    const publish = screen.getByRole('button', {name: 'Publish'});
     userEvent.click(publish);
 
     expect(sendComment).toHaveBeenCalledTimes(1);
@@ -174,10 +179,11 @@ describe("Full Post", () => {
     hooks.usePost = jest.fn().mockReturnValue([fakePost, fakeUser, true, jest.fn()]);
     hooks.useFollow = jest.fn().mockReturnValue([true, jest.fn()]);
     auth.getCurrentUserUsername = jest.fn().mockReturnValue("test");
+    const closeSidebar = jest.fn();
     render(
       <MemoryRouter initialEntries={["/test/hi"]}>
         <Routes>
-          <Route path=":username/:postid" element={<FullPost />} />
+          <Route path=":username/:postid" element={<FullPost closeSidebar={closeSidebar}/>} />
         </Routes>
       </MemoryRouter>
     );
@@ -185,12 +191,12 @@ describe("Full Post", () => {
     const dotIcon = screen.getByTitle("settings");
     userEvent.click(dotIcon);
 
-    const shareIcon = screen.getByAltText("url");
-    const urlIcon = screen.getByAltText("post share");
-    const deleteIcon = screen.getByAltText("delete");
+    const share = screen.getByText("Copy Link");
+    const url = screen.getByText("Share");
+    const deleteText = screen.getByText("Delete");
 
-    expect(shareIcon).toBeInTheDocument();
-    expect(urlIcon).toBeInTheDocument();
-    expect(deleteIcon).toBeInTheDocument();
+    expect(share).toBeInTheDocument();
+    expect(url).toBeInTheDocument();
+    expect(deleteText).toBeInTheDocument();
   });
 });
