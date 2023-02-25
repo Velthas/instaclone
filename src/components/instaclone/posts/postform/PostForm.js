@@ -181,7 +181,7 @@ const Image = styled.img`
   }
 
   @media (max-width: 750px) {
-    height: 250px;
+    height: 300px;
     width: 100%;
     max-width: initial;
     border-bottom-left-radius: 0;
