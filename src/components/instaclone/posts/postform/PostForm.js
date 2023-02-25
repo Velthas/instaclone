@@ -114,13 +114,18 @@ const Backdrop = styled.div`
   flex-shrink: 0;
 
   @media (max-width: 550px) {
-    align-items: center;
-    justify-content: center;
+    top: 0;
+    left: auto;
+    transform: none;
     height: 100%;
   }
 
   @media only screen and (max-height: 550px) and (orientation: landscape) {
-    align-items: flex-start;
+    top: 0;
+    left: 0;
+    height: 100%;
+    transform: none;
+    align-items: center;
   }
 `;
 
@@ -165,6 +170,11 @@ const Container = styled.div`
     min-width: initial;
     border-radius: 0;
     margin: 0;
+  }
+
+  @media only screen and (max-height: 550px) and (orientation: landscape) {
+    height: 95%;
+    min-width: min(500px, 95%);
   }
 `;
 
