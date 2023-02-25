@@ -10,7 +10,7 @@ import Input from "../inputs/Input";
 import TextArea from "../inputs/Textarea";
 import FileImg from "../inputs/FileImg";
 
-const EditProfileForm = ({ info, loadInfo }) => {
+const EditProfileForm = ({ info, loadInfo, refresh }) => {
   const [error, setError] = useState(false);
   const navigate = useNavigate();
 
@@ -47,7 +47,8 @@ const EditProfileForm = ({ info, loadInfo }) => {
             pfp.files[0]
           );
         updateProfile(info.username, payload); // Updates back end
-        loadInfo(); // Triggers a refetch for the front-end
+        loadInfo(); // Triggers a refetch for the front-end profile portion
+        refresh(info.username); // Triggers a refetch for the user data used by the navbar and new post.
         navigate(`/profile/${info.username}`); // Go back to the profile.
     }
   };
@@ -74,6 +75,7 @@ const EditProfileForm = ({ info, loadInfo }) => {
 EditProfileForm.propTypes = {
   info: PropTypes.object,
   loadInfo: PropTypes.func.isRequired,
+  refresh: PropTypes.func.isRequired
 };
 
 const Form = styled.form`

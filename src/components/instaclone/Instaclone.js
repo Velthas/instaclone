@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../../utils/hooks";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
@@ -10,6 +11,12 @@ const Instaclone = ({ user }) => {
   const navigate = useNavigate();
   const [sidebar, setSidebar] = useState(false); // Regulates sidebar display
   const [active, setActive] = useState("home"); // Determines which nav icon is marked as active
+  const [userData, getUserData] = useUser(user ? user.displayName : null);
+
+  // Triggers fetch when user info is finally loaded
+  useEffect(() => {
+    if (user !== null) getUserData(user.displayName);
+  }, [user]);
 
   // Brings the user to authentication if not logged in
   useEffect(() => {
@@ -30,8 +37,9 @@ const Instaclone = ({ user }) => {
         setSidebar={setSidebar}
         active={active}
         setActive={setActive}
+        userData={userData}
       />
-      <Main closeSidebar={closeSidebar} user={user} />
+      <Main getUserData={getUserData} closeSidebar={closeSidebar} user={user} />
     </Container>
   );
 };

@@ -7,6 +7,10 @@ import { BsEmojiSmile } from "react-icons/bs";
 const Add = ({ postInfo, insertComment }) => {
   const [value, setValue] = useState("");
   const handleChange = (e) => setValue(e.target.value);
+  const sendComment = () => {
+    insertComment();
+    setValue("");
+  };
 
   return (
     <Container>
@@ -20,7 +24,7 @@ const Add = ({ postInfo, insertComment }) => {
         maxLength={150}
         placeholder="Add your comment..."
       />
-      <Button value={value} onClick={() => insertComment()}>
+      <Button value={value} onClick={sendComment}>
         Publish
       </Button>
     </Container>

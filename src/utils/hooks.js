@@ -67,7 +67,7 @@ const useComments = (post, inputSelector) => {
   }, []);
 
   const insertComment = async () => {
-    const input = document.querySelector(inputSelector)
+    const input = document.querySelector(inputSelector);
     const content = input.value;
     if (content.length === 0 || content.length > 2200) return;
     const commentRef = await getCommentDocReference(post); // Need this to extract ID
@@ -81,7 +81,6 @@ const useComments = (post, inputSelector) => {
       addNotification(post.username, commentNotification);
     addComment(commentRef, comment); // Add doc to the db for permanent storage
     setComments([comment].concat(comments)); // Updates the front-end
-    input.value = ''; // Reset the text field
   };
 
   return [comments, insertComment];

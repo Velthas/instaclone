@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
-import { useUser, useNotifications } from "../../../utils/hooks";
+import { useState } from "react";
+import { useNotifications } from "../../../utils/hooks";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import * as BsIcons from "react-icons/bs";
 import { IoPaperPlaneOutline, IoPaperPlaneSharp } from "react-icons/io5";
 import { IconContext } from "react-icons";
@@ -13,14 +14,9 @@ import UpperNav from "./UpperNav";
 import PostForm from "../posts/postform/PostForm";
 import instalogo from "../../../assets/logo/instalogo.png"
 
-const Nav = ({ user, sidebar, setSidebar, active, setActive }) => {
-  const [userdata, getUserData] = useUser(user ? user.displayName : null);
+const Nav = ({ user, sidebar, setSidebar, active, setActive, userData }) => {
   const [notifications, markAllAsSeen] = useNotifications(user ? user.displayName : null);
   const [postForm, setPostForm] = useState(false); // Regulates new post form display
-
-  useEffect(() => {
-    if (user !== null) getUserData(user.displayName);
-  }, [user])
 
   // Click handler for icons that don't open the sidebar
   const handleClick = (icon) => {
@@ -117,7 +113,7 @@ const Nav = ({ user, sidebar, setSidebar, active, setActive }) => {
 
           <StyledLink to={user !== null ? "/profile/" + user.displayName : "/"}>
             <ListItem mobile={true} sidebar={sidebar} own="profile" onClick={() => handleClick("profile")}>
-              <User active={active === "profile"} url={userdata ? userdata.pfp : ""} />
+              <User active={active === "profile"} url={userData ? userData.pfp : ""} />
               <Label sidebar={sidebar} active={active} own={"profile"}>Profile</Label>
             </ListItem>
           </StyledLink>
@@ -128,9 +124,18 @@ const Nav = ({ user, sidebar, setSidebar, active, setActive }) => {
           <Label sidebar={sidebar} active={active} own={"burger"}>More</Label>
         </ListItem>
       </Navbar>
-      {postForm && <PostForm closeForm={closePostForm} user={userdata} />}
+      {postForm && <PostForm closeForm={closePostForm} user={userData} />}
     </IconContext.Provider>
   );
+};
+
+Nav.propTypes = {
+  user: PropTypes.object,
+  sidebar: PropTypes.bool.isRequired,
+  setSidebar: PropTypes.func.isRequired,
+  active: PropTypes.bool.isRequired,
+  setActive: PropTypes.func.isRequired,
+  userData: PropTypes.object, 
 };
 
 // Since Navbar is removed from the flow of the document

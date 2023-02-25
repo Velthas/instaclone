@@ -6,21 +6,21 @@ import { useProfile } from "../../../utils/hooks";
 import EditProfile from "./EditProfile";
 import Profile from "./Profile";
 
-const User = ({ closeSidebar }) => {
+const User = ({ closeSidebar, refresh }) => {
   const {username} = useParams();
   const [user, posts, reloadInfo] = useProfile(username);
 
   return (
     <Routes>
       <Route path="/" element={<Profile closeSidebar={closeSidebar} user={user} posts={posts} />}/>
-      <Route path="settings" element={<EditProfile closeSidebar={closeSidebar}  info={user} loadInfo={reloadInfo} />}/>
+      <Route path="settings" element={<EditProfile closeSidebar={closeSidebar}  info={user} loadInfo={reloadInfo} refresh={refresh} />}/>
     </Routes>
   );
 };
 
 User.propTypes = {
-  user: PropTypes.object,
-  posts: PropTypes.array,
+  closeSidebar: PropTypes.func.isRequired,
+  refresh: PropTypes.func.isRequired,
 };
 
 export default User;

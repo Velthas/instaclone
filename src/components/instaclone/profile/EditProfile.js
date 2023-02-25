@@ -7,7 +7,7 @@ import { getCurrentUserUsername } from "../../../firebase/authentication";
 import EditProfileForm from "../../forms/EditProfileForm";
 import MobileHeader from "../mobile/MobileHeader";
 
-const EditProfile = ({ info, loadInfo, closeSidebar }) => {
+const EditProfile = ({ info, loadInfo, closeSidebar, refresh }) => {
   const navigate = useNavigate();
   // Redirects user to own settings if they try to access another user's
   useEffect(() => {
@@ -20,7 +20,7 @@ const EditProfile = ({ info, loadInfo, closeSidebar }) => {
     <Backdrop onClick={closeSidebar}>
       <MobileHeader name="Profile Settings" />
       <Container>
-        <EditProfileForm info={info} loadInfo={loadInfo} />
+        <EditProfileForm info={info} loadInfo={loadInfo} refresh={refresh} />
       </Container>
     </Backdrop>
   );
@@ -30,6 +30,7 @@ EditProfile.propTypes = {
   info: PropTypes.object,
   loadInfo: PropTypes.func,
   closeSidebar: PropTypes.func.isRequired,
+  refresh: PropTypes.func.isRequired,
 };
 
 const Backdrop = styled.div`
