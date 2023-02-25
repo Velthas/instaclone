@@ -12,7 +12,7 @@ const createUserBucket = (name, username) => {
     username: username,
     description: `Hello, my name is ${name}`,
     pfp: defaultPfp,
-    follows: ["damian"],
+    follows: ["thegonkbrigade", "panampalmer", "thealvarez", "riverpd", "arasakaoverall"],
     followed: [],
   };
 

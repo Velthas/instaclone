@@ -9,7 +9,7 @@ import SuggestionCard from "./SuggestionCard";
 
 const Suggestions = ({ currentUser }) => {
   const [user, updateUser] = useUser(currentUser ? currentUser.displayName : null);
-  const userList = ["test", "panampalmer"];
+  const userList = ["thegonkbrigade", "panampalmer", "thealvarez", "riverpd", "arasakaoverall"];
 
   return (
     <Container>

@@ -206,6 +206,10 @@ const LogoContainer = styled.div`
   @media(max-width: 750px) {
     display: none;
   }
+
+  @media only screen and (max-height: 550px) and (orientation: landscape) {
+    display: ${({mobile}) => mobile ? 'flex' : 'none'};
+  }
 `;
 
 const ExtendedLogo = styled.img`
@@ -255,6 +259,11 @@ const Icons = styled.ul`
     height: 100%;
     gap: 0;
   }
+
+  @media only screen and (max-height: 550px) and (orientation: landscape) {
+    height: 100%;
+    justify-content: space-around;
+  }
 `;
 
 const ListItem = styled.li`
@@ -283,6 +292,10 @@ const ListItem = styled.li`
   @media(max-width: 750px) {
     display: ${({mobile}) => mobile ? 'flex' : 'none'};
     height: 100%;
+  }
+
+  @media only screen and (max-height: 550px) and (orientation: landscape) {
+    display: ${({mobile}) => mobile ? 'flex' : 'none'};
   }
 `;
 

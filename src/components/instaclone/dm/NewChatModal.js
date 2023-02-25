@@ -97,6 +97,7 @@ const Container = styled.div`
   @media only screen and (max-height: 600px) and (orientation: landscape) {
     height: 100%;
     width: 100%;
+    border-radius: none;
   }
 `;
 
