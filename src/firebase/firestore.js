@@ -146,7 +146,7 @@ const getHomepageContent = async (username) => {
     const info = documents.docs.map((doc) => doc.data());
     if (info) posts = posts.concat(info);
   }
-  return posts;
+  return posts.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
 };
 
 const addNotification = (receiver, payload) => {

@@ -12,7 +12,7 @@ import Message from "../Message";
 import RoomHeader from "./RoomHeader";
 import Textbox from "./Textbox";
 
-const Room = ({ active, setActive, rooms }) => {
+const Room = ({ active, setActive, setNewRoom, newRoom, rooms }) => {
   const user = getCurrentUserUsername();
   const unsubscribe = useRef(null); // Stores function to unsubscribe from db listener
   const navigate = useNavigate();
@@ -36,11 +36,12 @@ const Room = ({ active, setActive, rooms }) => {
 
   // Handles setting correct chat as active when ID changes
   useEffect(() => {
-    if (rooms && active && rooms.some((room) => room.chatId === id && room.chatId === active.id))
+    if (rooms && active && rooms.some((room) => (room.chatId === id && (room.chatId === active.chatId || newRoom.chatId === room.chatId))))
       return;
     else if (rooms) {
       const activeRoom = rooms.filter((room) => room.chatId === id)[0];
-      const payload = { username: activeRoom.username, id: activeRoom.chatId };
+      const payload = { username: activeRoom.username, chatId: activeRoom.chatId };
+      if(!activeRoom.lastMessage) setNewRoom(payload);
       setActive(payload);
     }
   }, [rooms, id]);
@@ -80,6 +81,8 @@ const Room = ({ active, setActive, rooms }) => {
 Room.propTypes = {
   active: PropTypes.any, 
   setActive: PropTypes.func.isRequired,
+  setNewRoom: PropTypes.func.isRequired,
+  newRoom: PropTypes.any,
   rooms: PropTypes.any,
 };
 

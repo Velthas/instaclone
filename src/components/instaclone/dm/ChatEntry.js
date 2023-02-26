@@ -10,7 +10,7 @@ const ChatEntry = ({ room, active, openChat }) => {
   return (
     <Container
       onClick={() => openChat(room.chatId, room.username)}
-      active={active ? active.id === room.chatId : false}
+      active={active ? active.chatId === room.chatId : false}
       id={room.chatId}
     >
       <Image url={user ? user.pfp : ""} />

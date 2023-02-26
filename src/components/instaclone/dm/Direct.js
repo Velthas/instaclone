@@ -59,7 +59,7 @@ const Direct = ({ user, closeSidebar }) => {
   };
 
   const openChatRoom = (id, username) => {
-    setActive({id, username});
+    setActive({chatId: id, username});
     navigate(`${id}`); // Will make the chatroom component appear, loading messages
   };
 
@@ -102,7 +102,7 @@ const Direct = ({ user, closeSidebar }) => {
           </ChatlistContainer>
           <Routes>
             <Route path={"/"} element={<EmptyChatroom></EmptyChatroom>} />
-            <Route path={":id"} element={<Room rooms={rooms} setActive={setActive} active={active} />} />
+            <Route path={":id"} element={<Room rooms={rooms} setNewRoom={setNewRoom} newRoom={newRoom} setActive={setActive} active={active} />} />
           </Routes>
         </MessagesContainer>
       </Container>
