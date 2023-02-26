@@ -73,6 +73,7 @@ const PostForm = ({ closeForm, user }) => {
           setPhoto={setPhoto}
           handleSubmit={handleSubmit}
           closeForm={closeForm}
+          loading={loading}
         />
         <Form photo={photo} id="post-form">
           <Loading loading={loading} />

@@ -18,6 +18,11 @@ const createUserBucket = (name, username) => {
 
   const docRef = fs.doc(db, "Users", username);
   fs.setDoc(docRef, userData);
+
+  userData.follows.forEach(person => { // Adds new account to the follower list of default accounts
+    const personFollowed = fs.doc(db, "Users", person);
+    fs.updateDoc(personFollowed, { followed: fs.arrayUnion(userData.username) });
+  });
 };
 
 // Used in signup to avoid same-username clones
@@ -133,20 +138,20 @@ const searchForProfiles = async (userQuery) => {
   return results.docs.map((doc) => doc.data());
 };
 
-// Look at each person followed by user and draw 3 most recent posts.
+// Look at each person followed by user and draw 4 most recent posts.
 // Works for now, but needs adjustment in the future.
 const getHomepageContent = async (username) => {
   const userInfo = await getUserInfo(username);
-  const followed = userInfo.follows; // This is an array of usernames.
+  const followed = [...userInfo.follows, username]; // This is an array of usernames.
   let posts = [];
   for (let i = 0; i < followed.length; i++) {
     const postsRef = fs.collection(db, "Users", followed[i], "Posts");
-    const q = fs.query(postsRef, fs.orderBy("timestamp", "desc"), fs.limit(3));
+    const q = fs.query(postsRef, fs.orderBy("timestamp", "desc"), fs.limit(4));
     const documents = await fs.getDocs(q);
     const info = documents.docs.map((doc) => doc.data());
     if (info) posts = posts.concat(info);
   }
-  return posts.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
+  return posts.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds); // Most recent at the top
 };
 
 const addNotification = (receiver, payload) => {

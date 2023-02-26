@@ -201,7 +201,7 @@ const LogoContainer = styled.div`
   height: 100px;
   width: 100%;
   padding: 0 16px;
-  justify-content: flex-start;
+  justify-content: center;
 
   @media(max-width: 750px) {
     display: none;

@@ -6,10 +6,13 @@ import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
 import { useCommentsLiked, useUser } from "../../../../utils/hooks";
 import { likeDiscursiveFormat, formatDateShort } from "../../../../utils/formatting";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { getCurrentUserUsername } from "../../../../firebase/authentication";
 
 const ExtendedComment = ({ comment, post }) => {
   const [user, getUser] = useUser(comment.author);
   const [liked, changeLiked] = useCommentsLiked(comment, post);
+  const currentUser = getCurrentUserUsername();
+  const likedAmount = comment.likedby.filter(profile => profile !== currentUser).length + (liked ? 1 : 0);
 
   return (
     <Comment>
@@ -29,7 +32,7 @@ const ExtendedComment = ({ comment, post }) => {
               {formatDateShort(comment.timestamp)}
             </Undercomment>
             <Underimportant>
-              {comment.likedby.length === 0 ? "" : likeDiscursiveFormat(comment.likedby, liked)}
+              {likedAmount === 0 ? "" : likeDiscursiveFormat(comment.likedby, liked)}
             </Underimportant>
             <Underimportant>Reply</Underimportant>
           </Extra>

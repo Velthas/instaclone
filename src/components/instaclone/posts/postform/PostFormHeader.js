@@ -4,13 +4,13 @@ import PropTypes from "prop-types";
 import { BsArrowLeft, BsXLg } from "react-icons/bs";
 import { flexRowBetween } from "../../../../styles/style";
 
-const PostFormHeader = ({ photo, setPhoto, handleSubmit, closeForm }) => {
+const PostFormHeader = ({ photo, setPhoto, handleSubmit, closeForm, loading }) => {
   return (
     <FormTitle photo={photo}>
       <XIcon onClick={() => closeForm(false)} />
-      {photo && <LeftArrow title="go back" onClick={() => setPhoto(false)} />}
+      {photo && !loading && <LeftArrow title="go back" onClick={() => setPhoto(false)} />}
       <Heading>Create a new post</Heading>
-      {photo && <SharePost onClick={(e) => handleSubmit(e)}>Share</SharePost>}
+      {photo && !loading && <SharePost onClick={(e) => handleSubmit(e)}>Share</SharePost>}
     </FormTitle>
   );
 };
@@ -20,6 +20,7 @@ PostFormHeader.propTypes = {
   setPhoto: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   closeForm: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
 };
 
 const SharePost = styled.p`

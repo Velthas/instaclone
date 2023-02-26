@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
@@ -7,18 +7,22 @@ import { signOutCurrentUser } from "../../../../firebase/authentication";
 import { flexRowCenter } from "../../../../styles/style";
 import { BsPersonPlus } from "react-icons/bs";
 import { createChatRoom, doesChatExist } from "../../../../firebase/firestore";
+import miniload from "../../../../assets/icons/miniload.gif";
 
 const HeaderButtons = ({ user, updateFollowed, followed }) => {
   const currentUser = getCurrentUserUsername();
   const navigate = useNavigate();
+  const [isOpeningChat, setIsOpeningChat] = useState(false);
 
   // Handles opening dms from profile.
   const openChat = async () => {
+    setIsOpeningChat(true);
     const chat = await doesChatExist(currentUser, user.username);
     if (!chat) {
       const newChatId = await createChatRoom(currentUser, user.username);
       navigate(`/direct/${newChatId}`);
     } else navigate(`/direct/${chat.chatId}`);
+    setIsOpeningChat(false);
   };
 
   return (
@@ -28,7 +32,9 @@ const HeaderButtons = ({ user, updateFollowed, followed }) => {
           <Button blue onClick={() => updateFollowed(!followed)}>
             {followed ? "Unfollow" : "Follow"}
           </Button>
-          <Button onClick={openChat}>Message</Button>
+          <Button disabled={isOpeningChat} onClick={openChat}>
+            {isOpeningChat ? <LoadingImg src={miniload} alt="loading" /> : 'Message'}
+          </Button>
           <IconButton>
             <BsPersonPlus size={15} />
           </IconButton>
@@ -68,6 +74,11 @@ const Button = styled.button`
     font-size: 0.8rem;
   }
 `;
+
+const LoadingImg = styled.img`
+  height: 17px;
+  width: 18px;
+`; 
 
 const IconButton = styled(Button)`
   padding: 0;
