@@ -44,6 +44,8 @@ const FakePfp = styled.div`
   border-radius: 50%;
   background-color: #e9e9e9;
   margin-right: 16px;
+
+  flex-shrink: 0;
 `;
 
 const Info = styled.div`

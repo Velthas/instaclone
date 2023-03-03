@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
-import { BsThreeDots } from "react-icons/bs";
+import { BsThreeDotsVertical } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { formatDateShort } from "../../../../utils/formatting";
 
@@ -65,7 +65,7 @@ const UserPhoto = styled.div`
   background-size: cover;
 `;
 
-const Dots = styled(BsThreeDots)`
+const Dots = styled(BsThreeDotsVertical)`
   cursor: pointer;
   width: 18px;
   height: 18px;

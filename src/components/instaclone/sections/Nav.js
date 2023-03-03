@@ -63,7 +63,7 @@ const Nav = ({ user, sidebar, setSidebar, active, setActive, userData }) => {
           notifications={notifications}
         />
 
-        <LogoContainer>
+        <LogoContainer sidebar={sidebar}>
           <MinifiedLogo sidebar={sidebar} title="instalogo" />
           <ExtendedLogo src={instalogo} sidebar={sidebar} title="instalogo" />
         </LogoContainer>
@@ -201,7 +201,7 @@ const LogoContainer = styled.div`
   height: 100px;
   width: 100%;
   padding: 0 16px;
-  justify-content: center;
+  justify-content: ${({sidebar}) => sidebar ? 'center' : 'flex-start'};
 
   @media(max-width: 750px) {
     display: none;

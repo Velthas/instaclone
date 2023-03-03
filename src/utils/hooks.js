@@ -64,7 +64,7 @@ const useComments = (post, inputSelector) => {
       setComments(commentdocs);
     };
     getPostComments(post.username, post.id);
-  }, []);
+  }, [post]);
 
   const insertComment = async () => {
     const input = document.querySelector(inputSelector);

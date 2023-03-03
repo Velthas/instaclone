@@ -39,7 +39,7 @@ const SignupForm = ({ displayError, setUser }) => {
         displayError("Username already taken");
         return;
       default:
-        createUser(mail, psw, usname, setUser);
+        await createUser(mail, psw, usname, setUser);
         createUserBucket(fullname, usname);
     }
   };

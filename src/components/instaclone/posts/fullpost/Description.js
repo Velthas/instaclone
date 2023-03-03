@@ -90,6 +90,7 @@ const Username = styled.div`
 const PostDescription = styled.div`
   font-size: 1rem;
   display: inline;
+  white-space: pre-wrap;
 `;
 
 const Extra = styled.div`

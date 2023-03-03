@@ -185,6 +185,7 @@ const Image = styled.img`
   max-width: 555px;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   border-bottom-left-radius: 10px;
 
   @media (max-width: 950px) {

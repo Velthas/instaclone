@@ -124,7 +124,6 @@ const Container = styled.div`
   
   @media (max-width: 750px) {
     height: calc(100vh - 50px);
-    margin-bottom: 50px;
   }
 `;
 
@@ -149,6 +148,10 @@ const Header = styled.div`
   ${flexRowCenter};
   flex-shrink: 0;
   justify-content: flex-end;
+
+  @media (max-width: 750px) {
+    border-right: none;
+  }
 `;
 
 const ChatlistContainer = styled.div`
