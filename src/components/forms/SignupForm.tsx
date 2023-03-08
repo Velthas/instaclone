@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 import InterInput from "../inputs/InterInput";
 import { validateMail, validatePsw, validateUsername, validateName } from "../../utils/validation";
@@ -7,13 +6,18 @@ import { createUser } from "../../firebase/authentication";
 import { createUserBucket, doesUserExist } from "../../firebase/firestore";
 import { flexRowCenter } from "../../styles/style";
 
-const SignupForm = ({ displayError, setUser }) => {
-  const handleSubmit = async (e) => {
+type Props = {
+  displayError: (message: string) => void,
+  setUser: () => void,
+}
+
+const SignupForm = ({ displayError, setUser }: Props) => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    displayError(null);
+    displayError("");
 
     const allInputs = Array.from(
-      document.querySelectorAll("#signup input")
+      document.querySelectorAll<HTMLInputElement>("#signup input")
     ).map((input) => input.value);
     const [mail, fullname, usname, psw] = allInputs;
     const isMailValid = validateMail(mail);
@@ -24,16 +28,16 @@ const SignupForm = ({ displayError, setUser }) => {
 
     switch (true) {
       case isMailValid !== true:
-        displayError(isMailValid);
+        if(typeof isMailValid === 'string') displayError(isMailValid);
         return;
       case isPswValid !== true:
-        displayError(isPswValid);
+        if(typeof isPswValid === 'string') displayError(isPswValid);
         return;
       case isNameValid !== true:
-        displayError(isNameValid);
+        if(typeof isNameValid === 'string') displayError(isNameValid);
         return;
       case isUsernameValid !== true:
-        displayError(isUsernameValid);
+        if(typeof isUsernameValid === 'string') displayError(isUsernameValid);
         return;
       case isUsernameTaken !== false:
         displayError("Username already taken");
@@ -65,11 +69,6 @@ const SignupForm = ({ displayError, setUser }) => {
       </Button>
     </Form>
   );
-};
-
-SignupForm.propTypes = {
-  displayError: PropTypes.func.isRequired,
-  setUser: PropTypes.func.isRequired,
 };
 
 const Form = styled.form`

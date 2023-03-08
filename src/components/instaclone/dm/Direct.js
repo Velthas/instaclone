@@ -121,9 +121,10 @@ const Container = styled.div`
   padding: 5%;
 
   ${flexRowCenter}
-  
+
   @media (max-width: 750px) {
     height: calc(100vh - 50px);
+    margin-bottom: 50px;
   }
 `;
 

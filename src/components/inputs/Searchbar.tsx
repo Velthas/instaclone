@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { BsSearch, BsXCircleFill } from "react-icons/bs";
 
-const Searchbar = ({ setQuery, id }) => {
+type Props = {
+  setQuery: (query: string) => void,
+  id: string,
+};
+
+const Searchbar = ({ setQuery, id }: Props) => {
   const [focused, setFocused] = useState(false);
 
   return (
@@ -17,7 +21,7 @@ const Searchbar = ({ setQuery, id }) => {
       {focused && (
         <InputContainer>
           <Input
-            autoFocus="true"
+            autoFocus={true}
             type={"text"}
             id={id}
             placeholder="Search"
@@ -29,11 +33,6 @@ const Searchbar = ({ setQuery, id }) => {
       )}
     </>
   );
-};
-
-Searchbar.propTypes = {
-  id: PropTypes.string.isRequired,
-  setQuery: PropTypes.func.isRequired,
 };
 
 const Container = styled.div`

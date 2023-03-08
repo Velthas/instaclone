@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { isFileImage } from "../../utils/validation";
 import { uploadPhoto } from "../../firebase/storage";
 import { updateProfile } from "../../firebase/firestore";
@@ -10,19 +9,27 @@ import Input from "../inputs/Input";
 import TextArea from "../inputs/Textarea";
 import FileImg from "../inputs/FileImg";
 
-const EditProfileForm = ({ info, loadInfo, refresh }) => {
-  const [error, setError] = useState(false);
+type Props = {
+  info: any,
+  loadInfo: () => void,
+  refresh: (username: string) => void,
+}
+
+const EditProfileForm = ({ info, loadInfo, refresh }: Props) => {
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    setError(false);
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    setError("");
     e.preventDefault();
 
-    const payload = {}; // This will store all info to be sent to firestore.
+    const payload: {name?: string; description?: string; pfp?: string} = {}; // Payload for firebase
     const [pfp, name] = Array.from(
-      document.querySelectorAll("#edit-profile input")
+      document.querySelectorAll<HTMLInputElement>("#edit-profile input")
     );
-    const bio = document.querySelector("#bio");
+    const bio = document.querySelector<HTMLTextAreaElement>("#bio");
+    console.log(pfp.files, pfp)
+    if(!(bio && pfp.files && name)) return //TODO: Log and see what pfp.files evaluates to
     const isPfpFileValid =
       pfp.files.length === 0 ? true : pfp.files[0] && isFileImage(pfp.files[0]);
     const isNameValid = validateName(name.value);
@@ -30,13 +37,13 @@ const EditProfileForm = ({ info, loadInfo, refresh }) => {
 
     switch (true) {
       case isPfpFileValid !== true:
-        setError(isPfpFileValid);
+        if (typeof isPfpFileValid  === 'string') setError(isPfpFileValid);
         return;
       case isNameValid !== true:
-        setError(isNameValid);
+        if (typeof isNameValid  === 'string') setError(isNameValid);
         return;
       case isDescrValid !== true:
-        setError(isDescrValid);
+        if (typeof isDescrValid  === 'string') setError(isDescrValid);
         return;
       default:
         if (name.value !== info.name) payload.name = name.value;
@@ -56,7 +63,7 @@ const EditProfileForm = ({ info, loadInfo, refresh }) => {
   return (
     <Form id="edit-profile">
       <ImageContainer>
-        <FileImg id="pfp" url={info ? info.pfp : ""} alt="profile picture" imgStyle={ImageStyle} />
+        <FileImg id="pfp" url={info ? info.pfp : ""} imgStyle={ImageStyle} />
         <UserInfo>
           <span>{info.username}</span>
           <FileLabel htmlFor="pfp">Change profile picture</FileLabel>
@@ -70,12 +77,6 @@ const EditProfileForm = ({ info, loadInfo, refresh }) => {
       </Button>
     </Form>
   );
-};
-
-EditProfileForm.propTypes = {
-  info: PropTypes.object,
-  loadInfo: PropTypes.func.isRequired,
-  refresh: PropTypes.func.isRequired
 };
 
 const Form = styled.form`
@@ -143,7 +144,7 @@ const Error = styled.p`
   text-align: center;
 `;
 
-const Button = styled.button`
+const Button = styled.button<{blue: boolean}>`
   padding: 8px 16px;
   margin-left: 5px;
   border: none;

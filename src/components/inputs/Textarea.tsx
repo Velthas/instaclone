@@ -1,41 +1,36 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 
-const Input = ({ id, type, placeholder, label, value, styling }) => {
+type Props = {
+  value: string | undefined,
+  id: string,
+  label?: string  
+};
+
+const TextArea = ({ value, id, label }: Props) => {
   const [input, setInput] = useState(value ? value : "");
-  const handleChange = (e) => setInput(e.target.value);
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => setInput(e.target.value);
 
   return (
     <Container>
       <Label htmlFor={id}>{label ? label : ""}</Label>
-      <InputWrapper>
+      <div>
         <TextBox
-          type={type}
-          placeholder={placeholder ? placeholder : ""}
           id={id}
+          rows={5}
+          maxLength={150}
           onChange={(e) => handleChange(e)}
           value={input}
-          styling={styling}
         />
-      </InputWrapper>
+        <Description>{input.length + "/150"}</Description>
+      </div>
     </Container>
   );
-};
-
-Input.propTypes = {
-  id: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  placeholder: PropTypes.string,
-  label: PropTypes.string,
-  value: PropTypes.string,
-  styling: PropTypes.string,
 };
 
 const Container = styled.div`
   height: min-content;
   display: flex;
-  width: 100%;
 
   @media (max-width: 750px) {
     flex-direction: column;
@@ -44,21 +39,25 @@ const Container = styled.div`
   }
 `;
 
-const InputWrapper = styled.div`
-  width: 100%;
-`;
-
-const TextBox = styled.input`
-  ${({ styling }) => styling}
-  height: 32px;
-  width: min(100%, 350px);
+const TextBox = styled.textarea`
+  padding: 5px;
   border-radius: 4px;
   border: 1px solid #dfdfdf;
-  padding: 5px;
+  width: 350px;
+  resize: none;
 
   &:focus-visible {
     outline: 1px solid black;
   }
+
+  @media (max-width: 750px) {
+    width: min(100%, 350px);
+  }
+`;
+
+const Description = styled.p`
+  font-size: 0.8rem;
+  color: #8e8e8e;
 `;
 
 const Label = styled.label`
@@ -75,4 +74,4 @@ const Label = styled.label`
   }
 `;
 
-export default Input;
+export default TextArea;

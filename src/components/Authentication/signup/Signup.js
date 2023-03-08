@@ -4,10 +4,10 @@ import styled from "styled-components";
 import { flexColumnCenter } from "../../../styles/style.js";
 
 import instalogo from "../../../assets/logo/instalogo.png";
-import SignupForm from "../../forms/SignupForm.js";
-import GoLogin from "./GoLogin.js";
-import FacebookButton from "./FacebookButton.js";
-import Separator from "./Separator.js";
+import SignupForm from "../../forms/SignupForm";
+import GoLogin from "./GoLogin";
+import FacebookButton from "./FacebookButton";
+import Separator from "./Separator";
 
 const Signup = ({ setUser }) => {
   const [error, setError] = useState(null);

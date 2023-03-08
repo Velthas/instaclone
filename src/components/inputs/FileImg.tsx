@@ -1,15 +1,22 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 import { isFileImage } from "../../utils/validation";
 
-const FileImg = ({ id, url, imgStyle }) => {
+type Props = {
+  id: string,
+  url: string,
+  imgStyle: string,
+};
+
+const FileImg = ({ id, url, imgStyle }: Props) => {
   const [photo, setPhoto] = useState(url);
 
-  const handleChange = (e) => {
-    const [file] = e.target.files;
-    let urlpic = URL.createObjectURL(file);
-    if (isFileImage(file)) setPhoto(urlpic);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if(e.target.files) {
+      const [file] = e.target.files;
+      let urlpic = URL.createObjectURL(file);
+      if (isFileImage(file)) setPhoto(urlpic);
+    };
   };
 
   return (
@@ -29,12 +36,6 @@ const FileImg = ({ id, url, imgStyle }) => {
   );
 };
 
-FileImg.propTypes = {
-  id: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired,
-  imgStyle: PropTypes.string,
-};
-
 const Input = styled.input`
   display: none;
 `;
@@ -49,7 +50,7 @@ const ImgWrapper = styled.div`
   }
 `;
 
-const Img = styled.img`
+const Img = styled.img<{imgStyle: string}>`
   object-fit: cover;
   ${({ imgStyle }) => imgStyle};
 `;

@@ -1,38 +1,40 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 
-const TextArea = ({ value, id, label }) => {
+type Props = {
+  id: string,
+  type: string,
+  placeholder?: string,
+  label?: string,
+  value: string,
+  styling?: string,
+};
+
+const Input = ({ id, type, placeholder, label, value, styling }: Props) => {
   const [input, setInput] = useState(value ? value : "");
-  const handleChange = (e) => setInput(e.target.value);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value);
 
   return (
     <Container>
       <Label htmlFor={id}>{label ? label : ""}</Label>
-      <div>
+      <InputWrapper>
         <TextBox
+          type={type}
+          placeholder={placeholder ? placeholder : ""}
           id={id}
-          rows="5"
-          col="33"
-          maxLength="150"
           onChange={(e) => handleChange(e)}
           value={input}
+          styling={styling}
         />
-        <Description>{input.length + "/150"}</Description>
-      </div>
+      </InputWrapper>
     </Container>
   );
-};
-
-TextArea.propTypes = {
-  value: PropTypes.string,
-  id: PropTypes.string.isRequired,
-  label: PropTypes.string
 };
 
 const Container = styled.div`
   height: min-content;
   display: flex;
+  width: 100%;
 
   @media (max-width: 750px) {
     flex-direction: column;
@@ -41,25 +43,21 @@ const Container = styled.div`
   }
 `;
 
-const TextBox = styled.textarea`
-  padding: 5px;
+const InputWrapper = styled.div`
+  width: 100%;
+`;
+
+const TextBox = styled.input<{styling: string | undefined}>`
+  ${({ styling }) => styling}
+  height: 32px;
+  width: min(100%, 350px);
   border-radius: 4px;
   border: 1px solid #dfdfdf;
-  width: 350px;
-  resize: none;
+  padding: 5px;
 
   &:focus-visible {
     outline: 1px solid black;
   }
-
-  @media (max-width: 750px) {
-    width: min(100%, 350px);
-  }
-`;
-
-const Description = styled.p`
-  font-size: 0.8rem;
-  color: #8e8e8e;
 `;
 
 const Label = styled.label`
@@ -76,4 +74,4 @@ const Label = styled.label`
   }
 `;
 
-export default TextArea;
+export default Input;

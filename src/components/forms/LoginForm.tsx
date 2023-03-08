@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { validateMail, validatePsw } from "../../utils/validation";
 import { flexRowCenter } from "../../styles/style";
 import { loginUser } from "../../firebase/authentication";
@@ -8,22 +7,29 @@ import { redirect } from "react-router-dom";
 
 import InterInput from "../inputs/InterInput";
 
-const LoginForm = ({ displayError }) => {
-  const handleSubmit = (e) => {
+type Props = {
+  displayError: (message: string) => void,
+};
+
+const LoginForm = ({ displayError }: Props) => {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     displayError("");
-    const mail = document.querySelector("#mail").value;
-    const psw = document.querySelector("#pass").value;
+    const mailInput = document.querySelector<HTMLInputElement>("#mail")
+    const pswInput = document.querySelector<HTMLInputElement>("#pass")
+    if(!(mailInput && pswInput)) return;
+    const mail = mailInput.value;
+    const psw = pswInput.value;
 
     const isMailValid = validateMail(mail);
     const isPswValid = validatePsw(psw);
 
     switch (true) {
       case isMailValid !== true:
-        displayError(isMailValid);
+        if(typeof isMailValid === 'string') displayError(isMailValid);
         return;
       case isPswValid !== true:
-        displayError(isPswValid);
+        if(typeof isPswValid === 'string') displayError(isPswValid);
         return;
       default:
         loginUser(mail, psw);
@@ -40,10 +46,6 @@ const LoginForm = ({ displayError }) => {
       </Button>
     </Form>
   );
-};
-
-LoginForm.propTypes = {
-  displayError: PropTypes.func.isRequired,
 };
 
 const Form = styled.form`

@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { BsXCircle, BsCheckCircle } from "react-icons/bs";
 import { flexRowCenter } from "../../styles/style";
 import { IconContext } from "react-icons";
 
-const InterInput = ({ label, type, id, checkValid }) => {
+type Props = {
+  label: string,
+  type: string,
+  id: string, 
+  checkValid: (content: string) => boolean | string ,
+};
+
+const InterInput = ({ label, type, id, checkValid }: Props) => {
   const [value, setValue] = useState("");
   const [valid, setValid] = useState(true);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValid(true);
     const valueIsValid = checkValid(e.target.value);
     if (valueIsValid !== true) setValid(false);
@@ -17,7 +23,7 @@ const InterInput = ({ label, type, id, checkValid }) => {
   };
 
   return (
-    <IconContext.Provider value={{ style: { cursor: "pointer" }, size: 24 }}>
+    <IconContext.Provider value={{ style: { cursor: "pointer" }, size: '24' }}>
       <Container>
         <InputContainer>
           <Label hasContent={value.length > 0} htmlFor={id}>
@@ -38,13 +44,6 @@ const InterInput = ({ label, type, id, checkValid }) => {
   );
 };
 
-InterInput.propTypes = {
-  label: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
-  checkValid: PropTypes.func.isRequired,
-};
-
 const Container = styled.div`
   width: 100%;
   height: 40px;
@@ -55,7 +54,7 @@ const Container = styled.div`
   flex-shrink: 0;
 
   border: 1px solid #dbdbdb;
-  background-color: #fafafa;
+  background-color: transparent;
 `;
 
 const InputContainer = styled.div`
@@ -67,7 +66,7 @@ const InputContainer = styled.div`
   flex-shrink: 0;
 `;
 
-const Input = styled.input`
+const Input = styled.input<{hasContent: boolean}>`
   ${(props) =>
     props.hasContent ? "padding: 14px 0 2px 8px" : "padding: 8px 8px"};
   width: 100%;
@@ -85,7 +84,7 @@ const highAligned = `
   transform: translateY(-10px);
 `;
 
-const Label = styled.label`
+const Label = styled.label<{hasContent: boolean}>`
   ${(props) => (props.hasContent ? highAligned : centerAligned)};
   position: absolute;
   left: 8px;
