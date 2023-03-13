@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { flexColumnCenter, flexRowCenter } from "../../../styles/style";
 
@@ -10,8 +10,8 @@ import Register from "./Register";
 import TestLogin from "./TestLogin";
 
 const Login = () => {
-  const [error, setError] = useState(null);
-  const displayError = (msg) => setError(msg);
+  const [error, setError] = useState("");
+  const displayError = (msg: string) => setError(msg);
 
   return (
     <Container>

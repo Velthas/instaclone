@@ -5,11 +5,12 @@ import { validateMail, validatePsw, validateUsername, validateName } from "../..
 import { createUser } from "../../firebase/authentication";
 import { createUserBucket, doesUserExist } from "../../firebase/firestore";
 import { flexRowCenter } from "../../styles/style";
+import { FirebaseUser } from "../../utils/types";
 
 type Props = {
   displayError: (message: string) => void,
-  setUser: () => void,
-}
+  setUser: (authUser: FirebaseUser | null) => void,
+};
 
 const SignupForm = ({ displayError, setUser }: Props) => {
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {

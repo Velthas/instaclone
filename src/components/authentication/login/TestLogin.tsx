@@ -1,27 +1,29 @@
-import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { flexRowCenter } from "../../../styles/style";
+import { loginTestUser } from "../../../firebase/authentication";
+import { redirect } from "react-router-dom";
 
-const GoLogin = () => {
+const TestLogin = () => {
+  const handleClick = () => {
+    loginTestUser();
+    redirect("/");
+  };
+
   return (
     <Container>
-      Already have an account?
-      <StyledLink to="/auth">Log in</StyledLink>
+      Want to poke around?
+      <Url onClick={handleClick}>Use a test account</Url>
     </Container>
   );
 };
-
-export default GoLogin;
 
 const Container = styled.div`
   ${flexRowCenter};
   width: 350px;
   min-height: 50px;
-  margin: 15px 0;
+  margin: 0 0 15px 0;
   border: 1px solid #dbdbdb;
-  font-size: 1rem;
-  margin-bottom: 36px;
+  font-size: 0.9rem;
 
   @media (max-width: 550px) {
     width: 80%;
@@ -30,13 +32,15 @@ const Container = styled.div`
   @media (max-width: 350px) {
     width: 90%;
     flex-direction: column;
-    font-size: 0.8rem;
   }
 `;
 
-const StyledLink = styled(Link)`
+const Url = styled.a`
+  cursor: pointer;
   color: #4295f6;
   font-weight: 500;
   text-decoration: none;
   margin-left: 5px;
 `;
+
+export default TestLogin;

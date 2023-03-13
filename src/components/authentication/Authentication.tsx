@@ -1,10 +1,16 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
+
 import Login from "./login/Login";
 import Signup from "./signup/Signup";
+import { FirebaseUser } from "../../utils/types";
 
-const Authentication = ({ user, setUser }) => {
+type Props = {
+  user: FirebaseUser | null,
+  setUser: (authUser: FirebaseUser | null) => void, 
+};
+
+const Authentication = ({ user, setUser }: Props) => {
   const navigate = useNavigate();
   useEffect(() => {
     if (user) navigate("/");
@@ -15,11 +21,6 @@ const Authentication = ({ user, setUser }) => {
       <Route path="signup" element={<Signup setUser={setUser} />} />
     </Routes>
   );
-};
-
-Authentication.propTypes = {
-  setUser: PropTypes.func.isRequired,
-  user: PropTypes.object,
 };
 
 export default Authentication;

@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import { useState } from "react";
 import styled from "styled-components";
 import { flexColumnCenter } from "../../../styles/style.js";
+import { FirebaseUser } from "../../../utils/types.js";
 
 import instalogo from "../../../assets/logo/instalogo.png";
 import SignupForm from "../../forms/SignupForm";
@@ -9,9 +9,13 @@ import GoLogin from "./GoLogin";
 import FacebookButton from "./FacebookButton";
 import Separator from "./Separator";
 
-const Signup = ({ setUser }) => {
-  const [error, setError] = useState(null);
-  const displayError = (msg) => setError(msg);
+type Props = {
+  setUser: (authUser: FirebaseUser | null) => void,
+};
+
+const Signup = ({ setUser }: Props) => {
+  const [error, setError] = useState("");
+  const displayError = (msg: string) => setError(msg);
 
   return (
     <Container>
@@ -26,10 +30,6 @@ const Signup = ({ setUser }) => {
       <GoLogin />
     </Container>
   );
-};
-
-Signup.propTypes = {
-  setUser: PropTypes.func.isRequired,
 };
 
 const Container = styled.div`
@@ -75,6 +75,7 @@ const Error = styled.p`
   margin-top: 12px;
   font-size: 1rem;
   color: #ee2e3e;
+  text-align: center;
 `;
 
 export default Signup;

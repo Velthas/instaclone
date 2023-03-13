@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../utils/hooks";
 import styled from "styled-components";
-import PropTypes from "prop-types";
+import { FirebaseUser } from "../../utils/types";
 
 import Nav from "./sections/Nav";
 import Main from "./sections/Main";
 
-const Instaclone = ({ user }) => {
+type Props = {
+  user: FirebaseUser | null
+};
+
+const Instaclone = ({ user }: Props) => {
   const navigate = useNavigate();
   const [sidebar, setSidebar] = useState(false); // Regulates sidebar display
   const [active, setActive] = useState("home"); // Determines which nav icon is marked as active
@@ -24,7 +28,7 @@ const Instaclone = ({ user }) => {
   }, [user]);
 
   // Used when click occurs on any place that isn't nav
-  const closeSidebar = (section) => {
+  const closeSidebar = (section: string) => {
     if (sidebar === true) setSidebar(false);
     if (section && section !== active) setActive(section);
   };
@@ -42,10 +46,6 @@ const Instaclone = ({ user }) => {
       <Main getUserData={getUserData} closeSidebar={closeSidebar} user={user} />
     </Container>
   );
-};
-
-Instaclone.propTypes = {
-  user: PropTypes.object,
 };
 
 const Container = styled.div`

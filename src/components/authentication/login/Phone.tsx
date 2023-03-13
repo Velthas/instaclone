@@ -1,5 +1,5 @@
 import styled, { keyframes } from "styled-components";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { flexRowCenter } from '../../../styles/style';
 
 import loginbackground from "../../../assets/images/login.png";
@@ -24,13 +24,12 @@ const Phone = () => {
   return (
     <PhoneContainer>
       {carousel.map((photo, index) => {
-        if (index === slide) return <Image key={slide} src={photo} />;
+        if (index === slide) return <Image key={slide} src={photo} />
+        else return "";
       })}
     </PhoneContainer>
   );
 };
-
-export default Phone;
 
 const PhoneContainer = styled.div`
   background-image: url(${loginbackground});
@@ -64,3 +63,5 @@ const Image = styled.img`
 
   ${flexRowCenter};
 `;
+
+export default Phone;

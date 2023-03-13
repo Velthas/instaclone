@@ -133,7 +133,7 @@ Nav.propTypes = {
   user: PropTypes.object,
   sidebar: PropTypes.bool.isRequired,
   setSidebar: PropTypes.func.isRequired,
-  active: PropTypes.bool.isRequired,
+  active: PropTypes.string.isRequired,
   setActive: PropTypes.func.isRequired,
   userData: PropTypes.object, 
 };

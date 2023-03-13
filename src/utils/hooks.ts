@@ -1,33 +1,22 @@
 import { useState, useEffect } from "react";
-import {
-  updateLikes,
-  addComment,
-  getPostInfo,
-  getComments,
-  getUserInfo,
-  getPosts,
-  getCommentDocReference,
-  updateFollow,
-  searchForProfiles,
-  addNotification,
-  setupNotifListener,
-  setNotificationsSeen,
-} from "../firebase/firestore";
+import * as fs from "../firebase/firestore";
 import { Timestamp } from "firebase/firestore";
 import { getCurrentUserUsername } from "../firebase/authentication";
 import { formatNotification } from "./formatting";
+import * as tp from '../utils/types';
 
 // Handles 'liked' status of a post, allowing for liking and unliking.
-const useLiked = (post) => {
+const useLiked = (post: tp.Post) => {
   const currentUser = getCurrentUserUsername();
-  const [liked, setLiked] = useState(post.likedby.indexOf(currentUser) !== -1);
+  const isLiked = currentUser ? post.likedby.indexOf(currentUser) !== -1 : false;
+  const [liked, setLiked] = useState(isLiked);
 
-  const changeLiked = (liked) => {
+  const changeLiked = (liked: boolean) => {
     if(!liked && currentUser !== post.username) { // Append notif. only if not liking own post
       const likeNotification = formatNotification('l', post.id, post.username);
-      addNotification(post.username, likeNotification);
+      fs.addNotification(post.username, likeNotification);
     }
-    updateLikes(`Users/${post.username}/Posts/${post.id}`, currentUser, !liked);
+    fs.updateLikes(`Users/${post.username}/Posts/${post.id}`, currentUser, !liked);
     setLiked(!liked);
   };
 
@@ -35,18 +24,20 @@ const useLiked = (post) => {
 };
 
 // Handles likes on comments, allowing liking and unliking posts.
-const useCommentsLiked = (comment, post) => {
+const useCommentsLiked = (comment: tp.Comment, post: tp.Post) => {
   const currentUser = getCurrentUserUsername();
-  const [liked, setLiked] = useState(comment.likedby.indexOf(currentUser) !== -1);
+  const isLiked = currentUser ? comment.likedby.indexOf(currentUser) !== -1 : false;
+  const [liked, setLiked] = useState(isLiked);
 
-  const changeLiked = (liked) => {
+  const changeLiked = (liked: boolean) => {
     if(!liked && currentUser !== comment.author) { // Send notif. only if not liking own comments
       const clNotification = formatNotification('cl', post.id, post.username, comment.content, comment.id);
-      addNotification(comment.author, clNotification);
+      fs.addNotification(comment.author, clNotification);
     }
-    updateLikes(`Users/${post.username}/Posts/${post.id}/Comments/${comment.id}`, currentUser, !liked);
+    fs.updateLikes(`Users/${post.username}/Posts/${post.id}/Comments/${comment.id}`, currentUser, !liked);
     setLiked(!liked);
   };
+
   return [liked, changeLiked];
 };
 
@@ -56,30 +47,31 @@ const useCommentsLiked = (comment, post) => {
 // For now, I use the post's id as an id selector for the input.
 // This avoids mix-ups when multiple inputs are present on the same page.
 // Comments are a subcollection of post, and thus need to be fetched independently from it.
-const useComments = (post, inputSelector) => {
-  const [comments, setComments] = useState(null);
+const useComments = (post: tp.Post, inputSelector: string) => {
+  const [comments, setComments] = useState< tp.Comment[] | null>(null);
   useEffect(() => {
-    const getPostComments = async (username, postid) => {
-      const commentdocs = await getComments(username, postid);
+    const getPostComments = async (username: string, postid: string) => {
+      const commentdocs = await fs.getComments(username, postid);
       setComments(commentdocs);
     };
     getPostComments(post.username, post.id);
   }, [post]);
 
   const insertComment = async () => {
-    const input = document.querySelector(inputSelector);
+    const input = document.querySelector<HTMLInputElement>(inputSelector);
+    if(!input) return;
     const content = input.value;
     if (content.length === 0 || content.length > 2200) return;
-    const commentRef = await getCommentDocReference(post); // Need this to extract ID
+    const commentRef = await fs.getCommentDocReference(post); // Need this to extract ID
     const id = commentRef.id; // I store this ID in my payload.
     const timestamp = Timestamp.now();
-    const author = getCurrentUserUsername();
-    const likedby = [];
-    const comment = { content, author, timestamp, id, likedby };
+    let author = getCurrentUserUsername();
+    const likedby: string[] = [];
+    const comment = { content, author, timestamp, id, likedby } as tp.Comment;
     const commentNotification = formatNotification('c', post.id, post.username, content, id);
     if(post.username !== author) // Only send a notification if commenting other's posts
-      addNotification(post.username, commentNotification);
-    addComment(commentRef, comment); // Add doc to the db for permanent storage
+      fs.addNotification(post.username, commentNotification);
+    fs.addComment(commentRef, comment); // Add doc to the db for permanent storage
     setComments([comment].concat(comments)); // Updates the front-end
   };
 
@@ -178,8 +170,8 @@ const useProfile = (username) => {
   const [posts, setPosts] = useState([]);
   useEffect(() => {
     const loadAllInfo = async () => {
-      const userInfo = await getUserInfo(username);
-      const postInfo = await getPosts(username);
+      const userInfo = await fs.getUserInfo(username);
+      const postInfo = await fs.getPosts(username);
       setUser(userInfo);
       setPosts(postInfo);
     }

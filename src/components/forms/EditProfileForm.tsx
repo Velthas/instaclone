@@ -28,8 +28,7 @@ const EditProfileForm = ({ info, loadInfo, refresh }: Props) => {
       document.querySelectorAll<HTMLInputElement>("#edit-profile input")
     );
     const bio = document.querySelector<HTMLTextAreaElement>("#bio");
-    console.log(pfp.files, pfp)
-    if(!(bio && pfp.files && name)) return //TODO: Log and see what pfp.files evaluates to
+    if(!(bio && pfp.files && name)) return;
     const isPfpFileValid =
       pfp.files.length === 0 ? true : pfp.files[0] && isFileImage(pfp.files[0]);
     const isNameValid = validateName(name.value);

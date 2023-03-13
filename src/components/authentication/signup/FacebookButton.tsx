@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { flexRowCenter } from "../../../styles/style";
 import { GrFacebook } from "react-icons/gr";
