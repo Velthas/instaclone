@@ -1,7 +1,8 @@
 import { db } from "./firebase-config";
 import * as fs from "firebase/firestore";
 import { getCurrentUserUsername } from "./authentication";
-import { Chatroom, Message, Notifications, Post, ProfilePayload } from "../utils/types";
+import { Chatroom, Message, Notifications, Post, ProfilePayload, Comments, InstaUser } from "../utils/types";
+
 // Used to create a document for new user in database
 const createUserBucket = (name: string, username: string) => {
   const defaultPfp =
@@ -36,7 +37,7 @@ const doesUserExist = async (username: string) => {
 const getUserInfo = async (username: string) => {
   const docRef = fs.doc(db, "Users", username);
   const userDoc = await fs.getDoc(docRef);
-  const data = userDoc.data();
+  const data = userDoc.data() as InstaUser;
   return data;
 };
 
@@ -46,7 +47,7 @@ const getPosts = async (username: string) => {
   const q = fs.query(colRef, fs.orderBy("timestamp", "desc"));
   const posts = await fs.getDocs(q);
   if (posts.empty) return [];
-  else return posts.docs.map((doc) => doc.data());
+  else return posts.docs.map((doc) => doc.data()) as Post[];
 };
 
 // Used to update the profile info on an user
@@ -79,7 +80,7 @@ const createPost = async (ref: fs.DocumentReference, payload: Post) => {
 const getPostInfo = async (username: string, postId: string) => {
   const docRef = fs.doc(db, "Users", username, "Posts", postId);
   const document = await fs.getDoc(docRef);
-  return document.data();
+  return document.data() as Post;
 };
 
 // Returns an array with all the comments of a given post sorted by timestamp
@@ -90,7 +91,7 @@ const getComments = async (username: string, postId: string) => {
   else
     return comments.docs
       .map((comment) => comment.data())
-      .sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
+      .sort((a, b) => b.timestamp.seconds - a.timestamp.seconds) as Comments[];
 };
 
 // Used to update comment/post likes
@@ -100,7 +101,7 @@ const updateLikes = async (path: string, username: string, liked: boolean) => {
   else fs.updateDoc(docRef, { likedby: fs.arrayRemove(username) });
 };
 
-const addComment = async (ref: fs.DocumentReference, comment: Comment) => {
+const addComment = async (ref: fs.DocumentReference, comment: Comments) => {
   fs.setDoc(ref, comment);
 };
 
@@ -110,7 +111,7 @@ const deletePost = async (post: Post) => {
 };
 
 // Follow and unfollow requires two writes, to both user profiles
-const updateFollow = async (followee: string, followed: string) => {
+const updateFollow = async (followee: string, followed: boolean) => {
   // Potentially null but auth listener redirects to auth when variable is null, so ok
   const follower = getCurrentUserUsername() as string;
   const followerRef = fs.doc(db, "Users", follower);
@@ -136,7 +137,7 @@ const searchForProfiles = async (userQuery: string) => {
   );
   const results = await fs.getDocs(q);
   if (results.empty) return [];
-  return results.docs.map((doc) => doc.data());
+  return results.docs.map((doc) => doc.data()) as InstaUser[];
 };
 
 // Look at each person followed by user and draw 4 most recent posts.

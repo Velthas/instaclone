@@ -1,6 +1,7 @@
 import { getCurrentUserUsername } from "../firebase/authentication";
 import { format } from "date-fns";
 import { Timestamp } from "firebase/firestore";
+import { Notifications } from "./types";
 
 let periods = {
   year: 365 * 24 * 60 * 60 * 1000,
@@ -96,7 +97,7 @@ const likeDiscursiveFormat = (likedby: string[], liked: boolean) => {
 
 // Depending on what type of notification it is, format and return appropriate payload
 // Payload will then be sent over to the db and inserted as a new document.
-const formatNotification = (type: string, postid: string, poster: string, message: string, commentid: string) => {
+const formatNotification = (type: string, postid?: string, poster?: string, message?: string, commentid?: string): Notifications | undefined => {
   const timestamp = Timestamp.now() // Get a timestamp for each notification
   const seen = false; // All notifications are unseen by default
   const author = getCurrentUserUsername() as string // Potentially null but not really
