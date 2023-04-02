@@ -1,10 +1,14 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
 import { BsTelephone, BsCameraVideo, BsInfoCircle, BsChevronLeft } from "react-icons/bs";
+import { Chatroom } from "../../../../utils/types";
 
-const RoomHeader = ({ active, backToChatSelection }) => {
+type Props = {
+  active: Chatroom | null,
+  backToChatSelection: () => void,
+};
+
+const RoomHeader = ({ active, backToChatSelection }: Props) => {
   return (
     <Header>
       <BackIcon onClick={backToChatSelection} />
@@ -16,11 +20,6 @@ const RoomHeader = ({ active, backToChatSelection }) => {
       </Icons>
     </Header>
   );
-};
-
-RoomHeader.propTypes = {
-  active: PropTypes.any,
-  backToChatSelection: PropTypes.func.isRequired
 };
 
 const Header = styled.div`

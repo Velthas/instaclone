@@ -1,16 +1,15 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
+import { ChatMessage } from "../../../utils/types";
 
-const Message = ({ message, user }) => {
+type Props = {
+  message: ChatMessage,
+  user: string,
+};
+
+const Message = ({ message, user }: Props) => {
   return (
     <Container isOwn={user === message.author}>{message.content}</Container>
   );
-};
-
-Message.propTypes = {
-  user: PropTypes.string.isRequired,
-  message: PropTypes.object.isRequired,
 };
 
 const LeftAlign = `
@@ -23,7 +22,7 @@ const RightAlign = `
   margin-left: auto;
 `;
 
-const Container = styled.div`
+const Container = styled.div<{isOwn: boolean}>`
   padding: 16px;
   border: 1px solid #efefef;
   border-radius: 24px;

@@ -111,21 +111,21 @@ const usePost = (username: string, postId: string) => {
 
 // Fetch user information and update it when needed using updateUser.
 // Using it in comments/notifications/search when only pfp and username is needed.
-const useUser = (username: string) => {
+const useUser = (username: string | null): [tp.InstaUser | null, (username: string) => void] => {
   const [user, setUser] = useState<tp.InstaUser | null>(null);
   useEffect(() => {
     if(username) getUser(username);
   }, []);
 
-  const getUser = async (username: string) => {
+  const getUser = async (username: string): Promise<void> => {
     const userData = await fs.getUserInfo(username);
-    setUser(userData);
+    if(userData) setUser(userData);
   };
 
   return [user, getUser];
 };
 
-const useFollow = (user: tp.InstaUser) => {
+const useFollow = (user: tp.InstaUser | null) => {
   const currentUser = getCurrentUserUsername() as string;
   const [followed, setFollowed] = useState(false);
   useEffect(() => {
@@ -149,8 +149,8 @@ const useFollow = (user: tp.InstaUser) => {
 // As of now, it will give back only profiles whose username's prefix matches the query
 // so if I search for 'te', and an account named 'test' exists, it will appear on screen.
 // Just the same, if there is a profile named 'footest', it would not appear under the same query
-const useSearch = () => {
-  const [query, setQuery] = useState<null | string>(null);
+const useSearch = (): [profiles: [] | tp.InstaUser[], setQuery: (query: string) => void] => {
+  const [query, setQuery] = useState<string>("");
   const [profiles, setProfiles] = useState<[] | tp.InstaUser[]>([])
   useEffect(() => {
     const searchProfiles = async () => {
@@ -188,7 +188,7 @@ const useProfile = (username: string) => {
 // This hook handles notifications for the logged user.
 // As new notifications come in they get updated on the front-end.
 // Notifications are sorted by timestamp so new ones will always be at the top of the list.
-const useNotifications = (username:string) => {
+const useNotifications = (username: string) => {
   const [notifications, setNotifications] = useState<[] | tp.Notifications[]>([]); // Houses data fetched from backend
   const [limit, setLimit] = useState(80); // Regulates how many notifications are shown
   const listener = useRef<null | (() => void)>(null); // Store db listener unsubscription function

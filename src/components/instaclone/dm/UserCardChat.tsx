@@ -1,10 +1,15 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { BsCircle, BsCheckCircleFill } from "react-icons/bs";
 import { flexRowBetween, flexRowCenter } from "../../../styles/style";
+import { InstaUser } from "../../../utils/types";
 
-const UserCardChat = ({ user, toggleSelected, selected }) => {
+type Props = {
+  user: InstaUser,
+  toggleSelected: (username: string) => void,
+  selected: string,
+};
+
+const UserCardChat = ({ user, toggleSelected, selected }: Props) => {
   return (
     <Container onClick={() => toggleSelected(user.username)}>
       <CardInfo>
@@ -17,12 +22,6 @@ const UserCardChat = ({ user, toggleSelected, selected }) => {
       {selected === user.username ? <Checked /> : <BsCircle />}
     </Container>
   );
-};
-
-UserCardChat.propTypes = {
-  user: PropTypes.object.isRequired,
-  toggleSelected: PropTypes.func.isRequired,
-  selected: PropTypes.any,
 };
 
 const Container = styled.div`
@@ -44,7 +43,7 @@ const CardInfo = styled.div`
   gap: 10px;
 `;
 
-const Picture = styled.div`
+const Picture = styled.div<{url: string}>`
   background-image: url(${({ url }) => url});
   background-position: center;
   background-size: cover;

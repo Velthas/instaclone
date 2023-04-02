@@ -1,13 +1,16 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { flexColumnCenter, flexRowBetween } from "../../../styles/style";
 import { useUser } from "../../../utils/hooks";
 import { Link } from "react-router-dom";
+import { FirebaseUser } from "../../../utils/types";
 
 import SuggestionCard from "./SuggestionCard";
 
-const Suggestions = ({ currentUser }) => {
+type Props = {
+ currentUser: FirebaseUser
+};
+
+const Suggestions = ({ currentUser }: Props) => {
   const [user, updateUser] = useUser(currentUser ? currentUser.displayName : null);
   const userList = ["thegonkbrigade", "panampalmer", "thealvarez", "riverpd", "arasakaoverall"];
 
@@ -35,10 +38,6 @@ const Suggestions = ({ currentUser }) => {
       </SuggestionsWrapper>
     </Container>
   );
-};
-
-Suggestions.propTypes = {
-  currentUser: PropTypes.any,
 };
 
 const Container = styled.div`
@@ -76,7 +75,7 @@ const SuggestionsWrapper = styled.div`
   flex-direction: column;
 `;
 
-const Picture = styled.div`
+const Picture = styled.div<{url: string}>`
   background-image: url(${({ url }) => url});
   background-position: center;
   background-size: cover;

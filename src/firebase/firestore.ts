@@ -1,7 +1,7 @@
 import { db } from "./firebase-config";
 import * as fs from "firebase/firestore";
 import { getCurrentUserUsername } from "./authentication";
-import { Chatroom, Message, Notifications, Post, ProfilePayload, Comments, InstaUser } from "../utils/types";
+import { Chatroom, ChatMessage, Notifications, Post, ProfilePayload, Comments, InstaUser } from "../utils/types";
 
 // Used to create a document for new user in database
 const createUserBucket = (name: string, username: string) => {
@@ -206,13 +206,13 @@ const setupAllChatsListener = (username: string, setRooms: (rooms: Chatroom[]) =
 };
 
 // Listens to a specific chat's messages when it's open.
-const setupMessagesListener = (id: string, setMessages: (messages: Message[]) => void) => {
+const setupMessagesListener = (id: string, setMessages: (messages: ChatMessage[]) => void) => {
   const q = fs.query(
     fs.collection(db, "Chats", id, "Messages"),
     fs.orderBy("timestamp", "asc") // Order by timestamp
   ); 
   const unsubscribe = fs.onSnapshot(q, (querySnapshot) => {
-    const data = querySnapshot.docs.map((doc) => doc.data()) as Message[];
+    const data = querySnapshot.docs.map((doc) => doc.data()) as ChatMessage[];
     setMessages(data); // Updates messages of room component
   });
   return unsubscribe; // Call this later to kill the listener
@@ -254,7 +254,7 @@ const createChatRoom = async (author: string, receiver: string) => {
 };
 
 // Function used to add messages on backend
-const addMessage = async (author: string, receiver: string, chatId: string, payload: Message) => {
+const addMessage = async (author: string, receiver: string, chatId: string, payload: ChatMessage) => {
   // Get references to both author and receiver dm docs
   const authorDocRef = fs.doc(db, "Users", author, "Dm", receiver); // Sender;
   const receivDocRef = fs.doc(db, "Users", receiver, "Dm", author); // Receiver;

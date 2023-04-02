@@ -38,7 +38,7 @@ export type ProfilePayload = {
 };
 
 export type Notifications = {
-  type: 'l' | 'cl' | 'f' | 'c',
+  type: "l" | "cl" | "f" | "c",
   author: string,
   content?: string,
   seen: boolean,
@@ -46,18 +46,18 @@ export type Notifications = {
   postid?: string,
   commentid?: string,
   timestamp: Timestamp,
-  id: string,
+  id?: string,
 };
 
-export type Message = {
-  author: string,
+export type ChatMessage = {
+  author: string | null,
   content: string,
   timestamp: Timestamp
-  id: string,
+  id?: string,
 };
 
 export type Chatroom = {
   chatId: string,
   username: string,
-  lastMessage: Message | null,
+  lastMessage?: ChatMessage | null,
 };

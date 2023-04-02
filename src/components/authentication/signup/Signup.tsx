@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { flexColumnCenter } from "../../../styles/style.js";
+import { flexColumnCenter } from "../../../styles/style";
 import { FirebaseUser } from "../../../utils/types.js";
 
 import instalogo from "../../../assets/logo/instalogo.png";

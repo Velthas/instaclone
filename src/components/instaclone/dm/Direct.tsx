@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { setupAllChatsListener } from "../../../firebase/firestore";
 import { IconContext } from "react-icons";
@@ -9,18 +8,24 @@ import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { BsChevronDown } from "react-icons/bs";
 import { createChatRoom } from "../../../firebase/firestore";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
+import { FirebaseUser, Chatroom } from "../../../utils/types";
 
 import NewChatModal from "./NewChatModal";
 import ChatEntry from "./ChatEntry";
 import Room from "./room/Room";
 
-const Direct = ({ user, closeSidebar }) => {
-  const currentUser = getCurrentUserUsername();
-  const unsubscribe = useRef(null); // Will hold unsubscribe database listener function
+type Props = {
+  user: FirebaseUser
+  closeSidebar: (active: string) => void 
+}
+
+const Direct = ({ user, closeSidebar }: Props) => {
+  const currentUser = getCurrentUserUsername() as string;
+  const unsubscribe = useRef<null | (() => void)>(null); // Will hold unsubscribe database listener function
   const [modal, setModal] = useState(false); // Regulates 'new chat' modal appearance.
-  const [rooms, setRooms] = useState(null); // Array of chatroom objects
-  const [newRoom, setNewRoom] = useState(null); // Stores empty empty/new chatrooms
-  const [active, setActive] = useState(null); // Causes selected chat to be highlighted
+  const [rooms, setRooms] = useState<null | Chatroom[]>(null); // Array of chatroom objects
+  const [newRoom, setNewRoom] = useState<null | Chatroom>(null); // Stores empty empty/new chatrooms
+  const [active, setActive] = useState<null | Chatroom>(null); // Causes selected chat to be highlighted
   const navigate = useNavigate();
 
   // Sets message section as active on navbar
@@ -41,11 +46,12 @@ const Direct = ({ user, closeSidebar }) => {
   // If the room exist and has at least one message, simply open it
   // Else if the room exists but has no messages, set it as NewRoom to make it appear
   // Otherwise, if room does not exist at all, create one, then open it.
-  const createRoom = async (username) => {
+  const createRoom = async (username: string) => {
     const [room] = rooms ? rooms.filter((room) => room.username === username) : [null];
 
     if (room && room.lastMessage) {
-      document.querySelector(`#${room.chatId}`).click();
+      const chatDiv = document.querySelector<HTMLElement>(`#${room.chatId}`)
+      if(chatDiv) chatDiv.click();
     } else if (room && !room.lastMessage) {
       openChatRoom(room.chatId, room.username);
       setNewRoom(room); // NewRoom is displayed unconditionally
@@ -58,13 +64,13 @@ const Direct = ({ user, closeSidebar }) => {
     setModal(false); // Close the modal
   };
 
-  const openChatRoom = (id, username) => {
+  const openChatRoom = (id: string, username: string) => {
     setActive({chatId: id, username});
     navigate(`${id}`); // Will make the chatroom component appear, loading messages
   };
 
   return (
-    <IconContext.Provider value={{ style: { cursor: "pointer" }, size: 22 }}>
+    <IconContext.Provider value={{ style: { cursor: "pointer" }, size: '22' }}>
       <Container onClick={() => closeSidebar("message")}>
         {modal && <NewChatModal createRoom={createRoom} setModal={setModal} />}
         <MessagesContainer>
@@ -89,7 +95,7 @@ const Direct = ({ user, closeSidebar }) => {
                 rooms
                   .filter(room => room.lastMessage !== null)
                   .filter(room => newRoom ? newRoom.username !== room.username : true)
-                  .sort((a, b) => b.lastMessage.timestamp - a.lastMessage.timestamp)
+                  .sort((a, b) => b.lastMessage!.timestamp.seconds - a.lastMessage!.timestamp.seconds)
                   .map((room) => (
                   <ChatEntry
                     key={room.chatId}
@@ -108,11 +114,6 @@ const Direct = ({ user, closeSidebar }) => {
       </Container>
     </IconContext.Provider>
   );
-};
-
-Direct.propTypes = {
-  user: PropTypes.object,
-  closeSidebar: PropTypes.func.isRequired,
 };
 
 const Container = styled.div`
@@ -155,7 +156,7 @@ const Header = styled.div`
   }
 `;
 
-const ChatlistContainer = styled.div`
+const ChatlistContainer = styled.div<{active: Chatroom | null}>`
   width: 40%;
   height: 100%;
 

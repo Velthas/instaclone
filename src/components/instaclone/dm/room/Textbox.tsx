@@ -1,10 +1,12 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
 import { BsEmojiSmile } from "react-icons/bs";
 
-const Textbox = ({ sendMessage }) => {
+type Props = {
+  sendMessage: () => void,
+};
+
+const Textbox = ({ sendMessage }: Props) => {
   return (
     <InputContainer>
       <InputWrapper>
@@ -20,10 +22,6 @@ const Textbox = ({ sendMessage }) => {
       </InputWrapper>
     </InputContainer>
   );
-};
-
-Textbox.propTypes = {
-  sendMessage: PropTypes.func.isRequired
 };
 
 const InputContainer = styled.div`

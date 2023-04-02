@@ -19,7 +19,7 @@ const Instaclone = ({ user }: Props) => {
 
   // Triggers fetch when user info is finally loaded
   useEffect(() => {
-    if (user !== null) getUserData(user.displayName);
+    if (user) getUserData(user.displayName);
   }, [user]);
 
   // Brings the user to authentication if not logged in

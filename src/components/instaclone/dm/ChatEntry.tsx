@@ -1,11 +1,16 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { flexRowCenter } from "../../../styles/style";
 import { formatDateShort } from "../../../utils/formatting";
 import { useUser } from "../../../utils/hooks";
+import { Chatroom } from "../../../utils/types";
 
-const ChatEntry = ({ room, active, openChat }) => {
+type Props = {
+  room: Chatroom,
+  active: Chatroom | null,
+  openChat: (chatId: string, username: string) => void
+};
+
+const ChatEntry = ({ room, active, openChat }: Props) => {
   const [user, updateUser] = useUser(room.username);
   return (
     <Container
@@ -28,13 +33,7 @@ const ChatEntry = ({ room, active, openChat }) => {
   );
 };
 
-ChatEntry.propTypes = {
-  room: PropTypes.object.isRequired,
-  active: PropTypes.object,
-  openChat: PropTypes.func.isRequired,
-};
-
-const Container = styled.div`
+const Container = styled.div<{active: string | boolean}>`
   ${flexRowCenter}
   justify-content: flex-start;
   gap: 10px;
@@ -44,7 +43,7 @@ const Container = styled.div`
   background-color: ${({ active }) => (active ? "#efefef" : "#fff")};
 `;
 
-const Image = styled.div`
+const Image = styled.div<{url: null | string}>`
   height: 56px;
   width: 56px;
   background-image: url(${({ url }) => (url ? url : "")});

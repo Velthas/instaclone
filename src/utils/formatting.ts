@@ -97,23 +97,24 @@ const likeDiscursiveFormat = (likedby: string[], liked: boolean) => {
 
 // Depending on what type of notification it is, format and return appropriate payload
 // Payload will then be sent over to the db and inserted as a new document.
-const formatNotification = (type: string, postid?: string, poster?: string, message?: string, commentid?: string): Notifications | undefined => {
+const formatNotification = (type: "l" | "cl" | "f" | "c", postid?: string, poster?: string, message?: string, commentid?: string): Notifications | undefined => {
   const timestamp = Timestamp.now() // Get a timestamp for each notification
   const seen = false; // All notifications are unseen by default
-  const author = getCurrentUserUsername() as string // Potentially null but not really
+  const author = getCurrentUserUsername() as string // Possibly null, when this occurs users is redirected
   switch (true) {
-    case (type === 'l'):
+    case (type === "l"):
       const likeNotification = {type, author, poster, timestamp, postid, seen};
       return likeNotification;
-    case (type === 'f'):
+    case (type === "f"):
       const followNotification = {type, author, timestamp, seen};
       return followNotification;
-    case (type === 'c'):
+    case (type === "c"):
       const commentNotification = {type, author, poster, timestamp, postid, message, commentid, seen};
       return commentNotification;
-    case (type === 'cl'): 
+    case (type === "cl"): 
     const commentLikeNotification = {type, author, timestamp, postid, message, commentid, poster, seen};
     return commentLikeNotification;
+    default: return undefined;
   }
 };
 

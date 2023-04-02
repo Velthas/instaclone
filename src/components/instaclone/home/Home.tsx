@@ -1,32 +1,37 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { getHomepageContent } from "../../../firebase/firestore";
 import { flexColumnCenter } from "../../../styles/style";
+import { FirebaseUser, Post } from "../../../utils/types";
 
 import HomePost from "../posts/homepost/HomePost";
 import Suggestions from "./Suggestions";
 import LoadingPost from "../posts/LoadingPost";
 
-const Home = ({ user, closeSidebar }) => {
-  const [content, setContent] = useState([]);
+type Props = {
+  user: FirebaseUser, 
+  closeSidebar: (page: string) => void,
+}
+
+const Home = ({ user, closeSidebar }: Props) => {
+  const [content, setContent] = useState<Post[] | any[]>([]);
   const [display, setDisplay] = useState(1);
   const [loading, setLoading] = useState(true);
 
   // Makes call to db to load homepage content.
   useEffect(() => {
     const loadContent = async () => {
-      let posts = [];
+      let posts;
       if (user) posts = await getHomepageContent(user.displayName);
-      setContent(posts);
+      if(posts) setContent(posts);
       setLoading(false);
     };
     loadContent();
   }, [user]);
 
   // Implementation of infinite scrolling
-  const observer = useRef(); // Preserves intersection observer reference
-  const lastElementRef = useCallback((node) => { // Is called every time last post gets created
+  const observer = useRef<null | IntersectionObserver>(); // Preserves intersection observer reference
+  const lastElementRef = useCallback((node: Element) => { // Is called every time last post gets created
     if (loading) return; // Don't try to load more posts when already loading more
     if (observer.current) observer.current.disconnect(); // Disconnect previous observer
     observer.current = new IntersectionObserver((entries) => {
@@ -62,11 +67,6 @@ const Home = ({ user, closeSidebar }) => {
       <Suggestions currentUser={user} />
     </Container>
   );
-};
-
-Home.propTypes = {
-  user: PropTypes.any,
-  closeSidebar: PropTypes.func.isRequired
 };
 
 const Container = styled.div`

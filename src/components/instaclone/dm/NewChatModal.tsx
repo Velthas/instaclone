@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { IoMdClose } from "react-icons/io";
 import { flexColumnCenter, flexRowBetween, flexRowCenter } from "../../../styles/style";
 import { useSearch } from "../../../utils/hooks";
@@ -8,14 +7,19 @@ import { getCurrentUserUsername } from "../../../firebase/authentication";
 
 import UserCardChat from "./UserCardChat";
 
-const NewChatModal = ({ setModal, createRoom }) => {
-  const currentUser = getCurrentUserUsername();
+type Props = {
+  setModal: (bool: boolean) => void,
+  createRoom: (username: string) => void,
+}
+
+const NewChatModal = ({ setModal, createRoom }: Props) => {
+  const currentUser = getCurrentUserUsername() as string;
   const [profiles, setQuery] = useSearch(); // Handles search queries to the backend
-  const [selected, setSelected] = useState(null); // Used to highlight selected user
+  const [selected, setSelected] = useState<string>(""); // Used to highlight selected user
 
   // Makes a check appear next to the selected profile
-  const toggleSelected = (username) => {
-    if (selected === username) setSelected(null);
+  const toggleSelected = (username: string) => {
+    if (selected === username) setSelected("");
     else setSelected(username);
   };
 
@@ -30,7 +34,7 @@ const NewChatModal = ({ setModal, createRoom }) => {
         <Search>
           <To>To:</To>
           <Searchbar
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
             type="text"
             id="search-chat"
             placeholder="Search..."
@@ -56,11 +60,6 @@ const NewChatModal = ({ setModal, createRoom }) => {
     </Backdrop>
   );
 };
-
-NewChatModal.propTypes = {
-  setModal: PropTypes.func.isRequired,
-  createRoom: PropTypes.func.isRequired,
-}
 
 const Backdrop = styled.div`
   position: fixed;

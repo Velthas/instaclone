@@ -1,11 +1,15 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { flexRowBetween, flexRowCenter } from "../../../styles/style";
 import { useFollow, useUser } from "../../../utils/hooks";
 import { Link } from "react-router-dom";
+import { FirebaseUser } from "../../../utils/types";
 
-const SuggestionCard = ({ suggestion, currentUser }) => {
+type Props = {
+  suggestion: string,
+  currentUser: FirebaseUser,
+}
+
+const SuggestionCard = ({ suggestion, currentUser }: Props) => {
   const [user, updateUser] = useUser(suggestion); // Houses all information on user
   const [followed, updateFollowed] = useFollow(user ? user : null); // Oversees follow status
   return (
@@ -18,17 +22,12 @@ const SuggestionCard = ({ suggestion, currentUser }) => {
         </div>
       </InfoWrapper>
       {currentUser && user && user.username !== currentUser.displayName && (
-        <FollowButton onClick={() => updateFollowed(!followed)}>
+        <FollowButton onClick={() => { if (typeof updateFollowed === "function") updateFollowed(!followed) }}>
           {followed ? "Unfollow" : "Follow"}
         </FollowButton>
       )}
     </Container>
   );
-};
-
-SuggestionCard.propTypes = {
-  suggestion: PropTypes.string.isRequired,
-  currentUser: PropTypes.any,
 };
 
 const Container = styled.div`
@@ -45,7 +44,7 @@ const InfoWrapper = styled(Link)`
   text-decoration: none;
 `;
 
-const Picture = styled.div`
+const Picture = styled.div<{url: string}>`
   background-image: url(${({ url }) => url});
   background-position: center;
   background-size: cover;
