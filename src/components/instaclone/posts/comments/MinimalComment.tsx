@@ -1,12 +1,16 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { useCommentsLiked } from "../../../../utils/hooks";
 import { flexRowBetween } from "../../../../styles/style";
 import { Link } from "react-router-dom";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { Comments, Post } from "../../../../utils/types";
 
-const MinimalComment = ({ comment, post }) => {
+type Props = {
+  comment: Comments,
+  post: Post,
+};
+
+const MinimalComment = ({ comment, post }: Props) => {
   const [liked, changeLiked] = useCommentsLiked(comment, post);
 
   return (
@@ -27,11 +31,6 @@ const MinimalComment = ({ comment, post }) => {
       }
     </Container>
   );
-};
-
-MinimalComment.propTypes = {
-  comment: PropTypes.object.isRequired,
-  post: PropTypes.object.isRequired,
 };
 
 const Container = styled.div`

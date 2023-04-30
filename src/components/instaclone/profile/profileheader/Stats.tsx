@@ -1,8 +1,13 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
+import { InstaUser } from "../../../../utils/types";
 
-const Stats = ({ length, user, followers }) => {
+type Props = {
+  length: number,
+  user: InstaUser,
+  followers: number,
+};
+
+const Stats = ({ length, user, followers }: Props) => {
   return (
     <StatsUl>
       <StatsLi>
@@ -20,12 +25,6 @@ const Stats = ({ length, user, followers }) => {
     </StatsUl>
   );
 };
-
-Stats.propTypes = {
-  length: PropTypes.number,
-  user: PropTypes.object,
-  followers: PropTypes.number,
-}
 
 const StatsUl = styled.ul`
   display: flex;

@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { flexRowBetween } from "../../../../styles/style";
 import { BsEmojiSmile } from "react-icons/bs";
+import { PostInfo } from "../../../../utils/types";
 
-const Add = ({ postInfo, insertComment }) => {
+type Props = {
+  postInfo: PostInfo,
+  insertComment: () => void,
+};
+
+const Add = ({ postInfo, insertComment }: Props) => {
   const [value, setValue] = useState("");
-  const handleChange = (e) => setValue(e.target.value);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value);
   const sendComment = () => {
     insertComment();
     setValue("");
@@ -31,11 +36,6 @@ const Add = ({ postInfo, insertComment }) => {
   );
 };
 
-Add.propTypes = {
-  postInfo: PropTypes.object.isRequired,
-  insertComment: PropTypes.func.isRequired
-};
-
 const Container = styled.div`
   ${flexRowBetween}
   height: 10%;
@@ -48,7 +48,7 @@ const Container = styled.div`
   }
 `;
 
-const Button = styled.button`
+const Button = styled.button<{value: string}>`
   display: ${(props) => (props.value.length > 0 ? "block" : "none")};
   font-weight: bold;
   color: #3897f0;

@@ -1,14 +1,18 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
 import { useCommentsLiked, useUser } from "../../../../utils/hooks";
 import { likeDiscursiveFormat, formatDateShort } from "../../../../utils/formatting";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { getCurrentUserUsername } from "../../../../firebase/authentication";
+import { Comments, PostInfo } from "../../../../utils/types";
 
-const ExtendedComment = ({ comment, post }) => {
+type Props = {
+  comment: Comments,
+  post: PostInfo,
+}
+
+const ExtendedComment = ({ comment, post }: Props) => {
   const [user, getUser] = useUser(comment.author);
   const [liked, changeLiked] = useCommentsLiked(comment, post);
   const currentUser = getCurrentUserUsername();
@@ -46,11 +50,6 @@ const ExtendedComment = ({ comment, post }) => {
   );
 };
 
-ExtendedComment.propTypes = {
-  comment: PropTypes.object.isRequired,
-  post: PropTypes.object.isRequired,
-};
-
 const Comment = styled.div`
   width: 100%;
   padding: 0 5%;
@@ -71,7 +70,7 @@ const Main = styled.div`
   width: 100%;
 `;
 
-const UserPic = styled.div`
+const UserPic = styled.div<{url: string}>`
   background-image: url(${({ url }) => url});
   background-position: center;
   background-size: cover;
@@ -123,7 +122,8 @@ const Icon = `
   cursor: pointer;
   width: 12px;
   height: 12px;
-  align-self: center;
+  align-self: start;
+  margin-top: 6px;
 `;
 
 const EmptyHeart = styled(FaRegHeart)` 

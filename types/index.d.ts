@@ -14,7 +14,7 @@ declare module "*.jpg" {
   export default path;
 }
 
-declare module "*.jpg" {
+declare module "*.gif" {
   const path: string;
   export default path;
 }

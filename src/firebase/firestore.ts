@@ -1,7 +1,7 @@
 import { db } from "./firebase-config";
 import * as fs from "firebase/firestore";
 import { getCurrentUserUsername } from "./authentication";
-import { Chatroom, ChatMessage, Notifications, Post, ProfilePayload, Comments, InstaUser } from "../utils/types";
+import { Chatroom, ChatMessage, Notifications, Post, ProfilePayload, Comments, InstaUser, PostInfo } from "../utils/types";
 
 // Used to create a document for new user in database
 const createUserBucket = (name: string, username: string) => {
@@ -64,7 +64,7 @@ const getPostDocReference = async (username: string) => {
 };
 
 // Needs this to insert comment id on database payload.
-const getCommentDocReference = async (post: Post) => {
+const getCommentDocReference = async (post: Post | PostInfo) => {
   const docRef = fs.doc(
     fs.collection(db, "Users", post.username, "Posts", post.id, "Comments")
   );

@@ -1,15 +1,18 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
 import * as io from "react-icons/io5";
 
-const Icons = ({ liked, changeLiked }) => {
+type Props = {
+  liked: boolean,
+  changeLiked: (liked: boolean) => void 
+};
+
+const Icons = ({ liked, changeLiked }: Props) => {
   return (
     <Container>
       <IconContainer>
         {liked 
-          ? <HeartFull liked={liked} title='heart' onClick={() => changeLiked(liked)} />
+          ? <HeartFull title='heart' onClick={() => changeLiked(liked)} />
           : <Heart title='heart' onClick={() => changeLiked(liked)} />
         }
         <Chat title="speech bubble" />
@@ -18,11 +21,6 @@ const Icons = ({ liked, changeLiked }) => {
       <Bookmark title="bookmark" />
     </Container>
   );
-};
-
-Icons.propTypes = {
-  liked: PropTypes.bool.isRequired,
-  changeLiked: PropTypes.func.isRequired
 };
 
 const Container = styled.div`

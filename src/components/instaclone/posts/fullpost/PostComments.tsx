@@ -1,11 +1,17 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
+import { PostInfo, Comments, Post, InstaUser } from "../../../../utils/types";
 
 import ExtendedComment from "../comments/ExtendedComment";
 import Description from "./Description";
 
-const Comments = ({ comments, postInfo, post, user }) => {
+type Props = {
+  comments: Comments[] | null,
+  postInfo: PostInfo,
+  post: Post | null,
+  user: InstaUser | null
+}
+
+const PostComments = ({ comments, postInfo, post, user }: Props) => {
   return (
     <Container>
       <Description post={post} user={user} />
@@ -15,13 +21,6 @@ const Comments = ({ comments, postInfo, post, user }) => {
         ))}
     </Container>
   );
-};
-
-Comments.propTypes = {
-  comments: PropTypes.array,
-  postInfo: PropTypes.object.isRequired,
-  post: PropTypes.object,
-  user: PropTypes.object,
 };
 
 const Container = styled.div`
@@ -42,4 +41,4 @@ const Container = styled.div`
   }
 `;
 
-export default Comments;
+export default PostComments;

@@ -24,7 +24,7 @@ const useLiked = (post: tp.Post) => {
 };
 
 // Handles likes on comments, allowing liking and unliking posts.
-const useCommentsLiked = (comment: tp.Comments, post: tp.Post) => {
+const useCommentsLiked = (comment: tp.Comments, post: tp.Post | tp.PostInfo): [liked: boolean, changeLiked: (liked: boolean) => void] => {
   const currentUser = getCurrentUserUsername() as string;
   const isLiked = currentUser ? comment.likedby.indexOf(currentUser) !== -1 : false;
   const [liked, setLiked] = useState(isLiked);
@@ -47,7 +47,7 @@ const useCommentsLiked = (comment: tp.Comments, post: tp.Post) => {
 // For now, I use the post's id as an id selector for the input.
 // This avoids mix-ups when multiple inputs are present on the same page.
 // Comments are a subcollection of post, and thus need to be fetched independently from it.
-const useComments = (post: tp.Post, inputSelector: string) => {
+const useComments = (post: tp.Post | tp.PostInfo, inputSelector: string): [tp.Comments[] | null, () => void] => {
   const [comments, setComments] = useState<tp.Comments[] | null>(null);
   useEffect(() => {
     const getPostComments = async (username: string, postid: string) => {
@@ -80,7 +80,7 @@ const useComments = (post: tp.Post, inputSelector: string) => {
 
 // Fetches info about post, poster and determines if post has been liked.
 // Used in full post components where post data is not already provided.
-const usePost = (username: string, postId: string) => {
+const usePost = (username: string, postId: string): [(tp.Post | null), (null | tp.InstaUser), boolean, (liked: boolean) => void] => {
   const currentUser = getCurrentUserUsername() as string;
   const [post, setPost] = useState<tp.Post | null>(null);
   const [user, setUser] = useState<tp.InstaUser | null>(null);
@@ -98,6 +98,7 @@ const usePost = (username: string, postId: string) => {
 
   // Used to change the liked status of a post
   const changeLiked = (liked: boolean) => {
+    if(!post) return; // Prevent changes when post is not loaded
     if(post && !liked && currentUser !== post.username) { // Only add notif. if not liking own post
       const likeNotification = formatNotification('l', postId, username);
       if(likeNotification) fs.addNotification(post.username, likeNotification);
@@ -125,7 +126,7 @@ const useUser = (username: string | null): [tp.InstaUser | null, (username: stri
   return [user, getUser];
 };
 
-const useFollow = (user: tp.InstaUser | null) => {
+const useFollow = (user: tp.InstaUser | null): [boolean, (followed: boolean) => void] => {
   const currentUser = getCurrentUserUsername() as string;
   const [followed, setFollowed] = useState(false);
   useEffect(() => {

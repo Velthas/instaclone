@@ -1,11 +1,15 @@
-import React from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 import { flexRowCenter } from "../../../../styles/style";
 import { formatDateShort } from "../../../../utils/formatting";
 import { Link } from "react-router-dom";
+import { InstaUser, Post } from "../../../../utils/types";
 
-const Description = ({ user, post }) => {
+type Props = {
+  user: InstaUser | null,
+  post: Post | null,
+};
+
+const Description = ({ user, post }: Props) => {
   return (
     <>
       {post && post.description && (
@@ -16,7 +20,7 @@ const Description = ({ user, post }) => {
             </Link>
             <Wrapper>
               <div>
-                <StyledLink>
+                <StyledLink to={user ? `/profile/${user.username}` : ""}>
                   <Username>{post ? post.username : ""}</Username>
                 </StyledLink>
                 <PostDescription>
@@ -34,11 +38,6 @@ const Description = ({ user, post }) => {
       )}
     </>
   );
-};
-
-Description.propTypes = {
-  user: PropTypes.object,
-  post: PropTypes.object
 };
 
 const Comment = styled.div`
@@ -61,7 +60,7 @@ const Main = styled.div`
   width: 100%;
 `;
 
-const UserPic = styled.div`
+const UserPic = styled.div<{url: string}>`
   background-image: url(${({ url }) => url});
   background-position: center;
   background-size: cover;

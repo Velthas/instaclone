@@ -1,16 +1,22 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { getCurrentUserUsername } from "../../../../firebase/authentication";
 import { signOutCurrentUser } from "../../../../firebase/authentication";
 import { flexRowCenter } from "../../../../styles/style";
 import { BsPersonPlus } from "react-icons/bs";
 import { createChatRoom, doesChatExist } from "../../../../firebase/firestore";
-import miniload from "../../../../assets/icons/miniload.gif";
+import miniload from "../../../../assets/icons/miniload.gif"
+import { InstaUser } from "../../../../utils/types";
 
-const HeaderButtons = ({ user, updateFollowed, followed }) => {
-  const currentUser = getCurrentUserUsername();
+type Props = {
+  user: InstaUser,
+  updateFollowed: (followed: boolean) => void,
+  followed: boolean,
+}
+
+const HeaderButtons = ({ user, updateFollowed, followed }: Props) => {
+  const currentUser = getCurrentUserUsername() as string;
   const navigate = useNavigate();
   const [isOpeningChat, setIsOpeningChat] = useState(false);
 
@@ -49,13 +55,7 @@ const HeaderButtons = ({ user, updateFollowed, followed }) => {
   );
 };
 
-HeaderButtons.propTypes = {
-  user: PropTypes.object,
-  updateFollowed: PropTypes.func,
-  followed: PropTypes.bool,
-};
-
-const Button = styled.button`
+const Button = styled.button<{blue?: boolean}>`
   cursor: pointer;
   padding: 8px 16px;
   margin-left: 5px;

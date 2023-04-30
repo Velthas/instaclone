@@ -75,6 +75,7 @@ const Container = styled.div`
   min-height: 100vh;
   display: flex;
   justify-content: center;
+  gap: 25px;
 
   @media (max-width: 950px) {
     flex-direction: column-reverse;

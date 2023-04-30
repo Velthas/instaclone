@@ -1,23 +1,29 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { usePost, useComments, useFollow } from "../../../../utils/hooks";
 import { flexColumnCenter, flexRowCenter } from "../../../../styles/style";
 
 import PostSettings from "../PostSettings";
 import Header from "./Header";
-import Comments from "./Comments";
+import PostComments from "./PostComments";
 import Icons from "./Icons";
 import Stats from "./Stats";
 import Add from "./Add";
 import MobileHeader from "../../mobile/MobileHeader";
+import { PostInfo } from "../../../../utils/types";
 
-const FullPost = ({ closeSidebar }) => {
+type Props = {
+  closeSidebar: React.MouseEventHandler<HTMLDivElement>
+};
+
+const FullPost = ({ closeSidebar }: Props) => {
+  const navigate = useNavigate();
   const { postid, username } = useParams();
-  const postInfo = { id: postid, username }; // Used to fetch information about the post
+  if (!postid || !username) navigate('/')
+  const postInfo: PostInfo = { id: postid!, username: username! }; // Used to fetch information about the post
   const [settings, setSettings] = useState(false); // Regulates display of post settings
-  const [post, user, liked, changeLiked] = usePost(username, postid);
+  const [post, user, liked, changeLiked] = usePost(username!, postid!);
   const [comments, insertComment] = useComments(postInfo, `#a${postInfo.id}`);
   const [followed, updateFollowed] = useFollow(user ? user : null);
 
@@ -40,7 +46,7 @@ const FullPost = ({ closeSidebar }) => {
             followed={followed}
             updateFollowed={updateFollowed}
           />
-          <Comments
+          <PostComments
             post={post}
             user={user}
             comments={comments}
@@ -55,10 +61,6 @@ const FullPost = ({ closeSidebar }) => {
       </PostWrapper>
     </Container>
   );
-};
-
-FullPost.propTypes = {
-  closeSidebar: PropTypes.func.isRequired,
 };
 
 const Container = styled.div`
@@ -80,10 +82,10 @@ const PostWrapper = styled.div`
   width: 900px;
   height: 600px;
   position: relative;
-  box-shadow: 3px 3px 6px gainsboro;
+  border: 1px solid #dfdfdf;
 
-  border-top-right-radius: 8px;
-  border-bottom-right-radius: 8px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
 
   @media (max-width: 1150px) {
     transform: scale(0.75);
@@ -103,7 +105,7 @@ const PostWrapper = styled.div`
   }
 `;
 
-const Photo = styled.div`
+const Photo = styled.div<{url: string}>`
   background-image: url(${({ url }) => url});
   background-position: center;
   background-size: cover;

@@ -18,8 +18,14 @@ export type Post = {
   likedby: string[],
   username: string,
   timestamp: Timestamp,
+  description: string,
   photo: string
 };
+
+export type PostInfo = {
+  username: string,
+  id: string,
+}
 
 export type Comments = {
   author: string,
@@ -43,7 +49,7 @@ export type Notifications = {
   content?: string,
   seen: boolean,
   poster?: string,
-  postid?: string,
+  postid?: string | number,
   commentid?: string,
   timestamp: Timestamp,
   id?: string,
