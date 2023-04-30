@@ -6,7 +6,7 @@ import { formatNotification } from "./formatting";
 import * as tp from '../utils/types';
 
 // Handles 'liked' status of a post, allowing for liking and unliking.
-const useLiked = (post: tp.Post) => {
+const useLiked = (post: tp.Post): [liked: boolean, changeLiked: (liked: boolean) => void] => {
   const currentUser = getCurrentUserUsername() as string;
   const isLiked = currentUser ? post.likedby.indexOf(currentUser) !== -1 : false;
   const [liked, setLiked] = useState(isLiked);

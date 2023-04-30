@@ -1,9 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { useLiked, useComments, useUser } from "../../../../utils/hooks";
 import { flexColumnCenter } from "../../../../styles/style";
+import { Post } from "../../../../utils/types";
 
 import PostSettings from "../PostSettings";
 import Icons from "../fullpost/Icons";
@@ -11,7 +11,12 @@ import Header from "./Header";
 import Comments from "./Comments";
 import Add from "./Add";
 
-const HomePost = ({ post, innerRef }) => {
+type Props = {
+  post: Post;
+  innerRef: (node: null | HTMLDivElement) => void;
+};
+
+const HomePost = ({ post, innerRef }: Props) => {
   const [settings, setSettings] = useState(false);
   const [liked, changeLiked] = useLiked(post);
   const [comments, insertComment] = useComments(post, `#a${post.id}`); // id must start with letter
@@ -38,11 +43,6 @@ const HomePost = ({ post, innerRef }) => {
   );
 };
 
-HomePost.propTypes = {
-  post: PropTypes.object.isRequired,
-  innerRef: PropTypes.func,
-};
-
 const Container = styled.div`
   ${flexColumnCenter}
   width: 470px;
@@ -55,7 +55,7 @@ const Container = styled.div`
   }
 `;
 
-const Picture = styled.div`
+const Picture = styled.div<{ url: string | "" }>`
   background-image: url(${({ url }) => (url ? url : "")});
   background-position: center;
   background-size: cover;

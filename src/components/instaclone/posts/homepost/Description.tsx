@@ -1,9 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-const Description = ({ description }) => {
+type Props = {
+  description: {
+    content: string;
+    author: string;
+  };
+};
+
+const Description = ({ description }: Props) => {
   const [limit, setLimit] = useState(100);
   return (
     <Container>
@@ -16,9 +23,11 @@ const Description = ({ description }) => {
             {description.content.length > limit
               ? description.content.slice(0, limit) + "..."
               : description.content}
-            {description.content.length > limit 
-            ? <More onClick={() => setLimit(2201)}>Show more</More>
-            : ""}
+            {description.content.length > limit ? (
+              <More onClick={() => setLimit(2201)}>Show more</More>
+            ) : (
+              ""
+            )}
           </PostDescription>
         </>
       )}

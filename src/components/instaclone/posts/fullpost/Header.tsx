@@ -1,12 +1,18 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
 import { BsThreeDots } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { getCurrentUserUsername } from "../../../../firebase/authentication";
+import { InstaUser } from "../../../../utils/types";
 
-const Header = ({ user, setSettings, followed, updateFollowed }) => {
+type Props = {
+  user: InstaUser | null;
+  setSettings: (show: boolean) => void;
+  followed: boolean;
+  updateFollowed: (followed: boolean) => void;
+};
+
+const Header = ({ user, setSettings, followed, updateFollowed }: Props) => {
   const currentUser = getCurrentUserUsername();
 
   return (
@@ -15,7 +21,7 @@ const Header = ({ user, setSettings, followed, updateFollowed }) => {
         <Link to={user ? `/profile/${user.username}` : ""}>
           <UserPhoto title="profile picture" url={user ? user.pfp : ""} />
         </Link>
-        <StyledLink>
+        <StyledLink to={user ? `/profile/${user.username}` : ""}>
           <Username>{user ? user.username : ""}</Username>
         </StyledLink>
         {user && currentUser && user.username !== currentUser && (
@@ -30,13 +36,6 @@ const Header = ({ user, setSettings, followed, updateFollowed }) => {
       <Dots title="settings" onClick={() => setSettings(true)} />
     </Container>
   );
-};
-
-Header.propTypes = {
-  user: PropTypes.object,
-  setSettings: PropTypes.func.isRequired,
-  followed: PropTypes.bool.isRequired,
-  updateFollowed: PropTypes.func.isRequired,
 };
 
 const Container = styled.div`
@@ -68,7 +67,7 @@ const Username = styled.p`
   color: #262626;
 `;
 
-const UserPhoto = styled.div`
+const UserPhoto = styled.div<{ url: string }>`
   width: 32px;
   height 32px;
   border-radius: 100%;

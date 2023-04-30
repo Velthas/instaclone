@@ -1,17 +1,22 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { flexColumnCenter } from "../../../../styles/style";
 import { likeDiscursiveFormat } from "../../../../utils/formatting";
 import { Link } from "react-router-dom";
 
 import MinimalComment from "../comments/MinimalComment";
 import Description from "./Description";
+import { Comments, Post } from "../../../../utils/types";
 
-const Comments = ({ post, comments, liked }) => {
+type Props = {
+  post: Post;
+  comments: Comments[] | null;
+  liked: boolean;
+};
+
+const CommentSection = ({ post, comments, liked }: Props) => {
   const description = { author: post.username, content: post.description };
   return (
-    <CommentSection>
+    <Container>
       <LikeCount>
         {(post.likedby.length !== 0 || liked === true) &&
           likeDiscursiveFormat(post.likedby, liked)}
@@ -32,17 +37,11 @@ const Comments = ({ post, comments, liked }) => {
               <MinimalComment post={post} key={comment.id} comment={comment} />
             ))}
       </CommentsContainer>
-    </CommentSection>
+    </Container>
   );
 };
 
-Comments.propTypes = {
-  post: PropTypes.object.isRequired,
-  comments: PropTypes.array,
-  liked: PropTypes.bool,
-};
-
-const CommentSection = styled.div`
+const Container = styled.div`
   padding: 0 0 10px 0;
   width: 100%;
   display: flex;
@@ -71,4 +70,4 @@ const CommentsContainer = styled.div`
   gap: 2px;
 `;
 
-export default Comments;
+export default CommentSection;
