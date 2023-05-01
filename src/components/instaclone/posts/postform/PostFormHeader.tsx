@@ -1,39 +1,49 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { BsArrowLeft, BsXLg } from "react-icons/bs";
 import { flexRowBetween } from "../../../../styles/style";
 
-const PostFormHeader = ({ photo, setPhoto, handleSubmit, closeForm, loading }) => {
+type Props = {
+  photo: false | string;
+  setPhoto: (photo: false | string) => void;
+  handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  closeForm: () => void;
+  loading: boolean;
+};
+
+const PostFormHeader = ({
+  photo,
+  setPhoto,
+  handleSubmit,
+  closeForm,
+  loading,
+}: Props) => {
   return (
     <FormTitle photo={photo}>
-      <XIcon onClick={() => closeForm(false)} />
-      {photo && !loading && <LeftArrow title="go back" onClick={() => setPhoto(false)} />}
+      <XIcon onClick={() => closeForm()} />
+      {photo && !loading && (
+        <LeftArrow title="go back" onClick={() => setPhoto(false)} />
+      )}
       <Heading>Create a new post</Heading>
-      {photo && !loading && <SharePost onClick={(e) => handleSubmit(e)}>Share</SharePost>}
+      {photo && !loading && (
+        <SharePost onClick={(e) => handleSubmit(e)}>Share</SharePost>
+      )}
     </FormTitle>
   );
 };
 
-PostFormHeader.propTypes = {
-  photo: PropTypes.any,
-  setPhoto: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  closeForm: PropTypes.func.isRequired,
-  loading: PropTypes.bool,
-};
-
-const SharePost = styled.p`
+const SharePost = styled.button`
   cursor: pointer;
   color: #0095f6;
   font-weight: 500;
   font-size: 0.9rem;
+  background-color: transparent;
+  border: none;
   &:hover {
     color: #000;
   }
 `;
 
-const FormTitle = styled.div`
+const FormTitle = styled.div<{ photo: false | string }>`
   transition: 1s ease-out;
   padding: 0 16px;
   ${({ photo }) =>
@@ -73,8 +83,6 @@ const Heading = styled.h1`
   font-size: 1rem;
   font-weight: 500;
   color: #000;
-  ${({ photo }) =>
-    photo ? "width: auto;" : "width: 90%; text-align: center;"};
 `;
 
 export default PostFormHeader;

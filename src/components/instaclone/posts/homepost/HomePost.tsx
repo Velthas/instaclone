@@ -13,7 +13,7 @@ import Add from "./Add";
 
 type Props = {
   post: Post;
-  innerRef: (node: null | HTMLDivElement) => void;
+  innerRef?: (node: HTMLDivElement) => void;
 };
 
 const HomePost = ({ post, innerRef }: Props) => {

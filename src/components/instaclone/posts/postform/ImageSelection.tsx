@@ -1,18 +1,29 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { isFileImage } from "../../../../utils/validation";
 import { flexColumnCenter } from "../../../../styles/style";
 import pictureIcon from "../../../../assets/icons/photo.svg";
 import warningIcon from "../../../../assets/icons/warning.svg";
 
-const ImageSelection = ({ photo, setPhoto, fileError, setFileError }) => {
+type Props = {
+  photo: boolean | string;
+  setPhoto: (photo: false | string) => void;
+  fileError: boolean | string;
+  setFileError: (error: boolean | string) => void;
+};
+
+const ImageSelection = ({
+  photo,
+  setPhoto,
+  fileError,
+  setFileError,
+}: Props) => {
   // Handles validation when image is loaded
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFileError(false); // Reset error view
+    if(!e.target.files) return
     const [file] = e.target.files; // Get first file off filelist
-    if (isFileImage(file) === true)
-      setPhoto(URL.createObjectURL(file)); // Will open description box and display image
+    if (isFileImage(file) === true) setPhoto(URL.createObjectURL(file));
+    // Will open description box and display image
     else setFileError(`Could not load ${file.name}`); // Otherwise display error
   };
 
@@ -40,14 +51,7 @@ const ImageSelection = ({ photo, setPhoto, fileError, setFileError }) => {
   );
 };
 
-ImageSelection.propTypes = {
-  photo: PropTypes.string,
-  setPhoto: PropTypes.func.isRequired,
-  fileError: PropTypes.bool.isRequired,
-  setFileError: PropTypes.func.isRequired
-};
-
-const Container = styled.div`
+const Container = styled.div<{ photo: boolean | string }>`
   ${flexColumnCenter}
   ${({ photo }) => (photo ? "display: none" : "display: flex")};
   gap: 20px;
@@ -61,7 +65,7 @@ const Label = styled.label`
   cursor: pointer;
 `;
 
-const Button = styled.button`
+const Button = styled.button<{ blue: boolean }>`
   pointer-events: none;
   cursor: pointer;
   padding: 8px 16px;

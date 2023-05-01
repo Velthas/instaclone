@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { BsEmojiSmile, BsGeoAlt, BsChevronDown } from "react-icons/bs";
 import { flexRowBetween } from "../../../../styles/style";
+import { InstaUser } from "../../../../utils/types";
 
-const PostInfo = ({ user, loading, photo }) => {
+type Props = {
+  user: InstaUser;
+  loading: boolean;
+  photo: false | string;
+};
+
+function PostInfo({ user, loading, photo }: Props) {
   const [value, setValue] = useState("");
-  const handleChange = (e) => setValue(e.target.value);
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
+    setValue(e.target.value);
+
   return (
     <Container loading={loading} photo={photo}>
       <TextBox>
@@ -40,15 +48,9 @@ const PostInfo = ({ user, loading, photo }) => {
       </Options>
     </Container>
   );
-};
+}
 
-PostInfo.propTypes = {
-  user: PropTypes.object,
-  loading: PropTypes.bool.isRequired,
-  photo: PropTypes.any
-};
-
-const Container = styled.div`
+const Container = styled.div<{ photo: false | string; loading: boolean }>`
   flex-shrink: 0;
   height: 100%;
   width: 0%;
@@ -107,17 +109,17 @@ const TextArea = styled.textarea`
 
   @media (max-width: 750px) {
     min-height: 70px;
+    ${flexRowBetween}
   }
 `;
 
 const Extra = styled.div`
   height: 15%;
-  ${flexRowBetween}
   padding: 0 16px;
   color: #ababab;
 `;
 
-const UserPic = styled.div`
+const UserPic = styled.div<{ url: false | string }>`
   background-image: url(${(props) => (props.url ? props.url : "")});
   background-position: center;
   background-size: cover;

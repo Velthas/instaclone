@@ -1,9 +1,11 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import loadingImage from "../../../../assets/icons/instaload.gif";
 
-const Loading = ({ loading }) => {
+type Props = {
+  loading: boolean
+}
+
+const Loading = ({ loading }: Props) => {
   return (
     <Container loading={loading}>
       <LoadingGif src={loadingImage} />
@@ -11,11 +13,7 @@ const Loading = ({ loading }) => {
   );
 };
 
-Loading.propTypes = {
-  loading: PropTypes.bool.isRequired,
-};
-
-const Container = styled.div`
+const Container = styled.div<{ loading: boolean }>`
   display: ${(props) => (props.loading ? "flex" : "none")};
   align-items: center;
   justify-content: center;

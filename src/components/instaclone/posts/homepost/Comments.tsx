@@ -2,10 +2,10 @@ import styled from "styled-components";
 import { flexColumnCenter } from "../../../../styles/style";
 import { likeDiscursiveFormat } from "../../../../utils/formatting";
 import { Link } from "react-router-dom";
+import { Comments, Post } from "../../../../utils/types";
 
 import MinimalComment from "../comments/MinimalComment";
 import Description from "./Description";
-import { Comments, Post } from "../../../../utils/types";
 
 type Props = {
   post: Post;
