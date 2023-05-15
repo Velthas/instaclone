@@ -1,6 +1,4 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { flexColumnCenter } from "../../../styles/style";
 import { deletePost } from "../../../firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -8,13 +6,20 @@ import { getCurrentUserUsername } from "../../../firebase/authentication";
 import { copyPostUrlToClipboard, openNativeShare } from "../../../utils/sharing";
 import { deletePostPhoto } from "../../../firebase/storage";
 import { fadeIn } from "../../../styles/style";
+import { Post } from "../../../utils/types";
 
-const PostSettings = ({ settings, setSettings, post }) => {
+type Props = {
+  settings: boolean;
+  setSettings: (show: boolean) => void;
+  post: Post;
+};
+
+const PostSettings = ({ settings, setSettings, post }: Props) => {
   const isOwn = post.username === getCurrentUserUsername(); // Display delete button when is own post
   const navigate = useNavigate();
 
   // Handles deletion from database and cloud storage
-  const handleDelete = async (post) => {
+  const handleDelete = async (post: Post) => {
     await deletePostPhoto(post.username, post.id); // Storage
     await deletePost(post); // Db
     navigate(`/profile/${post.username}`); // Redirect to user profile
@@ -40,13 +45,7 @@ const PostSettings = ({ settings, setSettings, post }) => {
   );
 };
 
-PostSettings.propTypes = {
-  settings: PropTypes.bool.isRequired,
-  setSettings: PropTypes.func.isRequired,
-  post: PropTypes.object,
-};
-
-const Settings = styled.div`
+const Settings = styled.div<{ settings: boolean }>`
   position: absolute;
   z-index: 1;
 
@@ -80,7 +79,7 @@ const SettingWrapper = styled.div`
   }
 `;
 
-const Bubble = styled.div`
+const Bubble = styled.div<{isOwn?: boolean}>`
   width: 100%;
   padding: 14px 0;
   text-align: center;

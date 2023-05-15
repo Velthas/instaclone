@@ -3,29 +3,31 @@ import { useNavigate } from "react-router-dom";
 import { BsChevronLeft } from "react-icons/bs";
 
 type Props = {
-  name: string
+  name: string;
+  isPostPage?: boolean;
 };
 
 // Appears only in mobile view on top of page
-const MobileHeader = ({ name }: Props) => {
+const MobileHeader = ({ name, isPostPage }: Props) => {
   const navigate = useNavigate();
 
   return (
-    <Container>
+    <Container isPostPage={isPostPage}>
       <Back onClick={() => navigate(-1)} />
       <Heading>{name}</Heading>
     </Container>
   );
 };
 
-const Container = styled.div`
+const Container = styled.div<{ isPostPage?: boolean }>`
   display: none;
 
   @media (max-width: 750px) {
     width: 100%;
     height: 44px;
     padding: 0 16px;
-    border-bottom: 1px solid #dfdfdf;
+    border-bottom: ${({ isPostPage }) =>
+      isPostPage ? "none" : "1px solid #dfdfdf"};
 
     display: flex;
     justify-content: flex-start;

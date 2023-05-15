@@ -1,13 +1,20 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
+import { InstaUser } from "../../../utils/types";
 
 import EditProfileForm from "../../forms/EditProfileForm";
 import MobileHeader from "../mobile/MobileHeader";
 
-const EditProfile = ({ info, loadInfo, closeSidebar, refresh }) => {
+type Props = {
+  info: InstaUser | null
+  loadInfo: () => void
+  closeSidebar: (section?: string) => void,
+  refresh: (username: string) => void
+}
+
+const EditProfile = ({ info, loadInfo, closeSidebar, refresh }: Props) => {
   const navigate = useNavigate();
   // Redirects user to own settings if they try to access another user's
   useEffect(() => {
@@ -17,20 +24,13 @@ const EditProfile = ({ info, loadInfo, closeSidebar, refresh }) => {
   }, []);
 
   return (
-    <Backdrop onClick={closeSidebar}>
+    <Backdrop onClick={() => closeSidebar()}>
       <MobileHeader name="Profile Settings" />
       <Container>
         <EditProfileForm info={info} loadInfo={loadInfo} refresh={refresh} />
       </Container>
     </Backdrop>
   );
-};
-
-EditProfile.propTypes = {
-  info: PropTypes.object,
-  loadInfo: PropTypes.func,
-  closeSidebar: PropTypes.func.isRequired,
-  refresh: PropTypes.func.isRequired,
 };
 
 const Backdrop = styled.div`

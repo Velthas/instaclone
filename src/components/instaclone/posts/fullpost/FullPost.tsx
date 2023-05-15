@@ -14,7 +14,7 @@ import MobileHeader from "../../mobile/MobileHeader";
 import { PostInfo } from "../../../../utils/types";
 
 type Props = {
-  closeSidebar: React.MouseEventHandler<HTMLDivElement>
+  closeSidebar: (section?: string) => void
 };
 
 const FullPost = ({ closeSidebar }: Props) => {
@@ -28,8 +28,8 @@ const FullPost = ({ closeSidebar }: Props) => {
   const [followed, updateFollowed] = useFollow(user ? user : null);
 
   return (
-    <Container onClick={closeSidebar}>
-      <MobileHeader name="Post" />
+    <Container onClick={() => closeSidebar()}>
+      <MobileHeader name="Post" isPostPage />
       <PostWrapper>
         {post && (
           <PostSettings
@@ -102,6 +102,7 @@ const PostWrapper = styled.div`
 
   @media (max-width: 550px) {
     width: 95%;
+    border: none;
   }
 `;
 

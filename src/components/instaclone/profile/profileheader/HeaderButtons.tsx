@@ -10,7 +10,7 @@ import miniload from "../../../../assets/icons/miniload.gif"
 import { InstaUser } from "../../../../utils/types";
 
 type Props = {
-  user: InstaUser,
+  user: InstaUser | null,
   updateFollowed: (followed: boolean) => void,
   followed: boolean,
 }
@@ -22,6 +22,7 @@ const HeaderButtons = ({ user, updateFollowed, followed }: Props) => {
 
   // Handles opening dms from profile.
   const openChat = async () => {
+    if (!user) return
     setIsOpeningChat(true);
     const chat = await doesChatExist(currentUser, user.username);
     if (!chat) {

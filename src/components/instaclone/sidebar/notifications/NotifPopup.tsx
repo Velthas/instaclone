@@ -1,11 +1,15 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { BsPersonFill, BsHeartFill } from "react-icons/bs";
 import { IoChatbubble } from "react-icons/io5";
+import { Notifications } from "../../../../utils/types";
 
-const NotifPopup = ({ notifications }) => {
-  const interval = useRef(); // Stores timeout ref
+type Props = {
+  notifications: Notifications[];
+};
+
+const NotifPopup = ({ notifications }: Props) => {
+  const interval = useRef<undefined | NodeJS.Timeout>(); // Stores timeout ref
   const [display, setDisplay] = useState(false);
 
   // Makes popup appear for 3 seconds when new notifications arrive.
@@ -17,7 +21,7 @@ const NotifPopup = ({ notifications }) => {
     }, 3000);
   }, [notifications]);
 
-  const getUnseenByType = (notitype) =>
+  const getUnseenByType = (notitype: string) =>
     notifications.filter(
       (notif) => notif.type === notitype && notif.seen === false
     ).length;
@@ -55,10 +59,6 @@ const NotifPopup = ({ notifications }) => {
       )}
     </>
   );
-};
-
-NotifPopup.propTypes = {
-  notifications: PropTypes.array,
 };
 
 const Container = styled.div`

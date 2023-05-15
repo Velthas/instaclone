@@ -1,42 +1,46 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
 import { useParams } from "react-router-dom";
+import { InstaUser, Post } from "../../../utils/types";
 
 import PostPreview from "../posts/PostPreview";
 import ProfileHeader from "./ProfileHeader";
 import ProfileSections from "./ProfileSections";
 import MobileTop from "./MobileTop";
 
-const Profile = ({ user, posts, closeSidebar }) => {
+type Props = {
+  user: InstaUser | null;
+  posts: Post[] | [];
+  closeSidebar: (section: string) => void;
+};
+
+const Profile = ({ user, posts, closeSidebar }: Props) => {
   const { username } = useParams();
   const isOwnProfile = getCurrentUserUsername() === username;
 
   // Sets profile icon as activeì if visiting own profile
   useEffect(() => {
     if (isOwnProfile) closeSidebar("profile");
-    else closeSidebar(" "); 
+    else closeSidebar(" ");
   }, []);
 
   return (
-    <Container onClick={ isOwnProfile ? () => closeSidebar("profile") : () => closeSidebar(" ")}>
-        <MobileTop user={user} />
-        <ProfileHeader user={user} posts={posts} />
-        <ProfileSections />
-        <PostList>
-          {posts.map(post => {
-            return <PostPreview key={post.id} post={post}/>;
-          })}
-        </PostList>
+    <Container
+      onClick={
+        isOwnProfile ? () => closeSidebar("profile") : () => closeSidebar(" ")
+      }
+    >
+      <MobileTop user={user} />
+      <ProfileHeader user={user} posts={posts} />
+      <ProfileSections />
+      <PostList>
+        {posts.map((post) => {
+          return <PostPreview key={post.id} post={post} />;
+        })}
+      </PostList>
     </Container>
   );
-};
-
-Profile.propTypes = {
-  user: PropTypes.object,
-  posts: PropTypes.array,
-  closeSidebar: PropTypes.func.isRequired,
 };
 
 const Container = styled.div`

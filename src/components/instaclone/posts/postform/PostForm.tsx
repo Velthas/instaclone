@@ -17,7 +17,7 @@ import Loading from "./Loading";
 
 type Props = {
   closeForm: () => void;
-  user: InstaUser;
+  user: InstaUser | null;
 };
 
 const PostForm = ({ closeForm, user }: Props) => {
@@ -27,6 +27,7 @@ const PostForm = ({ closeForm, user }: Props) => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    if(!user) return
     e.preventDefault()
     setLoading(true);
 
@@ -89,7 +90,7 @@ const PostForm = ({ closeForm, user }: Props) => {
             fileError={fileError}
             setFileError={setFileError}
           />
-          <Image photo={photo} loading={loading} src={photo ? photo : undefined} />
+          <Image photo={photo} isLoading={loading} src={photo ? photo : undefined} />
           <PostInfo user={user} loading={loading} photo={photo} />
         </Form>
       </Container>
@@ -180,7 +181,7 @@ const Container = styled.div`
   }
 `;
 
-const Image = styled.img<{photo: false | string, loading: any}>`
+const Image = styled.img<{photo: false | string, isLoading: boolean}>`
   ${({ photo }) => (photo ? "display: block" : "display: none")};
   ${({ loading }) => (loading ? "display: none" : "")};
   max-width: 555px;

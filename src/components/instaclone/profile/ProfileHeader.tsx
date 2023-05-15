@@ -1,16 +1,20 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { flexRowCenter, fadeIn } from "../../../styles/style";
 import { BsThreeDots } from "react-icons/bs";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
 import { useFollow } from "../../../utils/hooks";
+import { InstaUser, Post } from "../../../utils/types";
 
 import Stats from "./profileheader/Stats";
 import MobileStats from "./profileheader/MobileStats";
 import HeaderButtons from "./profileheader/HeaderButtons";
 
-const ProfileHeader = ({ user, posts }) => {
+type Props = {
+  user: InstaUser | null,
+  posts: Post[] | []
+}
+
+const ProfileHeader = ({ user, posts }: Props) => {
   const currentUser = getCurrentUserUsername();
   const [followed, updateFollowed] = useFollow(user ? user : null);
   let followers;
@@ -47,11 +51,6 @@ const ProfileHeader = ({ user, posts }) => {
   );
 };
 
-ProfileHeader.propTypes = {
-  user: PropTypes.object,
-  posts: PropTypes.array,
-};
-
 const Header = styled.div`
   display: flex;
   align-items: flex-start;
@@ -67,7 +66,7 @@ const Header = styled.div`
   }
 `;
 
-const ProfilePic = styled.div`
+const ProfilePic = styled.div<{url: null | string}>`
   position: relative;
   background-image: url(${({ url }) => (url ? url : "")});
   background-position: center;

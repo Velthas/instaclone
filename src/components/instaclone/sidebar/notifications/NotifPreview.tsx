@@ -1,13 +1,21 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { getPostInfo } from "../../../../firebase/firestore";
 
-const NotifPreview = ({ postId, poster, toggleSidebar }) => {
+type Props = {
+  postId: string | number;
+  poster: string;
+  toggleSidebar: (section: string) => void;
+};
+
+const NotifPreview = ({ postId, poster, toggleSidebar }: Props) => {
   const [postPicture, setPostPicture] = useState("");
+
   useEffect(() => {
     const setup = async () => {
-      const data = await getPostInfo(poster, postId);
+      if (typeof postId === "number") postId.toString();
+      const data = await getPostInfo(poster, postId as string);
       setPostPicture(data.photo); // We get post info and then set post picture in state
     };
     setup();
@@ -23,7 +31,7 @@ const NotifPreview = ({ postId, poster, toggleSidebar }) => {
   );
 };
 
-const Image = styled.div`
+const Image = styled.div<{ url: string }>`
   height: 44px;
   width: 44px;
   background-image: url(${({ url }) => (url ? url : "")});

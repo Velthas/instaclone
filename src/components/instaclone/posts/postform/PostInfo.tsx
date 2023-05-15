@@ -5,7 +5,7 @@ import { flexRowBetween } from "../../../../styles/style";
 import { InstaUser } from "../../../../utils/types";
 
 type Props = {
-  user: InstaUser;
+  user: InstaUser | null;
   loading: boolean;
   photo: false | string;
 };
@@ -117,6 +117,11 @@ const Extra = styled.div`
   height: 15%;
   padding: 0 16px;
   color: #ababab;
+
+  display: flex;
+  gap: 8px;
+  justify-content: flex-start;
+  align-items: center;
 `;
 
 const UserPic = styled.div<{ url: false | string }>`
@@ -141,6 +146,11 @@ const WordCount = styled.span`
 `;
 
 const Options = styled(Extra)`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+
   color: #2e2e2e;
   border-bottom: 1px solid #dfdfdf;
   border-top: 1px solid #dfdfdf;

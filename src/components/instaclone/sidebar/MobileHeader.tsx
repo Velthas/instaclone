@@ -1,21 +1,19 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { BsChevronLeft } from "react-icons/bs";
 
-const MobileHeader = ({ toggleSidebar, section, icon }) => {
+type Props = {
+  toggleSidebar: (section: string) => void;
+  section: string;
+  icon: string;
+};
+
+const MobileHeader = ({ toggleSidebar, section, icon }: Props) => {
   return (
     <MobileContainer>
       <BsChevronLeft onClick={() => toggleSidebar(icon)} />
       <MobileHeading>{section}</MobileHeading>
     </MobileContainer>
   );
-};
-
-MobileHeader.propTypes = {
-  toggleSidebar: PropTypes.func.isRequired,
-  section: PropTypes.string,
-  icon: PropTypes.string,
 };
 
 const MobileContainer = styled.div`

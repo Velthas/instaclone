@@ -35,7 +35,7 @@ const Container = styled.div`
   }
 `;
 
-const Section = styled.div`
+const Section = styled.div<{active?: boolean}>`
   padding: 10px 0 10px 0;
   ${({ active }) =>
     active
@@ -72,7 +72,7 @@ const Icons = `
   }
 `;
 
-const Grid = styled(BsGrid3X3)`
+const Grid = styled(BsGrid3X3)<{active?: boolean}>`
   ${Icons}
   color: ${({ active }) => (active ? "black" : "gray")};
 

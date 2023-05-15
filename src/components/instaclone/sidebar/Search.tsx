@@ -1,12 +1,14 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { flexColumnCenter, fadeIn } from "../../../styles/style";
 import { useSearch } from "../../../utils/hooks";
 import Searchbar from "../../inputs/Searchbar";
 import UserCard from "../profile/UserCard";
 
-const Search = ({ toggleSidebar }) => {
+type Props = {
+  toggleSidebar: (section: string) => void
+}
+
+const Search = ({ toggleSidebar }: Props) => {
   const [profiles, setQuery] = useSearch();
 
   return (
@@ -18,15 +20,11 @@ const Search = ({ toggleSidebar }) => {
       <div>
         {profiles &&
           profiles.map((prof) => (
-            <UserCard toggleSidebar={toggleSidebar} user={prof} key={prof.id} />
+            <UserCard toggleSidebar={toggleSidebar} user={prof} key={prof.username} />
           ))}
       </div>
     </>
   );
-};
-
-Search.propTypes = {
-  toggleSidebar: PropTypes.func.isRequired,
 };
 
 const Container = styled.div`

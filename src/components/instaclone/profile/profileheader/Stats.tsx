@@ -3,8 +3,8 @@ import { InstaUser } from "../../../../utils/types";
 
 type Props = {
   length: number,
-  user: InstaUser,
-  followers: number,
+  user: InstaUser | null,
+  followers: number | undefined,
 };
 
 const Stats = ({ length, user, followers }: Props) => {

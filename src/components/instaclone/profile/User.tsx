@@ -1,14 +1,17 @@
-import React from "react";
-import PropTypes from "prop-types";
 import { useParams, Routes, Route } from "react-router-dom";
 import { useProfile } from "../../../utils/hooks";
 
 import EditProfile from "./EditProfile";
 import Profile from "./Profile";
 
-const User = ({ closeSidebar, refresh }) => {
+type Props = {
+  closeSidebar: (section?: string) => void
+  refresh: (username: string) => void
+}
+
+const User = ({ closeSidebar, refresh }: Props) => {
   const {username} = useParams();
-  const [user, posts, reloadInfo] = useProfile(username);
+  const [user, posts, reloadInfo] = useProfile(username ? username : null);
 
   return (
     <Routes>
@@ -16,11 +19,6 @@ const User = ({ closeSidebar, refresh }) => {
       <Route path="settings" element={<EditProfile closeSidebar={closeSidebar}  info={user} loadInfo={reloadInfo} refresh={refresh} />}/>
     </Routes>
   );
-};
-
-User.propTypes = {
-  closeSidebar: PropTypes.func.isRequired,
-  refresh: PropTypes.func.isRequired,
 };
 
 export default User;

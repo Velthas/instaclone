@@ -1,32 +1,39 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { flexColumnCenter } from "../../../../styles/style";
 import { fadeIn } from "../../../../styles/style";
+import { Notifications } from "../../../../utils/types";
 
 import Notification from "./Notification";
 import MobileHeader from "../MobileHeader";
 
-const Notifications = ({ notifications, toggleSidebar }) => {
+type Props = {
+  notifications: Notifications[],
+  toggleSidebar: (section: string) => void,
+};
+
+const NotificationsBox = ({ notifications, toggleSidebar }: Props) => {
   return (
     <Container>
-      <MobileHeader toggleSidebar={toggleSidebar} section='notifications' icon='heart'/>
+      <MobileHeader
+        toggleSidebar={toggleSidebar}
+        section="notifications"
+        icon="heart"
+      />
       <Heading>Notifications</Heading>
       <div>
         {notifications &&
           notifications.map((notif) => {
             return (
-              <Notification key={notif.id} toggleSidebar={toggleSidebar} notification={notif} />
+              <Notification
+                key={notif.id}
+                toggleSidebar={toggleSidebar}
+                notification={notif}
+              />
             );
           })}
       </div>
     </Container>
   );
-};
-
-Notifications.propTypes = {
-  notifications: PropTypes.array,
-  toggleSidebar: PropTypes.func.isRequired,
 };
 
 const Container = styled.nav`
@@ -35,7 +42,7 @@ const Container = styled.nav`
   align-items: initial;
   justify-content: flex-start;
   gap: 24px;
-  padding: 24px 0;
+  padding: 24px 16px;
   animation-name: ${fadeIn};
   animation-duration: 1s;
   transition-timing-function: ease-out;
@@ -55,4 +62,4 @@ const Heading = styled.h1`
   }
 `;
 
-export default Notifications;
+export default NotificationsBox;

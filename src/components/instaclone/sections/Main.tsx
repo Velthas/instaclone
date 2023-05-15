@@ -1,13 +1,18 @@
-import React from "react";
-import PropTypes from "prop-types";
 import { Route, Routes } from "react-router-dom";
+import { FirebaseUser } from "../../../utils/types";
 
 import User from '../profile/User';
 import FullPost from "../posts/fullpost/FullPost";
 import Home from "../home/Home";
 import Direct from "../dm/Direct";
 
-const Main = ({ user, closeSidebar, getUserData }) => {
+type Props = {
+  user: FirebaseUser
+  closeSidebar: (section?: string) => void
+  getUserData: (username: string) => void
+}
+
+const Main = ({ user, closeSidebar, getUserData }: Props) => {
   return (
     <Routes>
       <Route path="/" element={<Home closeSidebar={closeSidebar} user={user}/>} />
@@ -16,12 +21,6 @@ const Main = ({ user, closeSidebar, getUserData }) => {
       <Route path="direct/*" element={<Direct closeSidebar={closeSidebar} user={user} />} />
     </Routes>
   );
-};
-
-Main.propTypes = {
-  user: PropTypes.object,
-  closeSidebar: PropTypes.func.isRequired,
-  getUserData: PropTypes.func.isRequired,
 };
 
 export default Main;

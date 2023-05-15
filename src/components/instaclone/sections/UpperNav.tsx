@@ -1,5 +1,3 @@
-import React from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 import { IconContext } from "react-icons";
 
@@ -8,35 +6,53 @@ import { BsHeartFill, BsHeart } from "react-icons/bs";
 import { Route, Routes } from "react-router-dom";
 import NotifPopup from "../sidebar/notifications/NotifPopup";
 import { flexRowCenter } from "../../../styles/style";
+import { Notifications } from "../../../utils/types";
+
+type Props = {
+  markAllAsSeen: (toggleSidebar: (section: string) => void) => void;
+  toggleSidebar: (section: string) => void;
+  active: string;
+  notifications: Notifications[];
+};
 
 // This component only appears in mobile view on the homepage
 // Serves as an extension of the navbar (has notifications)
-const UpperNav = ({ markAllAsSeen, toggleSidebar, active, notifications }) => {
+const UpperNav = ({
+  markAllAsSeen,
+  toggleSidebar,
+  active,
+  notifications,
+}: Props) => {
   return (
     <Routes>
-      <Route path="/" element={
-        <IconContext.Provider value={{ style: { cursor: "pointer" }, size: 24 }}>
-          <Container>
-            <InstaLogo src={instalogo} title="instalogo" />
-            <HeartContainer notif={notifications}>
-              <NotifPopup notifications={notifications} />
-              {active === "heart" 
-                ? <BsHeartFill title="heart" onClick={() => toggleSidebar("heart")} />
-                : <BsHeart title="heart" onClick={() => markAllAsSeen(toggleSidebar)} />}
-            </HeartContainer>
-          </Container>
-        </IconContext.Provider>
+      <Route
+        path="/"
+        element={
+          <IconContext.Provider
+            value={{ style: { cursor: "pointer" }, size: "24" }}
+          >
+            <Container>
+              <InstaLogo src={instalogo} title="instalogo" />
+              <HeartContainer notif={notifications}>
+                <NotifPopup notifications={notifications} />
+                {active === "heart" ? (
+                  <BsHeartFill
+                    title="heart"
+                    onClick={() => toggleSidebar("heart")}
+                  />
+                ) : (
+                  <BsHeart
+                    title="heart"
+                    onClick={() => markAllAsSeen(toggleSidebar)}
+                  />
+                )}
+              </HeartContainer>
+            </Container>
+          </IconContext.Provider>
         }
       />
     </Routes>
   );
-};
-
-UpperNav.propTypes = {
-  markAllAsSeen: PropTypes.func.isRequired,
-  toggleSidebar: PropTypes.func.isRequired,
-  active: PropTypes.string,
-  notifications: PropTypes.array,
 };
 
 const Container = styled.div`
@@ -63,7 +79,7 @@ const InstaLogo = styled.img`
   width: 110px;
 `;
 
-const HeartContainer = styled.div`
+const HeartContainer = styled.div<{ notif: Notifications[] }>`
   position: relative;
   ${flexRowCenter}
 

@@ -1,15 +1,20 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { useUser } from "../../../../utils/hooks";
 import { formatDateShort } from "../../../../utils/formatting";
 
 import NotifPreview from "./NotifPreview";
 import NotifFollow from "./NotifFollow";
+import { Notifications } from "../../../../utils/types";
 
-const Notification = ({ notification, toggleSidebar }) => {
+type Props = {
+  notification: Notifications
+  toggleSidebar: (section: string) => void
+}
+
+const Notification = ({ notification, toggleSidebar }: Props) => {
   const [user, updateUser] = useUser(notification.author);
+
   return (
     <Container>
       <FlexWrapper>
@@ -38,8 +43,9 @@ const Notification = ({ notification, toggleSidebar }) => {
         notification.type === "cl") && (
         <NotifPreview
           toggleSidebar={toggleSidebar}
-          postId={notification.postid}
-          poster={notification.poster}
+          postId={notification.postid!}
+          poster={notification.poster!}
+          
         />
       )}
       {notification.type === "f" && <NotifFollow user={user ? user : null} />}
@@ -47,10 +53,6 @@ const Notification = ({ notification, toggleSidebar }) => {
   );
 };
 
-Notification.propTypes = {
-  notification: PropTypes.object.isRequired,
-  toggleSidebar: PropTypes.func.isRequired,
-};
 
 const Container = styled.div`
   display: flex;
@@ -64,7 +66,7 @@ const Container = styled.div`
   }
 `;
 
-const ProfilePicture = styled.div`
+const ProfilePicture = styled.div<{url: string | null}>`
   background-image: url(${({ url }) => (url ? url : "")});
   background-position: center;
   background-size: cover;

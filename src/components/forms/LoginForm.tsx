@@ -8,16 +8,16 @@ import { redirect } from "react-router-dom";
 import InterInput from "../inputs/InterInput";
 
 type Props = {
-  displayError: (message: string) => void,
+  displayError: (message: string) => void;
 };
 
 const LoginForm = ({ displayError }: Props) => {
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     displayError("");
-    const mailInput = document.querySelector<HTMLInputElement>("#mail")
-    const pswInput = document.querySelector<HTMLInputElement>("#pass")
-    if(!(mailInput && pswInput)) return;
+    const mailInput = document.querySelector<HTMLInputElement>("#mail");
+    const pswInput = document.querySelector<HTMLInputElement>("#pass");
+    if (!(mailInput && pswInput)) return;
     const mail = mailInput.value;
     const psw = pswInput.value;
 
@@ -26,21 +26,32 @@ const LoginForm = ({ displayError }: Props) => {
 
     switch (true) {
       case isMailValid !== true:
-        if(typeof isMailValid === 'string') displayError(isMailValid);
+        if (typeof isMailValid === "string") displayError(isMailValid);
         return;
       case isPswValid !== true:
-        if(typeof isPswValid === 'string') displayError(isPswValid);
+        if (typeof isPswValid === "string") displayError(isPswValid);
         return;
       default:
-        loginUser(mail, psw);
-        redirect("/");
+        const error = await loginUser(mail, psw);
+        if (error) displayError(`Login failed with code: ${error.code}`);
+        else redirect("/");
     }
   };
 
   return (
     <Form id="login">
-      <InterInput id="mail" type="text" label="Email" checkValid={validateMail} />
-      <InterInput id="pass" type="password" label="Password" checkValid={validatePsw} />
+      <InterInput
+        id="mail"
+        type="text"
+        label="Email"
+        checkValid={validateMail}
+      />
+      <InterInput
+        id="pass"
+        type="password"
+        label="Password"
+        checkValid={validatePsw}
+      />
       <Button type="submit" onClick={(e) => handleSubmit(e)}>
         Log in
       </Button>

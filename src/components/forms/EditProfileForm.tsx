@@ -5,6 +5,8 @@ import { uploadPhoto } from "../../firebase/storage";
 import { updateProfile } from "../../firebase/firestore";
 import { validateName, validateDescription } from "../../utils/validation";
 import { useNavigate } from "react-router-dom";
+import { getCurrentUserUsername } from "../../firebase/authentication";
+
 import Input from "../inputs/Input";
 import TextArea from "../inputs/Textarea";
 import FileImg from "../inputs/FileImg";
@@ -18,8 +20,10 @@ type Props = {
 const EditProfileForm = ({ info, loadInfo, refresh }: Props) => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const currentUser = getCurrentUserUsername()
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    if(currentUser !== info.username) return // Don't allow edits to other users
     setError("");
     e.preventDefault();
 
@@ -64,7 +68,7 @@ const EditProfileForm = ({ info, loadInfo, refresh }: Props) => {
       <ImageContainer>
         <FileImg id="pfp" url={info ? info.pfp : ""} imgStyle={ImageStyle} />
         <UserInfo>
-          <span>{info.username}</span>
+          <span>{info ? info.username : ""}</span>
           <FileLabel htmlFor="pfp">Change profile picture</FileLabel>
         </UserInfo>
       </ImageContainer>

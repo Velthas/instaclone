@@ -3,20 +3,29 @@ import * as fs from "../firebase/firestore";
 import { Timestamp } from "firebase/firestore";
 import { getCurrentUserUsername } from "../firebase/authentication";
 import { formatNotification } from "./formatting";
-import * as tp from '../utils/types';
+import * as tp from "../utils/types";
 
 // Handles 'liked' status of a post, allowing for liking and unliking.
-const useLiked = (post: tp.Post): [liked: boolean, changeLiked: (liked: boolean) => void] => {
+const useLiked = (
+  post: tp.Post
+): [liked: boolean, changeLiked: (liked: boolean) => void] => {
   const currentUser = getCurrentUserUsername() as string;
-  const isLiked = currentUser ? post.likedby.indexOf(currentUser) !== -1 : false;
+  const isLiked = currentUser
+    ? post.likedby.indexOf(currentUser) !== -1
+    : false;
   const [liked, setLiked] = useState(isLiked);
 
   const changeLiked = (liked: boolean) => {
-    if(!liked && currentUser !== post.username) { // Append notif. only if not liking own post
-      const likeNotification = formatNotification('l', post.id, post.username);
-      if(likeNotification) fs.addNotification(post.username, likeNotification);
+    if (!liked && currentUser !== post.username) {
+      // Append notif. only if not liking own post
+      const likeNotification = formatNotification("l", post.id, post.username);
+      if (likeNotification) fs.addNotification(post.username, likeNotification);
     }
-    fs.updateLikes(`Users/${post.username}/Posts/${post.id}`, currentUser, !liked);
+    fs.updateLikes(
+      `Users/${post.username}/Posts/${post.id}`,
+      currentUser,
+      !liked
+    );
     setLiked(!liked);
   };
 
@@ -24,17 +33,33 @@ const useLiked = (post: tp.Post): [liked: boolean, changeLiked: (liked: boolean)
 };
 
 // Handles likes on comments, allowing liking and unliking posts.
-const useCommentsLiked = (comment: tp.Comments, post: tp.Post | tp.PostInfo): [liked: boolean, changeLiked: (liked: boolean) => void] => {
+const useCommentsLiked = (
+  comment: tp.Comments,
+  post: tp.Post | tp.PostInfo
+): [liked: boolean, changeLiked: (liked: boolean) => void] => {
   const currentUser = getCurrentUserUsername() as string;
-  const isLiked = currentUser ? comment.likedby.indexOf(currentUser) !== -1 : false;
+  const isLiked = currentUser
+    ? comment.likedby.indexOf(currentUser) !== -1
+    : false;
   const [liked, setLiked] = useState(isLiked);
 
   const changeLiked = (liked: boolean) => {
-    if(!liked && currentUser !== comment.author) { // Send notif. only if not liking own comments
-      const clNotification = formatNotification('cl', post.id, post.username, comment.content, comment.id);
-      if(clNotification) fs.addNotification(comment.author, clNotification);
+    if (!liked && currentUser !== comment.author) {
+      // Send notif. only if not liking own comments
+      const clNotification = formatNotification(
+        "cl",
+        post.id,
+        post.username,
+        comment.content,
+        comment.id
+      );
+      if (clNotification) fs.addNotification(comment.author, clNotification);
     }
-    fs.updateLikes(`Users/${post.username}/Posts/${post.id}/Comments/${comment.id}`, currentUser, !liked);
+    fs.updateLikes(
+      `Users/${post.username}/Posts/${post.id}/Comments/${comment.id}`,
+      currentUser,
+      !liked
+    );
     setLiked(!liked);
   };
 
@@ -47,7 +72,10 @@ const useCommentsLiked = (comment: tp.Comments, post: tp.Post | tp.PostInfo): [l
 // For now, I use the post's id as an id selector for the input.
 // This avoids mix-ups when multiple inputs are present on the same page.
 // Comments are a subcollection of post, and thus need to be fetched independently from it.
-const useComments = (post: tp.Post | tp.PostInfo, inputSelector: string): [tp.Comments[] | null, () => void] => {
+const useComments = (
+  post: tp.Post | tp.PostInfo,
+  inputSelector?: string
+): [tp.Comments[] | null, () => void] => {
   const [comments, setComments] = useState<tp.Comments[] | null>(null);
   useEffect(() => {
     const getPostComments = async (username: string, postid: string) => {
@@ -58,8 +86,9 @@ const useComments = (post: tp.Post | tp.PostInfo, inputSelector: string): [tp.Co
   }, [post]);
 
   const insertComment = async () => {
+    if (!inputSelector) return;
     const input = document.querySelector<HTMLInputElement>(inputSelector);
-    if(!input) return;
+    if (!input) return;
     const content = input.value;
     if (content.length === 0 || content.length > 2200) return;
     const commentRef = await fs.getCommentDocReference(post); // Need this to extract ID
@@ -68,11 +97,18 @@ const useComments = (post: tp.Post | tp.PostInfo, inputSelector: string): [tp.Co
     let author = getCurrentUserUsername();
     const likedby: string[] = [];
     const comment = { content, author, timestamp, id, likedby } as tp.Comments;
-    const commentNotification = formatNotification('c', post.id, post.username, content, id);
-    if(post.username !== author && commentNotification) // Only send a notification if commenting other's posts
+    const commentNotification = formatNotification(
+      "c",
+      post.id,
+      post.username,
+      content,
+      id
+    );
+    if (post.username !== author && commentNotification)
+      // Only send a notification if commenting other's posts
       fs.addNotification(post.username, commentNotification);
     fs.addComment(commentRef, comment); // Add doc to the db for permanent storage
-    if(comments) setComments([comment].concat(comments)); // Updates the front-end
+    if (comments) setComments([comment].concat(comments)); // Updates the front-end
   };
 
   return [comments, insertComment];
@@ -80,7 +116,10 @@ const useComments = (post: tp.Post | tp.PostInfo, inputSelector: string): [tp.Co
 
 // Fetches info about post, poster and determines if post has been liked.
 // Used in full post components where post data is not already provided.
-const usePost = (username: string, postId: string): [(tp.Post | null), (null | tp.InstaUser), boolean, (liked: boolean) => void] => {
+const usePost = (
+  username: string,
+  postId: string
+): [tp.Post | null, null | tp.InstaUser, boolean, (liked: boolean) => void] => {
   const currentUser = getCurrentUserUsername() as string;
   const [post, setPost] = useState<tp.Post | null>(null);
   const [user, setUser] = useState<tp.InstaUser | null>(null);
@@ -98,12 +137,18 @@ const usePost = (username: string, postId: string): [(tp.Post | null), (null | t
 
   // Used to change the liked status of a post
   const changeLiked = (liked: boolean) => {
-    if(!post) return; // Prevent changes when post is not loaded
-    if(post && !liked && currentUser !== post.username) { // Only add notif. if not liking own post
-      const likeNotification = formatNotification('l', postId, username);
-      if(likeNotification) fs.addNotification(post.username, likeNotification);
+    if (!post) return; // Prevent changes when post is not loaded
+    if (post && !liked && currentUser !== post.username) {
+      // Only add notif. if not liking own post
+      const likeNotification = formatNotification("l", postId, username);
+      if (likeNotification) fs.addNotification(post.username, likeNotification);
     }
-    if(post) fs.updateLikes(`Users/${post.username}/Posts/${post.id}`, currentUser, !liked); // Backend update
+    if (post)
+      fs.updateLikes(
+        `Users/${post.username}/Posts/${post.id}`,
+        currentUser,
+        !liked
+      ); // Backend update
     setLiked(!liked); // Makes the change evident on front-end.
   };
 
@@ -112,111 +157,141 @@ const usePost = (username: string, postId: string): [(tp.Post | null), (null | t
 
 // Fetch user information and update it when needed using updateUser.
 // Using it in comments/notifications/search when only pfp and username is needed.
-const useUser = (username: string | null): [tp.InstaUser | null, (username: string) => void] => {
+const useUser = (
+  username: string | null
+): [tp.InstaUser | null, (username: string) => void] => {
   const [user, setUser] = useState<tp.InstaUser | null>(null);
   useEffect(() => {
-    if(username) getUser(username);
+    if (username) getUser(username);
   }, []);
 
   const getUser = async (username: string): Promise<void> => {
     const userData = await fs.getUserInfo(username);
-    if(userData) setUser(userData);
+    if (userData) setUser(userData);
   };
 
   return [user, getUser];
 };
 
-const useFollow = (user: tp.InstaUser | null): [boolean, (followed: boolean) => void] => {
+const useFollow = (
+  user: tp.InstaUser | null
+): [boolean, (followed: boolean) => void] => {
   const currentUser = getCurrentUserUsername() as string;
   const [followed, setFollowed] = useState(false);
   useEffect(() => {
-    if(user) setFollowed(user.followed.indexOf(currentUser) !== -1);
+    if (user) setFollowed(user.followed.indexOf(currentUser) !== -1);
   }, [user]); // When user info is loaded make sure to update the default false value
 
   const updateFollowed = (followed: boolean) => {
-    if(user) {
+    if (user) {
       fs.updateFollow(user.username, followed); // Updates on the backend
-      if(followed) { // Only send a notification if the user is following 
-        const followNotification = formatNotification('f');
-        if(followNotification) fs.addNotification(user.username, followNotification);
+      if (followed) {
+        // Only send a notification if the user is following
+        const followNotification = formatNotification("f");
+        if (followNotification)
+          fs.addNotification(user.username, followNotification);
       }
       setFollowed(followed); // Triggers change on the frontend
     }
-  }
-  return [followed, updateFollowed]
+  };
+  return [followed, updateFollowed];
 };
 
 // Used to handle search queries.
 // As of now, it will give back only profiles whose username's prefix matches the query
 // so if I search for 'te', and an account named 'test' exists, it will appear on screen.
 // Just the same, if there is a profile named 'footest', it would not appear under the same query
-const useSearch = (): [profiles: [] | tp.InstaUser[], setQuery: (query: string) => void] => {
+const useSearch = (): [
+  profiles: [] | tp.InstaUser[],
+  setQuery: (query: string) => void
+] => {
   const [query, setQuery] = useState<string>("");
-  const [profiles, setProfiles] = useState<[] | tp.InstaUser[]>([])
+  const [profiles, setProfiles] = useState<[] | tp.InstaUser[]>([]);
   useEffect(() => {
     const searchProfiles = async () => {
-      if(query) { 
+      if (query) {
         const result = await fs.searchForProfiles(query);
         setProfiles(result);
       }
-    } 
+    };
     searchProfiles();
-  }, [query])
+  }, [query]);
   return [profiles, setQuery];
-}
+};
 
 // Used inside of profiles where we need user info and posts.
-const useProfile = (username: string) => {
+const useProfile = (
+  username: string | null
+): [tp.InstaUser | null, tp.Post[] | [], () => void] => {
   const [user, setUser] = useState<null | tp.InstaUser>(null);
   const [posts, setPosts] = useState<[] | tp.Post[]>([]);
   useEffect(() => {
     const loadAllInfo = async () => {
+      if (!username) return;
       const userInfo = await fs.getUserInfo(username);
       const postInfo = await fs.getPosts(username);
       setUser(userInfo);
       setPosts(postInfo);
-    }
+    };
     loadAllInfo();
   }, [username]);
 
   const reloadInfo = async () => {
+    if (!username) return;
     const userInfo = await fs.getUserInfo(username);
-    setUser({...userInfo});
-  }
-  return [user, posts, reloadInfo]
-}
+    setUser({ ...userInfo });
+  };
+  return [user, posts, reloadInfo];
+};
 
 // This hook handles notifications for the logged user.
 // As new notifications come in they get updated on the front-end.
 // Notifications are sorted by timestamp so new ones will always be at the top of the list.
-const useNotifications = (username: string) => {
-  const [notifications, setNotifications] = useState<[] | tp.Notifications[]>([]); // Houses data fetched from backend
+const useNotifications = (
+  username: string | null
+): [
+  notifications: tp.Notifications[] | [],
+  markAllAsSeen: (toggleSidebar: (icon: string) => void) => void
+] => {
+  const [notifications, setNotifications] = useState<[] | tp.Notifications[]>(
+    []
+  ); // Houses data fetched from backend
   const [limit, setLimit] = useState(80); // Regulates how many notifications are shown
   const listener = useRef<null | (() => void)>(null); // Store db listener unsubscription function
   useEffect(() => {
-    const setup = () =>  fs.setupNotifListener(username, setNotifications, limit);
-    if(username) listener.current = setup(); // Creates the listener
-  
-    return () => { if(username && listener.current) listener.current() }
+    if (!username) return;
+    const setup = () =>
+      fs.setupNotifListener(username, setNotifications, limit);
+    if (username) listener.current = setup(); // Creates the listener
+
+    return () => {
+      if (username && listener.current) listener.current();
+    };
   }, [username]);
 
   // Increases the limit of notifications downloaded on db
   const increaseLimit = () => {
-    if(listener.current) listener.current();
-    listener.current = fs.setupNotifListener(username, setNotifications, limit + 5);
+    if (!username) return;
+    if (listener.current) listener.current();
+    listener.current = fs.setupNotifListener(
+      username,
+      setNotifications,
+      limit + 5
+    );
     setLimit(limit + 5);
   };
 
   // Makes a batched update to notifications, marking all as seen.
-  const markAllAsSeen = (toggleSidebar: (active: string) => void) => { 
-    if(notifications.length > 0 && notifications[0].seen === false) fs.setNotificationsSeen(username);
-    toggleSidebar('heart');
+  const markAllAsSeen = (toggleSidebar: (active: string) => void) => {
+    if (notifications.length > 0 && notifications[0].seen === false)
+      if (username) fs.setNotificationsSeen(username);
+    toggleSidebar("heart");
   };
-  
-  return [notifications, markAllAsSeen]
-}
 
-export { 
+  return [notifications, markAllAsSeen];
+};
+
+export {
   useLiked,
   useCommentsLiked,
   useComments,
@@ -225,5 +300,5 @@ export {
   useFollow,
   useSearch,
   useProfile,
-  useNotifications
- };
+  useNotifications,
+};

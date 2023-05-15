@@ -1,16 +1,23 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import { InstaUser } from "../../../utils/types";
 
-const UserCard = ({ user, toggleSidebar }) => {
+type Props = {
+  user: InstaUser | null;
+  toggleSidebar: (section: string) => void;
+};
+
+const UserCard = ({ user, toggleSidebar }: Props) => {
   const navigate = useNavigate();
 
   // Closes the sidebar when card is clicked
   const handleClick = () => {
+    if (!user) return;
     navigate("./profile/" + user.username);
     toggleSidebar("search");
   };
+
+  if (!user) return null;
 
   return (
     <Container onClick={handleClick}>
@@ -21,11 +28,6 @@ const UserCard = ({ user, toggleSidebar }) => {
       </div>
     </Container>
   );
-};
-
-UserCard.propTypes = {
-  user: PropTypes.object.isRequired,
-  toggleSidebar: PropTypes.func.isRequired,
 };
 
 const Container = styled.div`
@@ -43,7 +45,7 @@ const Container = styled.div`
   }
 `;
 
-const Picture = styled.div`
+const Picture = styled.div<{ url: null | string }>`
   background-image: url(${({ url }) => url});
   background-position: center;
   background-size: cover;

@@ -1,12 +1,15 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { BsChevronLeft } from "react-icons/bs";
 import { BsGearWide } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
+import { InstaUser } from "../../../utils/types";
 
-const MobileTop = ({ user }) => {
+type Props = {
+  user: InstaUser | null
+}
+
+const MobileTop = ({ user }: Props) => {
   const currentUser = getCurrentUserUsername();
   const navigate = useNavigate();
 
@@ -19,10 +22,6 @@ const MobileTop = ({ user }) => {
       <Heading>{user ? user.username : ""}</Heading>
     </Container>
   );
-};
-
-MobileTop.propTypes = {
-  user: PropTypes.object
 };
 
 const Container = styled.div`

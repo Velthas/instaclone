@@ -1,9 +1,12 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { useFollow } from "../../../../utils/hooks";
+import { InstaUser } from "../../../../utils/types";
 
-const NotifFollow = ({ user }) => {
+type Props = {
+  user: InstaUser | null;
+};
+
+const NotifFollow = ({ user }: Props) => {
   const [followed, updateFollowed] = useFollow(user);
   return (
     <Button followed={followed} onClick={() => updateFollowed(!followed)}>
@@ -12,11 +15,7 @@ const NotifFollow = ({ user }) => {
   );
 };
 
-NotifFollow.propTypes = {
-  user: PropTypes.object,
-};
-
-const Button = styled.button`
+const Button = styled.button<{ followed: boolean }>`
   cursor: pointer;
   padding: 7px 16px;
   margin-left: 5px;

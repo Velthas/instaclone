@@ -28,7 +28,7 @@ const Instaclone = ({ user }: Props) => {
   }, [user]);
 
   // Used when click occurs on any place that isn't nav
-  const closeSidebar = (section: string) => {
+  const closeSidebar = (section?: string) => {
     if (sidebar === true) setSidebar(false);
     if (section && section !== active) setActive(section);
   };
@@ -43,7 +43,7 @@ const Instaclone = ({ user }: Props) => {
         setActive={setActive}
         userData={userData}
       />
-      <Main getUserData={getUserData} closeSidebar={closeSidebar} user={user} />
+      <Main getUserData={getUserData} closeSidebar={closeSidebar} user={user!} />
     </Container>
   );
 };

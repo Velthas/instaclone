@@ -1,15 +1,21 @@
-import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import Search from "./Search";
-import Notifications from "./notifications/Notifications";
+import NotificationsBox from "./notifications/Notifications";
+import { Notifications } from "../../../utils/types";
 
-const Sidebar = ({ active, content, toggleSidebar, notifications }) => {
+type Props = {
+  isOpen: boolean;
+  content: "search" | "heart" | string;
+  toggleSidebar: (section: string) => void;
+  notifications: Notifications[];
+};
+
+const Sidebar = ({ isOpen, content, toggleSidebar, notifications }: Props) => {
   return (
-    <Container active={active}>
+    <Container isOpen={isOpen}>
       {content === "search" && <Search toggleSidebar={toggleSidebar} />}
       {content === "heart" && (
-        <Notifications
+        <NotificationsBox
           notifications={notifications}
           toggleSidebar={toggleSidebar}
         />
@@ -18,14 +24,7 @@ const Sidebar = ({ active, content, toggleSidebar, notifications }) => {
   );
 };
 
-Sidebar.propTypes = {
-  active: PropTypes.string,
-  content: PropTypes.string,
-  toggleSidebar: PropTypes.func.isRequired,
-  notifications: PropTypes.array,
-};
-
-const Container = styled.div`
+const Container = styled.div<{ isOpen: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
@@ -44,7 +43,7 @@ const Container = styled.div`
   transition: 0.5s ease;
 
   z-index: -1;
-  ${({ active }) => (active ? "transform: translateX(80px);" : "")}
+  ${({ isOpen }) => (isOpen ? "transform: translateX(80px);" : "")}
 
   @media(max-width: 750px) {
     transform: translateX(0);
@@ -53,7 +52,7 @@ const Container = styled.div`
     width: 100%;
     height: calc(100vh - 50px);
     transform: translateY(100%);
-    ${({ active }) => (active ? "transform: translateY(0);" : "")}
+    ${({ isOpen }) => (isOpen ? "transform: translateY(0);" : "")}
   }
 `;
 

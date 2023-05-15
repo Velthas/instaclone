@@ -9,9 +9,9 @@ import Suggestions from "./Suggestions";
 import LoadingPost from "../posts/LoadingPost";
 
 type Props = {
-  user: FirebaseUser, 
-  closeSidebar: (page: string) => void,
-}
+  user: FirebaseUser;
+  closeSidebar: (page: string) => void;
+};
 
 const Home = ({ user, closeSidebar }: Props) => {
   const [content, setContent] = useState<Post[] | any[]>([]);
@@ -23,7 +23,7 @@ const Home = ({ user, closeSidebar }: Props) => {
     const loadContent = async () => {
       let posts;
       if (user) posts = await getHomepageContent(user.displayName);
-      if(posts) setContent(posts);
+      if (posts) setContent(posts);
       setLoading(false);
     };
     loadContent();
@@ -31,25 +31,30 @@ const Home = ({ user, closeSidebar }: Props) => {
 
   // Implementation of infinite scrolling
   const observer = useRef<null | IntersectionObserver>(); // Preserves intersection observer reference
-  const lastElementRef = useCallback((node: Element) => { // Is called every time last post gets created
-    if (loading) return; // Don't try to load more posts when already loading more
-    if (observer.current) observer.current.disconnect(); // Disconnect previous observer
-    observer.current = new IntersectionObserver((entries) => {
-      // Show more posts when last post scrolls into view && there are more posts to show
-      if (entries[0].isIntersecting && display !== content.length - 1) {
-        setLoading(true); // Will make loading placeholder post appear
-        setTimeout(() => { // Gives the illusion of loading more posts, for now.
-          setDisplay((prevState) => {
-            return content.length - 1 < prevState + 2
-              ? content.length - 1
-              : prevState + 2;
-          });
-          setLoading(false); // Takes away the loading placeholder
-        }, 1500);
-      }
-    });
-    if (node) observer.current.observe(node); // Makes the observer watch last div
-  }, [loading, display, content]);
+  const lastElementRef = useCallback(
+    (node: Element) => {
+      // Is called every time last post gets created
+      if (loading) return; // Don't try to load more posts when already loading more
+      if (observer.current) observer.current.disconnect(); // Disconnect previous observer
+      observer.current = new IntersectionObserver((entries) => {
+        // Show more posts when last post scrolls into view && there are more posts to show
+        if (entries[0].isIntersecting && display !== content.length - 1) {
+          setLoading(true); // Will make loading placeholder post appear
+          setTimeout(() => {
+            // Gives the illusion of loading more posts, for now.
+            setDisplay((prevState) => {
+              return content.length - 1 < prevState + 2
+                ? content.length - 1
+                : prevState + 2;
+            });
+            setLoading(false); // Takes away the loading placeholder
+          }, 1500);
+        }
+      });
+      if (node) observer.current.observe(node); // Makes the observer watch last div
+    },
+    [loading, display, content]
+  );
 
   return (
     <Container onClick={() => closeSidebar("home")}>

@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { useComments } from "../../../utils/hooks";
 import { useNavigate } from "react-router-dom";
 import { fadeIn } from "../../../styles/style";
 import { IoHeart, IoChatbubbleSharp } from "react-icons/io5";
+import { Post } from "../../../utils/types";
 
-const PostPreview = ({ post }) => {
+type Props = {
+  post: Post;
+};
+
+const PostPreview = ({ post }: Props) => {
   const [showStat, setShowStat] = useState(false);
   const [comments, addComment] = useComments(post);
   const navigate = useNavigate();
@@ -32,10 +36,6 @@ const PostPreview = ({ post }) => {
   );
 };
 
-PostPreview.propTypes = {
-  post: PropTypes.object.isRequired,
-};
-
 const PostCard = styled.div`
   max-width: 300px;
   max-height: 300px;
@@ -49,7 +49,7 @@ const PostCard = styled.div`
   }
 `;
 
-const PostStats = styled.div`
+const PostStats = styled.div<{ show: boolean }>`
   position: absolute;
   z-index: 1;
   width: 100%;
