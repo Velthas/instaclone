@@ -61,6 +61,7 @@ export type ChatMessage = {
   content: string;
   timestamp: Timestamp;
   id?: string;
+  seen?: boolean;
 };
 
 export type Chatroom = {

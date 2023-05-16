@@ -265,9 +265,16 @@ const addMessage = async (author: string, receiver: string, chatId: string, payl
   await fs.setDoc(newMessageRef, { ...payload, id });
 
   // Store last message info on both sender and receiver's
-  await fs.updateDoc(authorDocRef, { lastMessage: { ...payload, id } });
-  await fs.updateDoc(receivDocRef, { lastMessage: { ...payload, id } });
+  await fs.updateDoc(authorDocRef, { lastMessage: { ...payload, id, seen: true } });
+  await fs.updateDoc(receivDocRef, { lastMessage: { ...payload, id, seen: false } });
 };
+
+// Marks chat as read when viewing new messages
+const markChatAsSeen = async (viewer: string, sender: string, lastMessage: ChatMessage) => {
+  const {seen, ...rest} = lastMessage
+  const authorDocRef = fs.doc(db, "Users", viewer, "Dm", sender); 
+  await fs.updateDoc(authorDocRef, { lastMessage: { ...rest, seen: true } });
+}
 
 export {
   createUserBucket,
@@ -294,4 +301,5 @@ export {
   setupAllChatsListener,
   setupMessagesListener,
   addMessage,
+  markChatAsSeen,
 };

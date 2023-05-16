@@ -23,4 +23,12 @@ const fadeIn = keyframes`
   100% { opacity: 1; }
 `;
 
-export { flexRowCenter, flexColumnCenter, flexRowBetween, fadeIn };
+const ping = keyframes`
+  75%,
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+`;
+
+export { flexRowCenter, flexColumnCenter, flexRowBetween, fadeIn, ping };

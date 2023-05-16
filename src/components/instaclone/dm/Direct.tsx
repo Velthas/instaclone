@@ -36,6 +36,7 @@ const Direct = ({ user, closeSidebar }: Props) => {
   // Attaches listener to listen for chat updates
   useEffect(() => {
     if (unsubscribe.current) unsubscribe.current();
+    if(!user) return
     unsubscribe.current = setupAllChatsListener(user.displayName, setRooms);
     return () => {
       if (unsubscribe.current) unsubscribe.current();
