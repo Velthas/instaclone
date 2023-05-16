@@ -84,6 +84,7 @@ const ForgotPass = styled.p`
 `;
 
 const Error = styled.p`
+  text-align: center;
   margin-top: 12px;
   font-size: 1rem;
   color: #ee2e3e;

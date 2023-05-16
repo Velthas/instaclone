@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { Route, Routes, useNavigate, useParams } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { setupAllChatsListener } from "../../../firebase/firestore";
 import { IconContext } from "react-icons";
 import { flexColumnCenter, flexRowCenter } from "../../../styles/style";

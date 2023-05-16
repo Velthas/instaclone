@@ -8,15 +8,20 @@ const createUser = async (
   username: string,
   setUser: (user: FirebaseUser | null) => void
 ) => {
-  const response = await authFunc.createUserWithEmailAndPassword(
-    auth,
-    mail,
-    password
-  );
-  const user = response.user;
-  await authFunc.updateProfile(user, { displayName: username });
-  if (auth.currentUser) await auth.currentUser.reload();
-  setUser({ ...auth.currentUser } as FirebaseUser); // Bypasses problem:
+  try {
+    const response = await authFunc.createUserWithEmailAndPassword(
+      auth,
+      mail,
+      password
+    );
+    const user = response.user;
+    await authFunc.updateProfile(user, { displayName: username });
+    if (auth.currentUser) await auth.currentUser.reload();
+    setUser({ ...auth.currentUser } as FirebaseUser);
+  } catch (err: any) {
+    return err;
+  }
+  // Bypasses problem:
   // When user registers, they are logged in automatically
   // and their info stored before displayName is changed.
 };
@@ -26,7 +31,7 @@ const loginUser = async (email: string, password: string) => {
   try {
     await authFunc.signInWithEmailAndPassword(auth, email, password);
   } catch (err: any) {
-    return err
+    return err;
   }
 };
 

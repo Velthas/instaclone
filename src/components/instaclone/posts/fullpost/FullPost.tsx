@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import { usePost, useComments, useFollow } from "../../../../utils/hooks";
 import { flexColumnCenter, flexRowCenter } from "../../../../styles/style";
+import { PostInfo } from "../../../../utils/types";
 
 import PostSettings from "../PostSettings";
 import Header from "./Header";
@@ -11,16 +12,15 @@ import Icons from "./Icons";
 import Stats from "./Stats";
 import Add from "./Add";
 import MobileHeader from "../../mobile/MobileHeader";
-import { PostInfo } from "../../../../utils/types";
 
 type Props = {
-  closeSidebar: (section?: string) => void
+  closeSidebar: (section?: string) => void;
 };
 
 const FullPost = ({ closeSidebar }: Props) => {
   const navigate = useNavigate();
   const { postid, username } = useParams();
-  if (!postid || !username) navigate('/')
+  if (!postid || !username) navigate("/");
   const postInfo: PostInfo = { id: postid!, username: username! }; // Used to fetch information about the post
   const [settings, setSettings] = useState(false); // Regulates display of post settings
   const [post, user, liked, changeLiked] = usePost(username!, postid!);
@@ -94,6 +94,7 @@ const PostWrapper = styled.div`
   @media (max-width: 750px) {
     flex-direction: column;
     transform: scale(1);
+    border: none;
     width: 470px;
     height: auto;
     box-shadow: none;
@@ -102,11 +103,10 @@ const PostWrapper = styled.div`
 
   @media (max-width: 550px) {
     width: 95%;
-    border: none;
   }
 `;
 
-const Photo = styled.div<{url: string}>`
+const Photo = styled.div<{ url: string }>`
   background-image: url(${({ url }) => url});
   background-position: center;
   background-size: cover;

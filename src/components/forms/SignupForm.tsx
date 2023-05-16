@@ -1,15 +1,20 @@
 import React from "react";
 import styled from "styled-components";
 import InterInput from "../inputs/InterInput";
-import { validateMail, validatePsw, validateUsername, validateName } from "../../utils/validation";
+import {
+  validateMail,
+  validatePsw,
+  validateUsername,
+  validateName,
+} from "../../utils/validation";
 import { createUser } from "../../firebase/authentication";
 import { createUserBucket, doesUserExist } from "../../firebase/firestore";
 import { flexRowCenter } from "../../styles/style";
 import { FirebaseUser } from "../../utils/types";
 
 type Props = {
-  displayError: (message: string) => void,
-  setUser: (authUser: FirebaseUser | null) => void,
+  displayError: (message: string) => void;
+  setUser: (authUser: FirebaseUser | null) => void;
 };
 
 const SignupForm = ({ displayError, setUser }: Props) => {
@@ -29,32 +34,55 @@ const SignupForm = ({ displayError, setUser }: Props) => {
 
     switch (true) {
       case isMailValid !== true:
-        if(typeof isMailValid === 'string') displayError(isMailValid);
+        if (typeof isMailValid === "string") displayError(isMailValid);
         return;
       case isPswValid !== true:
-        if(typeof isPswValid === 'string') displayError(isPswValid);
+        if (typeof isPswValid === "string") displayError(isPswValid);
         return;
       case isNameValid !== true:
-        if(typeof isNameValid === 'string') displayError(isNameValid);
+        if (typeof isNameValid === "string") displayError(isNameValid);
         return;
       case isUsernameValid !== true:
-        if(typeof isUsernameValid === 'string') displayError(isUsernameValid);
+        if (typeof isUsernameValid === "string") displayError(isUsernameValid);
         return;
       case isUsernameTaken !== false:
         displayError("Username already taken");
         return;
       default:
-        await createUser(mail, psw, usname, setUser);
-        createUserBucket(fullname, usname);
+        const error = await createUser(mail, psw, usname, setUser);
+        if (error) {
+          displayError(`Signup failed with code: ${error.code}`);
+          return;
+        } else createUserBucket(fullname, usname);
     }
   };
 
   return (
     <Form id="signup">
-      <InterInput id="mailreg" type="text" label="Email" checkValid={validateMail} />
-      <InterInput id="fullname" type="text" label="Full name" checkValid={validateName} />
-      <InterInput id="username" type="text" label="Username" checkValid={validateUsername} />
-      <InterInput id="passreg" type="password" label="Password" checkValid={validatePsw} />
+      <InterInput
+        id="mailreg"
+        type="text"
+        label="Email"
+        checkValid={validateMail}
+      />
+      <InterInput
+        id="fullname"
+        type="text"
+        label="Full name"
+        checkValid={validateName}
+      />
+      <InterInput
+        id="username"
+        type="text"
+        label="Username"
+        checkValid={validateUsername}
+      />
+      <InterInput
+        id="passreg"
+        type="password"
+        label="Password"
+        checkValid={validatePsw}
+      />
       <Para>
         Hi! My name is Damiano, my coding alias is Velthas, and this is my clone
         of Instagram.{" "}
