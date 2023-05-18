@@ -21,6 +21,7 @@ type Props = {
   active: string;
   setActive: (section: string) => void;
   userData: InstaUser | null;
+  hasNewMessages: boolean;
 };
 
 const Nav = ({
@@ -30,11 +31,13 @@ const Nav = ({
   active,
   setActive,
   userData,
+  hasNewMessages,
 }: Props) => {
   const [notifications, markAllAsSeen] = useNotifications(
     user ? user.displayName : null
   );
   const [postForm, setPostForm] = useState(false); // Regulates new post form display
+  console.log({ hasNewMessages });
 
   // Click handler for icons that don't open the sidebar
   const handleClick = (icon: string) => {
@@ -156,11 +159,12 @@ const Nav = ({
           </NotifListItem>
 
           <StyledLink to={"/direct"}>
-            <ListItem
+            <MessageListItem
               mobile={true}
               sidebar={sidebar}
               own={"message"}
               onClick={() => handleClick("message")}
+              hasNewMessages={hasNewMessages}
             >
               {active === "message" ? (
                 <IoPaperPlaneSharp title="direct messages" />
@@ -170,7 +174,7 @@ const Nav = ({
               <Label sidebar={sidebar} active={active} own={"message"}>
                 Messages
               </Label>
-            </ListItem>
+            </MessageListItem>
           </StyledLink>
 
           <StyledLink to={user !== null ? "/profile/" + user.displayName : "/"}>
@@ -321,6 +325,7 @@ const Icons = styled.ul`
   @media (max-width: 750px) {
     flex-direction: row;
     justify-content: space-around;
+    align-items: center;
     width: 100%;
     height: 100%;
     gap: 0;
@@ -343,6 +348,7 @@ const ListItem = styled.li<{
   transition: 0.15s ease-out;
   min-height: 40px;
   min-width: 40px;
+  max-height: 40px;
   ${flexRowCenter}
   justify-content: ${({ sidebar }) => (sidebar ? "center" : "flex-start")};
   border-radius: 50%;
@@ -380,6 +386,27 @@ const Label = styled.span<{ sidebar: boolean; active: string; own: string }>`
 
   @media (max-width: 1100px) {
     display: none;
+  }
+`;
+
+const MessageListItem = styled(ListItem)<{ hasNewMessages?: boolean }>`
+  &::after {
+    ${({ hasNewMessages }) => (hasNewMessages ? "content: '';" : "")}
+    position: absolute;
+    top: 6px;
+    left: 24px;
+    border: 2px solid #fff;
+    border-radius: 100%;
+    background-color: #fe004b;
+    height: 10px;
+    width: 10px;
+  }
+
+  @media (max-width: 1100px) {
+    &::after {
+      top: 6px;
+      left: 24px;
+    }
   }
 `;
 

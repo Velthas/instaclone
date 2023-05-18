@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Route, Routes, useNavigate } from "react-router-dom";
-import { setupAllChatsListener } from "../../../firebase/firestore";
 import { IconContext } from "react-icons";
 import { flexColumnCenter, flexRowCenter } from "../../../styles/style";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
@@ -17,13 +16,12 @@ import Room from "./room/Room";
 type Props = {
   user: FirebaseUser;
   closeSidebar: (active: string) => void;
+  rooms: null | Chatroom[];
 };
 
-const Direct = ({ user, closeSidebar }: Props) => {
+const Direct = ({ user, closeSidebar, rooms }: Props) => {
   const currentUser = getCurrentUserUsername() as string;
-  const unsubscribe = useRef<null | (() => void)>(null); // Will hold unsubscribe database listener function
   const [modal, setModal] = useState(false); // Regulates 'new chat' modal appearance.
-  const [rooms, setRooms] = useState<null | Chatroom[]>(null); // Array of chatroom objects
   const [newRoom, setNewRoom] = useState<null | Chatroom>(null); // Stores empty empty/new chatrooms
   const [active, setActive] = useState<null | Chatroom>(null); // Causes selected chat to be highlighted
   const navigate = useNavigate();
@@ -32,16 +30,6 @@ const Direct = ({ user, closeSidebar }: Props) => {
   useEffect(() => {
     closeSidebar("message");
   }, []);
-
-  // Attaches listener to listen for chat updates
-  useEffect(() => {
-    if (unsubscribe.current) unsubscribe.current();
-    if(!user) return
-    unsubscribe.current = setupAllChatsListener(user.displayName, setRooms);
-    return () => {
-      if (unsubscribe.current) unsubscribe.current();
-    };
-  }, [user]);
 
   // Fixes bug on mobile, when pressing back on browser chat remained blank
   useEffect(() => {
