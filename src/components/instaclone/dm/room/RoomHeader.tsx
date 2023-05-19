@@ -1,18 +1,30 @@
 import styled from "styled-components";
 import { flexRowBetween, flexRowCenter } from "../../../../styles/style";
-import { BsTelephone, BsCameraVideo, BsInfoCircle, BsChevronLeft } from "react-icons/bs";
+import {
+  BsTelephone,
+  BsCameraVideo,
+  BsInfoCircle,
+  BsChevronLeft,
+} from "react-icons/bs";
 import { Chatroom } from "../../../../utils/types";
+import { useNavigate } from "react-router-dom";
+import { useCallback } from "react";
 
 type Props = {
-  active: Chatroom | null,
-  backToChatSelection: () => void,
+  active: Chatroom | null;
+  backToChatSelection: () => void;
 };
 
 const RoomHeader = ({ active, backToChatSelection }: Props) => {
+  const navigate = useNavigate();
+  const goToProfile = useCallback(() => {
+    if (active) navigate(`/profile/${active.username}`);
+  }, [active]);
+
   return (
     <Header>
       <BackIcon onClick={backToChatSelection} />
-      <Username>{active ? active.username : ""}</Username>
+      <Username onClick={goToProfile}>{active ? active.username : ""}</Username>
       <Icons>
         <BsTelephone />
         <BsCameraVideo />
@@ -35,6 +47,8 @@ const Header = styled.div`
 const Username = styled.span`
   font-weight: 500;
   font-size: 1rem;
+  cursor: pointer;
+  
 `;
 
 const Icons = styled.div`
