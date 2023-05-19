@@ -61,10 +61,16 @@ const Home = ({ user, closeSidebar }: Props) => {
       <PostContainer>
         {content.length !== 0 &&
           content.map((post, index) => {
-            if (index < display) return <HomePost key={post.id} post={post} />;
+            if (index < display)
+              return <HomePost currentUser={user} key={post.id} post={post} />;
             else if (index === display)
               return (
-                <HomePost innerRef={lastElementRef} key={post.id} post={post} />
+                <HomePost
+                  currentUser={user}
+                  innerRef={lastElementRef}
+                  key={post.id}
+                  post={post}
+                />
               );
           })}
         {loading && <LoadingPost />}
