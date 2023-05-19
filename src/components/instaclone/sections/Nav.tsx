@@ -37,7 +37,6 @@ const Nav = ({
     user ? user.displayName : null
   );
   const [postForm, setPostForm] = useState(false); // Regulates new post form display
-  console.log({ hasNewMessages });
 
   // Click handler for icons that don't open the sidebar
   const handleClick = (icon: string) => {

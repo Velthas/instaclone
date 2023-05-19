@@ -18,7 +18,6 @@ const Instaclone = ({ user }: Props) => {
   const [active, setActive] = useState("home"); // Determines which nav icon is marked as active
   const [userData, getUserData] = useUser(user ? user.displayName : null);
   const [rooms, hasNewMessages] = useChatRooms(user ? user : null);
-  console.log(hasNewMessages)
 
   // Triggers fetch when user info is finally loaded
   useEffect(() => {
