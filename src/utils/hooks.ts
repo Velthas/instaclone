@@ -291,6 +291,33 @@ const useNotifications = (
   return [notifications, markAllAsSeen];
 };
 
+// Attaches listener for all user chatrooms
+const useChatRooms = (
+  user: tp.FirebaseUser | null
+): [rooms: tp.Chatroom[] | null, hasNewMessages: boolean] => {
+  const unsubscribe = useRef<null | (() => void)>(null); // Will hold unsubscribe database listener function
+  const [rooms, setRooms] = useState<null | tp.Chatroom[]>(null); // Array of chatroom objects
+  const [hasNewMessages, setHasNewMessages] = useState(false);
+
+  useEffect(() => {
+    setHasNewMessages(
+      rooms ? rooms?.some((room) => room.lastMessage?.seen === false) : false
+    );
+  }, [rooms]);
+
+  // Attaches listener to listen for chat updates
+  useEffect(() => {
+    if (unsubscribe.current) unsubscribe.current();
+    if (!user) return;
+    unsubscribe.current = fs.setupAllChatsListener(user.displayName, setRooms);
+    return () => {
+      if (unsubscribe.current) unsubscribe.current();
+    };
+  }, [user]);
+
+  return [rooms, hasNewMessages];
+};
+
 export {
   useLiked,
   useCommentsLiked,
@@ -301,4 +328,5 @@ export {
   useSearch,
   useProfile,
   useNotifications,
+  useChatRooms,
 };

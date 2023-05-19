@@ -46,12 +46,12 @@ const Container = styled.div<{ isOpen: boolean }>`
   ${({ isOpen }) => (isOpen ? "transform: translateX(80px);" : "")}
 
   @media(max-width: 750px) {
-    transform: translateX(0);
+    transform: translateX(-1px);
 
     border-right: none;
     width: 100%;
     height: calc(100vh - 50px);
-    transform: translateY(100%);
+    transform: translateY(101%);
     ${({ isOpen }) => (isOpen ? "transform: translateY(0);" : "")}
   }
 `;

@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../../utils/hooks";
+import { useChatRooms, useUser } from "../../utils/hooks";
 import styled from "styled-components";
 import { FirebaseUser } from "../../utils/types";
+import { Chatroom } from "../../utils/types";
 
 import Nav from "./sections/Nav";
 import Main from "./sections/Main";
 
 type Props = {
-  user: FirebaseUser | null
+  user: FirebaseUser | null;
 };
 
 const Instaclone = ({ user }: Props) => {
@@ -16,6 +17,8 @@ const Instaclone = ({ user }: Props) => {
   const [sidebar, setSidebar] = useState(false); // Regulates sidebar display
   const [active, setActive] = useState("home"); // Determines which nav icon is marked as active
   const [userData, getUserData] = useUser(user ? user.displayName : null);
+  const [rooms, hasNewMessages] = useChatRooms(user ? user : null);
+  console.log(hasNewMessages)
 
   // Triggers fetch when user info is finally loaded
   useEffect(() => {
@@ -42,8 +45,14 @@ const Instaclone = ({ user }: Props) => {
         active={active}
         setActive={setActive}
         userData={userData}
+        hasNewMessages={hasNewMessages}
       />
-      <Main getUserData={getUserData} closeSidebar={closeSidebar} user={user!} />
+      <Main
+        getUserData={getUserData}
+        closeSidebar={closeSidebar}
+        user={user!}
+        rooms={rooms}
+      />
     </Container>
   );
 };
