@@ -8,7 +8,7 @@ import { useState, useRef } from "react";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
 
 type Props = {
-  userList: string[];
+  userList: string[] | undefined;
   showLikes: boolean;
   setShowLikes: any;
 };
@@ -35,15 +35,16 @@ const LikeList = ({ userList, showLikes, setShowLikes }: Props) => {
           <CloseIcon onClick={() => setShowLikes(false)} />
         </TitleContainer>
         <UsersContainer>
-          {userList.map((user) => {
-            return (
-              <LikeCard
-                key={user}
-                suggestion={user}
-                currentUser={currentUser.current ? currentUser.current : null}
-              />
-            );
-          })}
+          {userList &&
+            userList.map((user) => {
+              return (
+                <LikeCard
+                  key={user}
+                  suggestion={user}
+                  currentUser={currentUser.current ? currentUser.current : null}
+                />
+              );
+            })}
         </UsersContainer>
       </Container>
     </Backdrop>
@@ -60,7 +61,6 @@ const Backdrop = styled.div`
   width: 100vw;
   height: calc(100vh - 50px);
   max-height: 100%;
-  overflow-y: auto;
   background-color: #000000c4;
 
   display: flex;
@@ -75,14 +75,14 @@ const Backdrop = styled.div`
     height: 100vh;
   }
 
-  @media (min-width: 750px) {
-
+  @media only screen and (max-height: 550px) and (max-width: 750px) and (orientation: landscape) {
+    height: 100%;
   }
 
-  @media only screen and (max-height: 550px) and (orientation: landscape) {
+  @media only screen and (max-height: 550px) and (max-width: 550px) and (orientation: landscape) {
     top: 0;
     left: 0;
-    height: 100%;
+    height: calc(100vh - 50px);
     transform: none;
     align-items: center;
   }
@@ -92,8 +92,6 @@ const Container = styled.div<{ isListExiting: boolean }>`
   position: fixed;
   z-index: 2;
   top: 0;
-  overflow-y: auto;
-
   height: calc(100vh - 50px);
   width: 100vw;
   background-color: white;
@@ -127,6 +125,10 @@ const Container = styled.div<{ isListExiting: boolean }>`
     height: 400px;
     border-radius: 12px;
   }
+
+  @media only screen and (max-height: 550px) and (orientation: landscape) {
+    height: calc(100vh - 50px);
+  }
 `;
 
 const TitleContainer = styled.div`
@@ -146,6 +148,7 @@ const TitleContainer = styled.div`
 const UsersContainer = styled.div`
   ${flexColumnCenter}
   width: 100%;
+  height: calc(100% - 44px);
   padding: 8px;
   overflow-y: scroll;
 `;

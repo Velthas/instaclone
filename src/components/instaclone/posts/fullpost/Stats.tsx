@@ -1,16 +1,22 @@
 import styled from "styled-components";
-import { likeDiscursiveFormat, formatDateLong } from "../../../../utils/formatting";
+import {
+  likeDiscursiveFormat,
+  formatDateLong,
+} from "../../../../utils/formatting";
 import { Post } from "../../../../utils/types";
 
 type Props = {
   post: Post | null;
   liked: boolean;
+  openLikes: () => void;
 };
 
-const Stats = ({ post, liked }: Props) => {
+const Stats = ({ post, liked, openLikes }: Props) => {
   return (
     <Container>
-      <Likes>{post ? likeDiscursiveFormat(post.likedby, liked) : ""}</Likes>
+      <Likes onClick={openLikes}>
+        {post ? likeDiscursiveFormat(post.likedby, liked) : ""}
+      </Likes>
       <Date>{post ? formatDateLong(post.timestamp) : ""}</Date>
     </Container>
   );
@@ -28,6 +34,7 @@ const Likes = styled.p`
   font-weight: 500;
   color: #262626;
   font-size: 1rem;
+  cursor: pointer;
 `;
 
 const Date = styled.p`
