@@ -4,13 +4,14 @@ import { useFollow, useUser } from "../../../utils/hooks";
 import { Link } from "react-router-dom";
 
 type Props = {
-  suggestion: string,
-  currentUser: string | null,
-}
+  suggestion: string;
+  currentUser: string | null;
+};
 
 const LikeCard = ({ suggestion, currentUser }: Props) => {
   const [user, updateUser] = useUser(suggestion); // Houses all information on user
   const [followed, updateFollowed] = useFollow(user ? user : null); // Oversees follow status
+
   return (
     <Container>
       <InfoWrapper to={user ? `/profile/${user.username}` : ""}>
@@ -21,7 +22,12 @@ const LikeCard = ({ suggestion, currentUser }: Props) => {
         </div>
       </InfoWrapper>
       {currentUser && user && user.username !== currentUser && (
-        <Button onClick={() => { if (typeof updateFollowed === "function") updateFollowed(!followed) }} blue>
+        <Button
+          onClick={() => {
+            updateFollowed(!followed);
+          }}
+          blue={followed ? false : true}
+        >
           {followed ? "Unfollow" : "Follow"}
         </Button>
       )}
@@ -44,7 +50,7 @@ const InfoWrapper = styled(Link)`
   text-decoration: none;
 `;
 
-const Picture = styled.div<{url: string}>`
+const Picture = styled.div<{ url: string }>`
   background-image: url(${({ url }) => url});
   background-position: center;
   background-size: cover;
@@ -52,11 +58,12 @@ const Picture = styled.div<{url: string}>`
   width: 50px;
   border-radius: 50%;
   border: 1px solid #dfdfdf;
+  flex-shrink: 0;
 `;
 
 const Username = styled.div`
   font-weight: 500;
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: #262626;
 `;
 
@@ -65,7 +72,7 @@ const Name = styled.div`
   color: #8e8e8e;
 `;
 
-const Button = styled.button<{blue?: boolean}>`
+const Button = styled.button<{ blue?: boolean }>`
   min-width: 90px;
   padding: 8px 16px;
   margin-left: 5px;

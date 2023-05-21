@@ -31,9 +31,8 @@ const HomePost = ({ post, innerRef, currentUser }: Props) => {
   }
 
   return (
-    <>
-    <LikeList userList={post.likedby} showLikes={showLikes} setShowLikes={setShowLikes}/>
     <Container ref={innerRef}>
+    <LikeList userList={post.likedby} showLikes={showLikes} setShowLikes={setShowLikes}/>
       <PostSettings settings={settings} setSettings={setSettings} post={post} />
       <Header setSettings={setSettings} user={user} timestamp={post.timestamp} />
       <Picture
@@ -45,7 +44,6 @@ const HomePost = ({ post, innerRef, currentUser }: Props) => {
       <Comments post={post} comments={comments} liked={liked} openLikes={openLikes}/>
       <Add insertComment={insertComment} post={post} />
     </Container>
-    </>
   );
 };
 

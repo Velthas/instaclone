@@ -83,7 +83,7 @@ const Nav = ({
           notifications={notifications}
         />
 
-        <LogoContainer sidebar={sidebar} mobile={true}>
+        <LogoContainer sidebar={sidebar} mobile={false}>
           <MinifiedLogo sidebar={sidebar} title="instalogo" />
           <ExtendedLogo src={instalogo} sidebar={sidebar} title="instalogo" />
         </LogoContainer>
