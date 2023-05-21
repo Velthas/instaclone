@@ -46,7 +46,7 @@ const Direct = ({ user, closeSidebar, rooms }: Props) => {
       : [null];
 
     if (room && room.lastMessage) {
-      const chatDiv = document.querySelector<HTMLElement>(`#${room.chatId}`);
+      const chatDiv = document.querySelector<HTMLElement>(`#${'a' + room.chatId}`);
       if (chatDiv) chatDiv.click();
     } else if (room && !room.lastMessage) {
       openChatRoom(room.chatId, room.username);
