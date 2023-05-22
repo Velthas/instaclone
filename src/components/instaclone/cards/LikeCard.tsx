@@ -12,6 +12,7 @@ const LikeCard = ({ suggestion, currentUser }: Props) => {
   const [user, updateUser] = useUser(suggestion); // Houses all information on user
   const [followed, updateFollowed] = useFollow(user ? user : null); // Oversees follow status
 
+  if (!user) return null;
   return (
     <Container>
       <InfoWrapper to={user ? `/profile/${user.username}` : ""}>
