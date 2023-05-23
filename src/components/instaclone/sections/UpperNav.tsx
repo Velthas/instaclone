@@ -64,7 +64,7 @@ const Container = styled.div`
 
   position: fixed;
   background-color: #fff;
-  z-index: 3;
+  z-index: 2;
   top: 0;
 
   @media (max-width: 750px) {

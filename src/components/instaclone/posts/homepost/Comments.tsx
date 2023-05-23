@@ -11,13 +11,14 @@ type Props = {
   post: Post;
   comments: Comments[] | null;
   liked: boolean;
+  openLikes: () => void;
 };
 
-const CommentSection = ({ post, comments, liked }: Props) => {
+const CommentSection = ({ post, comments, liked, openLikes }: Props) => {
   const description = { author: post.username, content: post.description };
   return (
     <Container>
-      <LikeCount>
+      <LikeCount onClick={openLikes}>
         {(post.likedby.length !== 0 || liked === true) &&
           likeDiscursiveFormat(post.likedby, liked)}
       </LikeCount>
@@ -62,6 +63,7 @@ const ViewMoreCommentsPara = styled.p`
 const LikeCount = styled.p`
   color: #262626;
   font-weight: 500;
+  cursor: pointer;
 `;
 
 const CommentsContainer = styled.div`

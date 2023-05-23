@@ -12,6 +12,7 @@ import Icons from "./Icons";
 import Stats from "./Stats";
 import Add from "./Add";
 import MobileHeader from "../../mobile/MobileHeader";
+import LikeList from "../LikeList";
 
 type Props = {
   closeSidebar: (section?: string) => void;
@@ -26,9 +27,15 @@ const FullPost = ({ closeSidebar }: Props) => {
   const [post, user, liked, changeLiked] = usePost(username!, postid!);
   const [comments, insertComment] = useComments(postInfo, `#a${postInfo.id}`);
   const [followed, updateFollowed] = useFollow(user ? user : null);
+  const [showLikes, setShowLikes] = useState(false);
+
+  const openLikes = () => {
+    setShowLikes(true)
+  }
 
   return (
     <Container onClick={() => closeSidebar()}>
+      <LikeList showLikes={showLikes} setShowLikes={setShowLikes} userList={post?.likedby} />
       <MobileHeader name="Post" isPostPage />
       <PostWrapper>
         {post && (
@@ -54,7 +61,7 @@ const FullPost = ({ closeSidebar }: Props) => {
           />
           <StatWrapper>
             <Icons liked={liked} changeLiked={changeLiked} />
-            <Stats post={post} liked={liked} />
+            <Stats openLikes={openLikes} post={post} liked={liked} />
           </StatWrapper>
           <Add postInfo={postInfo} insertComment={insertComment} />
         </Info>

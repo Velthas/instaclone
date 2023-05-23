@@ -11,10 +11,11 @@ import HeaderButtons from "./profileheader/HeaderButtons";
 
 type Props = {
   user: InstaUser | null,
-  posts: Post[] | []
+  posts: Post[] | [],
+  setFollowersModalOpen: (section: 'followers' | 'following') => void
 }
 
-const ProfileHeader = ({ user, posts }: Props) => {
+const ProfileHeader = ({ user, posts, setFollowersModalOpen }: Props) => {
   const currentUser = getCurrentUserUsername();
   const [followed, updateFollowed] = useFollow(user ? user : null);
   let followers;
@@ -35,7 +36,7 @@ const ProfileHeader = ({ user, posts }: Props) => {
             <HeaderButtons user={user} followed={followed} updateFollowed={updateFollowed} />
             <Dots />
           </FirstRow>
-          <Stats followers={followers} user={user} length={posts ? posts.length : 0} />
+          <Stats followers={followers} user={user} length={posts ? posts.length : 0} setFollowersModalOpen={setFollowersModalOpen}/>
           <UserInfo>
             <FullName>{user ? user.name : ""}</FullName>
             <Description>{user ? user.description : ""}</Description>
@@ -46,7 +47,7 @@ const ProfileHeader = ({ user, posts }: Props) => {
         <FullName>{user ? user.name : ""}</FullName>
         <Description>{user ? user.description : ""}</Description>
       </UserInfoMobile>
-      <MobileStats followers={followers} user={user} length={posts ? posts.length : 0} />
+      <MobileStats followers={followers} user={user} length={posts ? posts.length : 0} setFollowersModalOpen={setFollowersModalOpen} />
     </>
   );
 };

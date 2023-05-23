@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
 import { useParams } from "react-router-dom";
@@ -8,6 +8,7 @@ import PostPreview from "../posts/PostPreview";
 import ProfileHeader from "./ProfileHeader";
 import ProfileSections from "./ProfileSections";
 import MobileTop from "./MobileTop";
+import FollowersFollowingModal from "./FollowersFollowingModal";
 
 type Props = {
   user: InstaUser | null;
@@ -18,6 +19,9 @@ type Props = {
 const Profile = ({ user, posts, closeSidebar }: Props) => {
   const { username } = useParams();
   const isOwnProfile = getCurrentUserUsername() === username;
+  const [followersModalOpen, setFollowersModalOpen] = useState<
+    "" | "followers" | "following"
+  >("");
 
   // Sets profile icon as activeì if visiting own profile
   useEffect(() => {
@@ -25,14 +29,28 @@ const Profile = ({ user, posts, closeSidebar }: Props) => {
     else closeSidebar(" ");
   }, []);
 
+  // Ensures followers modal is closed when switching profile
+  useEffect(() => {
+    setFollowersModalOpen("");
+  }, [username]);
+
   return (
     <Container
       onClick={
         isOwnProfile ? () => closeSidebar("profile") : () => closeSidebar(" ")
       }
     >
+      <FollowersFollowingModal
+        followersModalOpen={followersModalOpen}
+        setFollowersModalOpen={setFollowersModalOpen}
+        user={user}
+      />
       <MobileTop user={user} />
-      <ProfileHeader user={user} posts={posts} />
+      <ProfileHeader
+        user={user}
+        posts={posts}
+        setFollowersModalOpen={setFollowersModalOpen}
+      />
       <ProfileSections />
       <PostList>
         {posts.map((post) => {

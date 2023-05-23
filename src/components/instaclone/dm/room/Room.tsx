@@ -60,6 +60,7 @@ const Room = ({ active, setActive, setNewRoom, newRoom, rooms }: Props) => {
       return;
     else if (rooms) {
       const activeRoom = rooms.filter((room) => room.chatId === id)[0];
+      if (!activeRoom) return;
       const payload = {
         username: activeRoom.username,
         chatId: activeRoom.chatId,

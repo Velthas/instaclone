@@ -29,7 +29,7 @@ const ChatEntry = ({ room, active, openChat }: Props) => {
     <Container
       onClick={() => openChat(room.chatId, room.username)}
       active={active ? active.chatId === room.chatId : false}
-      id={room.chatId}
+      id={'a' + room.chatId}
       lastMessage={room.lastMessage as any}
     >
       <Image url={user ? user.pfp : ""} />

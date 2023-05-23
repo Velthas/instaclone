@@ -5,20 +5,21 @@ type Props = {
   length: number,
   user: InstaUser | null,
   followers: number | undefined,
+  setFollowersModalOpen: (section: 'followers' | 'following') => void
 };
 
-const MobileStats = ({ length, user, followers }: Props) => {
+const MobileStats = ({ length, user, followers, setFollowersModalOpen }: Props) => {
   return (
     <StatsUl>
       <StatsLi>
         <StatEntry>{length}</StatEntry>
         <StatLabel>posts</StatLabel>
       </StatsLi>
-      <StatsLi>
+      <StatsLi onClick={() => setFollowersModalOpen('followers')}>
         <StatEntry> {user ? followers : ""} </StatEntry>
         <StatLabel>followers</StatLabel>
       </StatsLi>
-      <StatsLi>
+      <StatsLi onClick={() => setFollowersModalOpen('following')}>
         <StatEntry>{user ? user.follows.length : ""}</StatEntry>
         <StatLabel>followed</StatLabel>
       </StatsLi>
@@ -52,6 +53,7 @@ const StatsLi = styled.li`
   text-align: center;
 
   font-size: 0.9rem;
+  cursor: pointer;
 `;
 
 const StatEntry = styled.span`

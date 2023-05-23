@@ -30,12 +30,14 @@ const Container = styled.div<{ isPostPage?: boolean }>`
       isPostPage ? "none" : "1px solid #dfdfdf"};
 
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
   }
 `;
 
 const Back = styled(BsChevronLeft)`
+  position: absolute;
+  inset-inline-start: 8px;
   height: 24px;
   width: 24px;
   color: #262626;
