@@ -56,7 +56,7 @@ const Backdrop = styled.div`
   top: 0;
   left: auto;
   height: 100%;
-  z-index: 4;
+  z-index: 2;
 
   width: 100vw;
   height: calc(100vh - 50px);
@@ -73,10 +73,12 @@ const Backdrop = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     height: 100vh;
+    z-index: 4
   }
 
   @media only screen and (max-height: 550px) and (max-width: 750px) and (orientation: landscape) {
     height: 100%;
+    z-index: 4;
   }
 
   @media only screen and (max-height: 550px) and (max-width: 550px) and (orientation: landscape) {
@@ -85,6 +87,7 @@ const Backdrop = styled.div`
     height: calc(100vh - 50px);
     transform: none;
     align-items: center;
+    z-index: 2;
   }
 `;
 
