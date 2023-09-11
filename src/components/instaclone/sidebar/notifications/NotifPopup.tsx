@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import styled from "styled-components";
 import { BsPersonFill, BsHeartFill } from "react-icons/bs";
 import { IoChatbubble } from "react-icons/io5";
@@ -21,21 +21,30 @@ const NotifPopup = ({ notifications }: Props) => {
     }, 3000);
   }, [notifications]);
 
-  const getUnseenByType = (notitype: string) =>
-    notifications.filter(
-      (notif) => notif.type === notitype && notif.seen === false
-    ).length;
+  const getUnseenByType = useCallback(
+    (notifs: Notifications[]) =>
+      notifs.reduce(
+        (
+          acc: { likes: number; follows: number; comments: number },
+          notif: Notifications
+        ) => {
+          if (notif.seen === true) return acc;
+          if (notif?.type === "l" || notif?.type === "cl") acc.likes += 1;
+          if (notif?.type === "f") acc.follows += 1;
+          if (notif?.type === "c") acc.comments += 1;
+          return acc;
+        },
+        { likes: 0, follows: 0, comments: 0 }
+      ),
+    []
+  );
 
-  const likes = getUnseenByType("l") + getUnseenByType("cl"); // Unseen like notifications
-  const follows = getUnseenByType("f"); // Unseen follow notifications
-  const comments = getUnseenByType("c"); // Unseen comments notifications
-
-  // Function returns true if there is at least 1 new notification
+  const { likes, follows, comments } = getUnseenByType(notifications);
   const areNewNotifications = () => likes + follows + comments > 0;
 
   return (
     <>
-      {display && (
+      {display && areNewNotifications() && (
         <Container>
           {comments > 0 && (
             <Section>
