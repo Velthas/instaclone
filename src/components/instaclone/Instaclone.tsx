@@ -1,9 +1,8 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useChatRooms, useUser } from "../../utils/hooks";
 import styled from "styled-components";
 import { FirebaseUser } from "../../utils/types";
-import { Chatroom } from "../../utils/types";
 
 import Nav from "./sections/Nav";
 import Main from "./sections/Main";
