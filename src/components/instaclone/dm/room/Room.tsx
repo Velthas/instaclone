@@ -20,7 +20,7 @@ type Props = {
   setActive: (room: Chatroom | null) => void;
   setNewRoom: (room: Chatroom | null) => void;
   newRoom: Chatroom | null;
-  rooms: Chatroom[] | null;
+  rooms: Chatroom[] | null | undefined;
 };
 
 const Room = ({ active, setActive, setNewRoom, newRoom, rooms }: Props) => {

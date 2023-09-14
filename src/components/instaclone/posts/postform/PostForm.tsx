@@ -1,14 +1,17 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import { BsXLg } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { validateDescription, isFileImage } from "../../../../utils/validation";
 import { getCurrentUserUsername } from "../../../../firebase/authentication";
-import { createPost, getPostDocReference } from "../../../../firebase/firestore";
+import {
+  createPost,
+  getPostDocReference,
+} from "../../../../firebase/firestore";
 import { uploadPhoto } from "../../../../firebase/storage";
 import { Timestamp } from "firebase/firestore";
 import { fadeIn } from "../../../../styles/style";
-import { InstaUser } from "../../../../utils/types";
+import { UserContext } from "../../../context/UserProvider";
 
 import PostFormHeader from "./PostFormHeader";
 import ImageSelection from "./ImageSelection";
@@ -17,18 +20,18 @@ import Loading from "./Loading";
 
 type Props = {
   closeForm: () => void;
-  user: InstaUser | null;
 };
 
-const PostForm = ({ closeForm, user }: Props) => {
+const PostForm = ({ closeForm }: Props) => {
+  const { user } = useContext(UserContext) || {};
   const [photo, setPhoto] = useState<false | string>(false);
   const [fileError, setFileError] = useState<boolean | string>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    if(!user) return
-    e.preventDefault()
+    if (!user) return;
+    e.preventDefault();
     setLoading(true);
 
     const payload = {} as any;
@@ -90,7 +93,11 @@ const PostForm = ({ closeForm, user }: Props) => {
             fileError={fileError}
             setFileError={setFileError}
           />
-          <Image photo={photo} isLoading={loading} src={photo ? photo : undefined} />
+          <Image
+            photo={photo}
+            isLoading={loading}
+            src={photo ? photo : undefined}
+          />
           <PostInfo user={user} loading={loading} photo={photo} />
         </Form>
       </Container>
@@ -181,7 +188,7 @@ const Container = styled.div`
   }
 `;
 
-const Image = styled.img<{photo: false | string, isLoading: boolean}>`
+const Image = styled.img<{ photo: false | string; isLoading: boolean }>`
   ${({ photo }) => (photo ? "display: block" : "display: none")};
   ${({ isLoading }) => (isLoading ? "display: none" : "")};
   max-width: 555px;

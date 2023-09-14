@@ -1,28 +1,30 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, useContext } from "react";
 import styled from "styled-components";
 import { getHomepageContent } from "../../../firebase/firestore";
 import { flexColumnCenter } from "../../../styles/style";
-import { FirebaseUser, Post } from "../../../utils/types";
+import { Post } from "../../../utils/types";
 
 import HomePost from "../posts/homepost/HomePost";
 import Suggestions from "./Suggestions";
 import LoadingPost from "../posts/LoadingPost";
+import { UserContext } from "../../context/UserProvider";
 
 type Props = {
-  user: FirebaseUser;
   closeSidebar: (page: string) => void;
 };
 
-const Home = ({ user, closeSidebar }: Props) => {
+const Home = ({ closeSidebar }: Props) => {
   const [content, setContent] = useState<Post[] | any[]>([]);
   const [display, setDisplay] = useState(1);
   const [loading, setLoading] = useState(true);
+
+  const { user } = useContext(UserContext) || {};
 
   // Makes call to db to load homepage content.
   useEffect(() => {
     const loadContent = async () => {
       let posts;
-      if (user) posts = await getHomepageContent(user.displayName);
+      if (user) posts = await getHomepageContent(user.username);
       if (posts) setContent(posts);
       setLoading(false);
     };
@@ -31,7 +33,7 @@ const Home = ({ user, closeSidebar }: Props) => {
 
   // Implementation of infinite scrolling
   const observer = useRef<null | IntersectionObserver>(); // Preserves intersection observer reference
-  const lastElementRef = useCallback(
+  const lastElementRef = useCallback<any>(
     (node: Element) => {
       // Is called every time last post gets created
       if (loading) return; // Don't try to load more posts when already loading more
@@ -61,21 +63,15 @@ const Home = ({ user, closeSidebar }: Props) => {
       <PostContainer>
         {content.length !== 0 &&
           content.map((post, index) => {
-            if (index < display)
-              return <HomePost currentUser={user} key={post.id} post={post} />;
+            if (index < display) return <HomePost key={post.id} post={post} />;
             else if (index === display)
               return (
-                <HomePost
-                  currentUser={user}
-                  innerRef={lastElementRef}
-                  key={post.id}
-                  post={post}
-                />
+                <HomePost innerRef={lastElementRef} key={post.id} post={post} />
               );
           })}
         {loading && <LoadingPost />}
       </PostContainer>
-      <Suggestions currentUser={user} />
+      <Suggestions />
     </Container>
   );
 };

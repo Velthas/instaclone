@@ -1,18 +1,20 @@
 import styled from "styled-components";
 import { flexColumnCenter, flexRowBetween } from "../../../styles/style";
-import { useUser } from "../../../utils/hooks";
 import { Link } from "react-router-dom";
-import { FirebaseUser } from "../../../utils/types";
+import { useContext } from "react";
+import { UserContext } from "../../context/UserProvider";
 
 import SuggestionCard from "./SuggestionCard";
 
-type Props = {
- currentUser: FirebaseUser
-};
-
-const Suggestions = ({ currentUser }: Props) => {
-  const [user, updateUser] = useUser(currentUser ? currentUser.displayName : null);
-  const userList = ["thegonkbrigade", "panampalmer", "thealvarez", "riverpd", "arasakaoverall"];
+const Suggestions = () => {
+  const { user } = useContext(UserContext) || {};
+  const userList = [
+    "thegonkbrigade",
+    "panampalmer",
+    "thealvarez",
+    "riverpd",
+    "arasakaoverall",
+  ];
 
   return (
     <Container>
@@ -30,7 +32,7 @@ const Suggestions = ({ currentUser }: Props) => {
       <SuggestionsWrapper>
         {userList.map((suggestion, index) => (
           <SuggestionCard
-            currentUser={currentUser}
+            currentUser={user}
             key={index}
             suggestion={suggestion}
           />
@@ -75,7 +77,7 @@ const SuggestionsWrapper = styled.div`
   flex-direction: column;
 `;
 
-const Picture = styled.div<{url: string}>`
+const Picture = styled.div<{ url: string }>`
   background-image: url(${({ url }) => url});
   background-position: center;
   background-size: cover;

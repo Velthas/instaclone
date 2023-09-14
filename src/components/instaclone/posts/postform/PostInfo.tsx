@@ -5,7 +5,7 @@ import { flexRowBetween } from "../../../../styles/style";
 import { InstaUser } from "../../../../utils/types";
 
 type Props = {
-  user: InstaUser | null;
+  user: InstaUser | null | undefined;
   loading: boolean;
   photo: false | string;
 };

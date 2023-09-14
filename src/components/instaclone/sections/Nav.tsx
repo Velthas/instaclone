@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNotifications } from "../../../utils/hooks";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -12,31 +12,23 @@ import NotifPopup from "../sidebar/notifications/NotifPopup";
 import UpperNav from "./UpperNav";
 import PostForm from "../posts/postform/PostForm";
 import instalogo from "../../../assets/logo/instalogo.png";
-import { FirebaseUser, InstaUser, Notifications } from "../../../utils/types";
+import { InstaUser, Notifications } from "../../../utils/types";
+import { UserContext } from "../../context/UserProvider";
 
 type Props = {
-  user: FirebaseUser | null;
   sidebar: boolean;
   setSidebar: (isOpen: boolean) => void;
   active: string;
   setActive: (section: string) => void;
   userData: InstaUser | null;
-  hasNewMessages: boolean;
 };
 
-const Nav = ({
-  user,
-  sidebar,
-  setSidebar,
-  active,
-  setActive,
-  userData,
-  hasNewMessages,
-}: Props) => {
-  const [notifications, markAllAsSeen] = useNotifications(
-    user ? user.displayName : null
-  );
+const Nav = ({ sidebar, setSidebar, active, setActive }: Props) => {
+  const { user, hasNewMessages } = useContext(UserContext) || {};
   const [postForm, setPostForm] = useState(false); // Regulates new post form display
+  const [notifications, markAllAsSeen] = useNotifications(
+    user ? user.username : null
+  );
 
   // Click handler for icons that don't open the sidebar
   const handleClick = (icon: string) => {
@@ -146,7 +138,7 @@ const Nav = ({
               markAllAsSeen(toggleSidebar);
             }}
           >
-            <NotifPopup notifications={notifications ? notifications : []} />
+            <NotifPopup notifications={notifications || []} />
             {active === "heart" ? (
               <BsIcons.BsHeartFill title="heart" />
             ) : (
@@ -176,17 +168,14 @@ const Nav = ({
             </MessageListItem>
           </StyledLink>
 
-          <StyledLink to={user !== null ? "/profile/" + user.displayName : "/"}>
+          <StyledLink to={user !== null ? "/profile/" + user?.username : "/"}>
             <ListItem
               mobile={true}
               sidebar={sidebar}
               own="profile"
               onClick={() => handleClick("profile")}
             >
-              <User
-                isActive={active === "profile"}
-                url={userData ? userData.pfp : ""}
-              />
+              <User isActive={active === "profile"} url={user?.pfp || ""} />
               <Label sidebar={sidebar} active={active} own={"profile"}>
                 Profile
               </Label>
@@ -201,7 +190,7 @@ const Nav = ({
           </Label>
         </ListItem>
       </Navbar>
-      {postForm && <PostForm closeForm={closePostForm} user={userData} />}
+      {postForm && <PostForm closeForm={closePostForm} />}
     </IconContext.Provider>
   );
 };

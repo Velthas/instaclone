@@ -15,10 +15,9 @@ import LikeList from "../LikeList";
 type Props = {
   post: Post;
   innerRef?: (node: HTMLDivElement) => void;
-  currentUser: FirebaseUser;
 };
 
-const HomePost = ({ post, innerRef, currentUser }: Props) => {
+const HomePost = ({ post, innerRef }: Props) => {
   const [settings, setSettings] = useState(false);
   const [showLikes, setShowLikes] = useState(false);
   const [liked, changeLiked] = useLiked(post);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { IconContext } from "react-icons";
@@ -7,19 +7,19 @@ import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { BsChevronDown } from "react-icons/bs";
 import { createChatRoom } from "../../../firebase/firestore";
 import { getCurrentUserUsername } from "../../../firebase/authentication";
-import { FirebaseUser, Chatroom } from "../../../utils/types";
+import { Chatroom } from "../../../utils/types";
+import { UserContext } from "../../context/UserProvider";
 
 import NewChatModal from "./NewChatModal";
 import ChatEntry from "./ChatEntry";
 import Room from "./room/Room";
 
 type Props = {
-  user: FirebaseUser;
   closeSidebar: (active: string) => void;
-  rooms: null | Chatroom[];
 };
 
-const Direct = ({ user, closeSidebar, rooms }: Props) => {
+const Direct = ({ closeSidebar }: Props) => {
+  const { user, rooms } = useContext(UserContext) || {};
   const currentUser = getCurrentUserUsername() as string;
   const [modal, setModal] = useState(false); // Regulates 'new chat' modal appearance.
   const [newRoom, setNewRoom] = useState<null | Chatroom>(null); // Stores empty empty/new chatrooms
@@ -46,7 +46,9 @@ const Direct = ({ user, closeSidebar, rooms }: Props) => {
       : [null];
 
     if (room && room.lastMessage) {
-      const chatDiv = document.querySelector<HTMLElement>(`#${'a' + room.chatId}`);
+      const chatDiv = document.querySelector<HTMLElement>(
+        `#${"a" + room.chatId}`
+      );
       if (chatDiv) chatDiv.click();
     } else if (room && !room.lastMessage) {
       openChatRoom(room.chatId, room.username);
@@ -73,7 +75,7 @@ const Direct = ({ user, closeSidebar, rooms }: Props) => {
           <ChatlistContainer active={active}>
             <Header>
               <Username>
-                {user ? user.displayName : ""}
+                {user ? user.username : ""}
                 <BsChevronDown />
               </Username>
               <NewChatButton onClick={() => setModal(true)} />
