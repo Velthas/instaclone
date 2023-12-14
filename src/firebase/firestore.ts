@@ -1,7 +1,16 @@
 import { db } from "./firebase-config";
 import * as fs from "firebase/firestore";
 import { getCurrentUserUsername } from "./authentication";
-import { Chatroom, ChatMessage, Notifications, Post, ProfilePayload, Comments, InstaUser, PostInfo } from "../utils/types";
+import {
+  Chatroom,
+  ChatMessage,
+  Notifications,
+  Post,
+  ProfilePayload,
+  Comments,
+  InstaUser,
+  PostInfo,
+} from "../utils/types";
 
 // Used to create a document for new user in database
 const createUserBucket = (name: string, username: string) => {
@@ -13,16 +22,25 @@ const createUserBucket = (name: string, username: string) => {
     username: username,
     description: `Hello, my name is ${name}`,
     pfp: defaultPfp,
-    follows: ["thegonkbrigade", "panampalmer", "thealvarez", "riverpd", "arasakaoverall"],
+    follows: [
+      "thegonkbrigade",
+      "panampalmer",
+      "thealvarez",
+      "riverpd",
+      "arasakaoverall",
+    ],
     followed: [],
   };
 
   const docRef = fs.doc(db, "Users", username);
   fs.setDoc(docRef, userData);
 
-  userData.follows.forEach(person => { // Adds new account to the follower list of default accounts
+  userData.follows.forEach((person) => {
+    // Adds new account to the follower list of default accounts
     const personFollowed = fs.doc(db, "Users", person);
-    fs.updateDoc(personFollowed, { followed: fs.arrayUnion(userData.username) });
+    fs.updateDoc(personFollowed, {
+      followed: fs.arrayUnion(userData.username),
+    });
   });
 };
 
@@ -85,13 +103,21 @@ const getPostInfo = async (username: string, postId: string) => {
 
 // Returns an array with all the comments of a given post sorted by timestamp
 const getComments = async (username: string, postId: string) => {
-  const colRef = fs.collection(db, "Users", username, "Posts", postId, "Comments");
+  const colRef = fs.collection(
+    db,
+    "Users",
+    username,
+    "Posts",
+    postId,
+    "Comments"
+  );
   const comments = await fs.getDocs(colRef);
   if (comments.empty) return [];
-  else
+  else {
     return comments.docs
       .map((comment) => comment.data())
-      .sort((a, b) => b.timestamp.seconds - a.timestamp.seconds) as Comments[];
+      .sort((a, b) => a.timestamp.seconds - b.timestamp.seconds) as Comments[];
+  }
 };
 
 // Used to update comment/post likes
@@ -119,7 +145,8 @@ const updateFollow = async (followee: string, followed: boolean) => {
   if (followed) {
     fs.updateDoc(followerRef, { follows: fs.arrayUnion(followee) });
     fs.updateDoc(followeeRef, { followed: fs.arrayUnion(follower) });
-  } else { // Both follower and followee profiles have to be updated
+  } else {
+    // Both follower and followee profiles have to be updated
     fs.updateDoc(followerRef, { follows: fs.arrayRemove(followee) });
     fs.updateDoc(followeeRef, { followed: fs.arrayRemove(follower) });
   }
@@ -144,7 +171,7 @@ const searchForProfiles = async (userQuery: string) => {
 // Works for now, but needs adjustment in the future.
 const getHomepageContent = async (username: string) => {
   const userInfo = await getUserInfo(username);
-  if(!userInfo) return;
+  if (!userInfo) return;
   const followed = [...userInfo.follows, username]; // This is an array of usernames.
   let posts: Post[] = [];
   for (let i = 0; i < followed.length; i++) {
@@ -159,13 +186,17 @@ const getHomepageContent = async (username: string) => {
 
 const addNotification = (receiver: string, payload: Notifications) => {
   const docRef = fs.doc(fs.collection(db, "Users", receiver, "Notifications"));
-  payload.id = docRef.id // Store reference to own doc id inside
+  payload.id = docRef.id; // Store reference to own doc id inside
   fs.setDoc(docRef, payload); // Append it to the user's notification subcollection
 };
 
 // Listens for recent notifications and filters them by timestamp
 // Querylimits limits the amount, for now hard set at 80
-const setupNotifListener = (username: string, setNotif: (notif: Notifications[]) => void , queryLimit: number) => {
+const setupNotifListener = (
+  username: string,
+  setNotif: (notif: Notifications[]) => void,
+  queryLimit: number
+) => {
   const q = fs.query(
     fs.collection(db, "Users", username, "Notifications"),
     fs.orderBy("timestamp", "desc"),
@@ -196,7 +227,10 @@ const setNotificationsSeen = async (username: string) => {
 };
 
 // General listener monitoring all of user's chats
-const setupAllChatsListener = (username: string, setRooms: (rooms: Chatroom[]) => void) => {
+const setupAllChatsListener = (
+  username: string,
+  setRooms: (rooms: Chatroom[]) => void
+) => {
   const q = fs.query(fs.collection(db, "Users", username, "Dm")); // Get all rooms
   const unsubscribe = fs.onSnapshot(q, (querySnapshot) => {
     const data = querySnapshot.docs.map((doc) => doc.data()) as Chatroom[];
@@ -206,11 +240,14 @@ const setupAllChatsListener = (username: string, setRooms: (rooms: Chatroom[]) =
 };
 
 // Listens to a specific chat's messages when it's open.
-const setupMessagesListener = (id: string, setMessages: (messages: ChatMessage[]) => void) => {
+const setupMessagesListener = (
+  id: string,
+  setMessages: (messages: ChatMessage[]) => void
+) => {
   const q = fs.query(
     fs.collection(db, "Chats", id, "Messages"),
     fs.orderBy("timestamp", "asc") // Order by timestamp
-  ); 
+  );
   const unsubscribe = fs.onSnapshot(q, (querySnapshot) => {
     const data = querySnapshot.docs.map((doc) => doc.data()) as ChatMessage[];
     setMessages(data); // Updates messages of room component
@@ -223,9 +260,9 @@ const setupMessagesListener = (id: string, setMessages: (messages: ChatMessage[]
 const doesChatExist = async (currentUser: string, receiver: string) => {
   const chatRef = fs.doc(db, "Users", currentUser, "Dm", receiver);
   const chatDoc = await fs.getDoc(chatRef);
-  if(chatDoc.exists()) return chatDoc.data();
+  if (chatDoc.exists()) return chatDoc.data();
   return false;
-}
+};
 
 // Will use this function to create chat bucket & info on both profiles
 const createChatRoom = async (author: string, receiver: string) => {
@@ -254,7 +291,12 @@ const createChatRoom = async (author: string, receiver: string) => {
 };
 
 // Function used to add messages on backend
-const addMessage = async (author: string, receiver: string, chatId: string, payload: ChatMessage) => {
+const addMessage = async (
+  author: string,
+  receiver: string,
+  chatId: string,
+  payload: ChatMessage
+) => {
   // Get references to both author and receiver dm docs
   const authorDocRef = fs.doc(db, "Users", author, "Dm", receiver); // Sender;
   const receivDocRef = fs.doc(db, "Users", receiver, "Dm", author); // Receiver;
@@ -265,16 +307,24 @@ const addMessage = async (author: string, receiver: string, chatId: string, payl
   await fs.setDoc(newMessageRef, { ...payload, id });
 
   // Store last message info on both sender and receiver's
-  await fs.updateDoc(authorDocRef, { lastMessage: { ...payload, id, seen: true } });
-  await fs.updateDoc(receivDocRef, { lastMessage: { ...payload, id, seen: false } });
+  await fs.updateDoc(authorDocRef, {
+    lastMessage: { ...payload, id, seen: true },
+  });
+  await fs.updateDoc(receivDocRef, {
+    lastMessage: { ...payload, id, seen: false },
+  });
 };
 
 // Marks chat as read when viewing new messages
-const markChatAsSeen = async (viewer: string, sender: string, lastMessage: ChatMessage) => {
-  const {seen, ...rest} = lastMessage
-  const authorDocRef = fs.doc(db, "Users", viewer, "Dm", sender); 
+const markChatAsSeen = async (
+  viewer: string,
+  sender: string,
+  lastMessage: ChatMessage
+) => {
+  const { seen, ...rest } = lastMessage;
+  const authorDocRef = fs.doc(db, "Users", viewer, "Dm", sender);
   await fs.updateDoc(authorDocRef, { lastMessage: { ...rest, seen: true } });
-}
+};
 
 export {
   createUserBucket,
