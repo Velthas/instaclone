@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import { usePost, useComments, useFollow } from "../../../../utils/hooks";
@@ -22,7 +22,9 @@ const FullPost = ({ closeSidebar }: Props) => {
   const navigate = useNavigate();
   const { postid, username } = useParams();
   if (!postid || !username) navigate("/");
-  const postInfo: PostInfo = { id: postid!, username: username! }; // Used to fetch information about the post
+  const postInfo = useMemo<PostInfo>(() => {
+    return { id: postid!, username: username! };
+  }, [postid, username]); // Used to fetch information about the post
   const [settings, setSettings] = useState(false); // Regulates display of post settings
   const [post, user, liked, changeLiked] = usePost(username!, postid!);
   const [comments, insertComment] = useComments(postInfo, `#a${postInfo.id}`);
@@ -30,12 +32,16 @@ const FullPost = ({ closeSidebar }: Props) => {
   const [showLikes, setShowLikes] = useState(false);
 
   const openLikes = () => {
-    setShowLikes(true)
-  }
+    setShowLikes(true);
+  };
 
   return (
     <Container onClick={() => closeSidebar()}>
-      <LikeList showLikes={showLikes} setShowLikes={setShowLikes} userList={post?.likedby} />
+      <LikeList
+        showLikes={showLikes}
+        setShowLikes={setShowLikes}
+        userList={post?.likedby}
+      />
       <MobileHeader name="Post" isPostPage />
       <PostWrapper>
         {post && (

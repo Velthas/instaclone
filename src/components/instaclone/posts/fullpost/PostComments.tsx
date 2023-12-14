@@ -5,11 +5,11 @@ import ExtendedComment from "../comments/ExtendedComment";
 import Description from "./Description";
 
 type Props = {
-  comments: Comments[] | null,
-  postInfo: PostInfo,
-  post: Post | null,
-  user: InstaUser | null
-}
+  comments: Comments[] | null;
+  postInfo: PostInfo;
+  post: Post | null;
+  user: InstaUser | null;
+};
 
 const PostComments = ({ comments, postInfo, post, user }: Props) => {
   return (
