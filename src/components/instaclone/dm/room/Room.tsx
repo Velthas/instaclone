@@ -103,7 +103,7 @@ const Room = ({ active, setActive, setNewRoom, newRoom, rooms }: Props) => {
               return <Message key={message.id} message={message} user={user} />;
             })}
         </MessagesContainer>
-        <Textbox sendMessage={sendMessage} />
+        <Textbox sendMessage={sendMessage} active={active} />
       </Container>
     </IconContext.Provider>
   );

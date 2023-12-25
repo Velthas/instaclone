@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useChatRooms, useUser } from "../../utils/hooks";
+import { useUser } from "../../utils/hooks";
 import styled from "styled-components";
 import { FirebaseUser } from "../../utils/types";
 

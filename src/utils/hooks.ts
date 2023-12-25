@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from "react";
-import * as fs from "../firebase/firestore";
+import { useState, useEffect, useRef, Dispatch, SetStateAction } from "react";
 import { Timestamp } from "firebase/firestore";
+import { EmojiClickData } from "emoji-picker-react";
 import { getCurrentUserUsername } from "../firebase/authentication";
 import { formatNotification } from "./formatting";
+import * as fs from "../firebase/firestore";
 import * as tp from "../utils/types";
 
 // Handles 'liked' status of a post, allowing for liking and unliking.
@@ -318,6 +319,29 @@ const useChatRooms = (
   return [rooms, hasNewMessages];
 };
 
+const useEmojiPicker = (
+  setValue: Dispatch<SetStateAction<string>>
+): [
+  isEmojiPickerOpen: any,
+  onEmojiClick: (emojiData: EmojiClickData, event: MouseEvent) => void,
+  handleEmojiPickerClick: (event: MouseEvent) => void
+] => {
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState<boolean>(false);
+  const handleEmojiPickerClick = (e: any) => {
+    e.stopPropagation();
+    setIsEmojiPickerOpen((prevState: boolean) => !prevState);
+  };
+
+  const onEmojiClick = (emojiData: EmojiClickData, event: MouseEvent) => {
+    if (!emojiData) return;
+    const { emoji } = emojiData;
+    setValue((prevValue) => prevValue + emoji);
+    setIsEmojiPickerOpen(false);
+  };
+
+  return [isEmojiPickerOpen, onEmojiClick, handleEmojiPickerClick];
+};
+
 export {
   useLiked,
   useCommentsLiked,
@@ -329,4 +353,5 @@ export {
   useProfile,
   useNotifications,
   useChatRooms,
+  useEmojiPicker,
 };

@@ -3,15 +3,21 @@ import styled from "styled-components";
 import { flexRowBetween } from "../../../../styles/style";
 import { BsEmojiSmile } from "react-icons/bs";
 import { PostInfo } from "../../../../utils/types";
+import EmojiPicker from "emoji-picker-react";
+import { useEmojiPicker } from "../../../../utils/hooks";
 
 type Props = {
-  postInfo: PostInfo,
-  insertComment: () => void,
+  postInfo: PostInfo;
+  insertComment: () => void;
 };
 
 const Add = ({ postInfo, insertComment }: Props) => {
   const [value, setValue] = useState("");
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value);
+  const [isEmojiPickerOpen, onEmojiClick, handleEmojiPickerClick] =
+    useEmojiPicker(setValue);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setValue(e.target.value);
   const sendComment = () => {
     insertComment();
     setValue("");
@@ -19,7 +25,10 @@ const Add = ({ postInfo, insertComment }: Props) => {
 
   return (
     <Container>
-      <Icon />
+      <Icon onClick={handleEmojiPickerClick as any} />
+      {isEmojiPickerOpen && (
+        <EmojiPicker height={350} onEmojiClick={onEmojiClick as any} />
+      )}
       <CommentBox
         onChange={(e) => handleChange(e)}
         value={value}
@@ -48,7 +57,7 @@ const Container = styled.div`
   }
 `;
 
-const Button = styled.button<{value: string}>`
+const Button = styled.button<{ value: string }>`
   display: ${(props) => (props.value.length > 0 ? "block" : "none")};
   font-weight: bold;
   color: #3897f0;

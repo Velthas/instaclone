@@ -2,6 +2,20 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
   scroll-behavior: smooth;
+}
+
+/*  EMOJI PICKER */
+.EmojiPickerReact {
+  position: absolute !important;
+  bottom: 40px;
+}
+
+@media screen and (max-width: 450px) {
+  .EmojiPickerReact {
+    width: 280px !important;
+    z-index: 1;
+  }
 }

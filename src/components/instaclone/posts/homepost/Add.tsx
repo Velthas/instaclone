@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { BsEmojiSmile } from "react-icons/bs";
 import { flexRowBetween } from "../../../../styles/style";
 import { Post } from "../../../../utils/types";
+import { useEmojiPicker } from "../../../../utils/hooks";
+import EmojiPicker from "emoji-picker-react";
 
 type Props = {
   post: Post;
@@ -11,6 +13,8 @@ type Props = {
 
 const Add = ({ post, insertComment }: Props) => {
   const [value, setValue] = useState("");
+  const [isEmojiPickerOpen, onEmojiClick, handleEmojiPickerClick] =
+    useEmojiPicker(setValue);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setValue(e.target.value);
@@ -33,7 +37,10 @@ const Add = ({ post, insertComment }: Props) => {
       <Send value={value} onClick={sendComment}>
         Publish
       </Send>
-      <Icon />
+      <Icon onClick={handleEmojiPickerClick as any} />
+      {isEmojiPickerOpen && (
+        <StyledEmojiPicker height={350} onEmojiClick={onEmojiClick as any} />
+      )}
     </AddComment>
   );
 };
@@ -43,6 +50,10 @@ const AddComment = styled.div`
   width: 100%;
   height: 50px;
   padding: 20px 0 15px 0;
+
+  & > aside.EmojiPickerReact {
+      right: 0;
+     }
 `;
 
 const Icon = styled(BsEmojiSmile)`

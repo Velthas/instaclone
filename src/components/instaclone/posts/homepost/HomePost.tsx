@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useLiked, useComments, useUser } from "../../../../utils/hooks";
 import { flexColumnCenter } from "../../../../styles/style";
-import { FirebaseUser, Post } from "../../../../utils/types";
+import { Post } from "../../../../utils/types";
 
 import PostSettings from "../PostSettings";
 import Icons from "../fullpost/Icons";
@@ -31,7 +31,7 @@ const HomePost = ({ post, innerRef }: Props) => {
 
   return (
     <Container ref={innerRef}>
-    <LikeList userList={post.likedby} showLikes={showLikes} setShowLikes={setShowLikes}/>
+      <LikeList userList={post.likedby} showLikes={showLikes} setShowLikes={setShowLikes}/>
       <PostSettings settings={settings} setSettings={setSettings} post={post} />
       <Header setSettings={setSettings} user={user} timestamp={post.timestamp} />
       <Picture
