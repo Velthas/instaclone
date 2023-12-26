@@ -1,0 +1,6 @@
+.env
+node_modules
+
+# Ignore typescript output
+*.js
+*.js.map
